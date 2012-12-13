@@ -1,0 +1,95 @@
+<?php
+
+use User\Task as Task;
+
+class Admin_Api_V1_Tasks_Controller extends Controller {
+	public $restful = true;
+
+	public function __construct()
+	{
+		parent::__construct();
+		$this->filter('before', 'deny-non-async');
+	}
+
+	final public function get_index()
+	{
+		$tasks = Task::with('users')->get();
+		return eloquent_to_json($tasks);		
+	}
+
+	final public function post_index()
+	{
+		$json = Input::json();
+		$input = get_object_vars($json);
+		Input::replace($input);
+
+		if (!($errors = Task::is_valid($input))) {
+			return Response::json($errors);
+		}
+
+		$task = new Task();
+
+		$task->author_id			= $json->author_id;
+		$task->client				= $json->client;
+		$task->end_date				= $json->end_date;
+		$task->start_date			= $json->start_date;
+		$task->name					= $json->name;
+		$task->project_code			= $json->project_code;
+		$task->color 				= $json->color;
+		#$task->pivot->percentage	= $json->pivot->percentage;
+
+		$task->save();
+		$task->users()->attach($json->developer_id);
+
+		return Response::json($task);
+	}
+
+	final public function put_update($id)
+	{
+		$task = Task::find($id);
+		$json = Input::json();
+		
+		if(preg_match('/^(\d{4}\-\d{2}\-\d{2})/', $json->start_date, $matches)) {
+			$json->start_date = $matches[1];
+		}
+		if(preg_match('/^(\d{4}\-\d{2}\-\d{2})/', $json->end_date, $matches)) {
+			$json->end_date = $matches[1];
+		}
+
+		$task->author_id			= $json->author_id;
+		$task->client				= $json->client;
+		$task->end_date				= $json->end_date;
+		$task->start_date			= $json->start_date;
+		$task->name					= $json->name;
+		$task->project_code			= $json->project_code;
+		$task->track				= $json->track;
+		$task->color 				= $json->color;
+		$task->save();
+
+		if(isset($json->developer_id)) {
+			$task->users()->sync(array($json->developer_id));
+			$pivot = $task->users()->pivot()->where_user_id($json->developer_id)->first();
+			$pivot->percentage = $json->pivot->percentage;
+			$pivot->save();
+		} 
+
+		return Response::json($task);
+	}
+
+	final public function get_read($id)
+	{
+		$task = Task::with('users')
+			->find($id);
+
+		if(!$task) {
+			return Response::error('404');
+		}
+
+		return json_encode($task->to_array());
+	}
+
+	final public function delete_index($id)
+	{
+
+	}
+}

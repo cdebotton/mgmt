@@ -1,0 +1,100 @@
+<article class="edit-modal">
+	<nav class="navbar navbar-inverse">
+		<div class="navbar-inner">
+			<span href="#" class="brand">Edit Task #{{ id }} &mdash; {{ name }}</span>
+			<a href="#" class="icon icon-white icon-remove"></a>
+		</div>
+	</nav>
+	<form class="form-horizontal">
+		<div class="form-row">
+			<div class="form-element slot-8 alpha">
+				<input type="text" name="name" value="{{ name }}">
+				<div class="meta">
+					<label class="form-label">Project Name</label>
+				</div>
+			</div>
+			<div class="form-element slot-4">
+				<input type="text" name="project_code" value="{{ project_code }}">
+				<div class="meta">
+					<label class="form-label">Project Code</label>
+				</div>
+			</div>
+		</div>
+		<div class="form-row">
+			<div class="form-element slot-5 alpha">
+				<input type="text" name="client" value="{{ client }}">
+				<div class="meta">
+					<label class="form-label">Client Name</label>
+				</div>
+			</div>
+			<div class="form-element slot-7">
+				<select name="developer_id">
+					{{#printUsers user_list}}
+						<option value="{{ id }}"{{ selected }}>{{ email }}</option>
+					{{/printUsers}}
+				</select>
+				<div class="meta">
+					<label class="form-label">Developer</label>
+				</div>
+			</div>
+		</div>
+		<div class="form-row">
+			<div class="form-element slot-6 alpha">
+				<article class="date-field">
+					<input type="number" class="month-field" name="start_month" value="{{ start_month }}"> / <input type="number" class="day-field" name="start_day" value="{{ start_day }}"> / <input type="number" class="year-field" name="start_year" value="{{ start_year }}">
+				</article>
+				<div class="meta">
+					<label class="form-label">Start Date</label>
+				</div>
+			</div>
+			<div class="form-element slot-6">
+				<article class="date-field">
+					<input type="number" class="month-field" name="end_month" value="{{ end_month }}"> / <input type="number" class="day-field" name="end_day" value="{{ end_day }}"> / <input type="number" class="year-field" name="end_year" value="{{ end_year }}">
+				</article>
+				<div class="meta">
+					<label class="form-label">End Date</label>
+				</div>
+			</div>
+		</div>
+		<div class="form-row">
+			<div class="form-element slot-4 alpha">
+				<select name="color">
+					{{#printColors}}
+						<option value="{{ id }}"{{ selected }}>{{ color }}</option>
+					{{/printColors}}
+				</select>
+				<div class="meta">
+					<label class="form-label">Color</label>
+				</div>
+			</div>
+			<div class="form-element slot-4">
+				<article class="percentage-field">
+					<input type="number" value="{{ pivot.percentage }}"> %
+				</article>
+				<div class="meta">
+					<label class="form-label">Percentage</label>
+				</div>
+			</div>
+			<div class="form-element slot-4">
+				<input type="checkbox">
+				<div class="meta">
+					<label class="form-label">Task Complete</label>
+				</div>
+			</div>
+		</div>
+		<div class="form-row">
+			<div class="form-element slot-8 alpha">
+				<textarea></textarea>
+				<div class="meta">
+					<label class="form-label">Notes</label>
+				</div>
+			</div>
+			<di class="form-element slot-4">
+				<div class="btn-group">
+					<button type="submit" class="btn btn-primary">Save</button>
+					<button type="reset" class="btn">Reset</button>
+				</div>
+			</div>
+		</diV>
+	</form>
+</article>

@@ -1,0 +1,15 @@
+<div class="photo-container">
+	<article class="profile-image">
+	{{#if photo}}
+		<img src="{{ photo }}" class="img-polaroid" />
+	{{else}}
+		<img src="http://placehold.it/100x100" class="img-polaroid" />
+	{{/if}}
+		<h5>{{ first_name }} {{ last_name }}</h5>
+	</article>
+	<div class="badges">
+		{{#each roles}}
+			<span class="label label-info">{{ name }}</span>
+		{{/each}}	
+	</div>		
+</div>

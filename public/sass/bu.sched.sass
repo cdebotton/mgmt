@@ -1,0 +1,454 @@
+@import compass
+@include global-reset
+@import bootstrap
+@import 960/_grid
+@import 960/_text
+
+$helvetica: 'Helvetica Neue', Helvetica, Arial, sans-serif
+
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button
+	-webkit-appearance: none
+	margin: 0
+
+$modal-width: 480px
+
+.container
+	@include grid-container
+
+#login-form
+	width: 464px
+	height: 180px
+	padding-top: 25px
+	position: absolute
+	top: 50%
+	left: 50%
+	margin: -150px 0 0 -232px
+	overflow: hidden
+	@include background(linear-gradient(#fcfcfc, #f5f5f5))
+	@include border-radius(3px)
+	@include box-shadow(1px 1px 3px rgba(0,0,0,0.35))
+	.control-label
+		width: 90px
+	.controls
+		margin-left: 120px
+	.form-actions
+		margin-top: 20px
+#breadcrumb-trail
+	width: 960px
+	margin: 0 auto
+#section-header
+	@include grid-container
+	@include clearfix
+	.hero-wrapper
+		@include grid(7)
+		@include alpha
+	.control-box
+		@include grid(5)
+		@include omega
+.date-selector-month
+	width: 110px
+.date-selector-day
+	width: 70px
+.date-selector-year
+	width: 70px
+
+#users-table
+	@include grid-container
+	@include clearfix
+	.user-id
+		@include grid(1)
+		@include grid-prefix(1)
+		@include alpha
+	.user-email
+		@include grid(3)
+	.user-name
+		@include grid(3)
+	.user-roles
+		@include grid(2)
+	.user-actions
+		@include grid(2)
+		@include omega
+	.user-edit, .user-delete
+		@include grid(1)
+	.user-delete
+		@include omega
+	#users-header
+		@include clearfix
+		@include background(linear-gradient(#333,#222))
+		@include box-shadow(1px 1px 3px rgba(0,0,0,0.25))
+		@include border-radius(4px)
+		margin-bottom: 5px
+		font-weight: bold
+		color: #fff
+		padding: 5px 0
+	.user-row
+		@include clearfix
+		padding: 5px 0
+		&+.user-row
+			margin-top: 5px
+			border-top: 1px solid #ececec
+
+#schedule-viewport
+	width: 100%
+	@include background(linear-gradient(top left, #eee #ddd))
+	margin-bottom: 39px
+	position: relative
+	@include clearfix
+	.navbar
+		z-index: 2
+		margin-bottom: 0
+		&.affix
+			position: fixed
+			top: 0
+			width: 100%
+			.navbar-inner
+				width: 100%
+				position: fixed
+				top: 0
+		.navbar-inner
+			.brand
+				font-size: 16px
+			.nav
+				font-size: 14px
+				li
+					.dropdown-menu
+						li
+							padding: 0 10px
+						.nav-header
+							padding: 0 10px
+	.striped-cheech
+		position: fixed
+		top: 0
+		left: 0
+		width: 100%
+		height: 100%
+		background-color: rgba(0,0,0,0.75)
+		z-index: 100
+		@include background-size(20px 20px)
+		border: 1px solid rgba(0,0,0,0.5)
+		@include opacity(0)
+		background-image: -webkit-linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent)
+		.edit-modal
+			color: #eee
+			position: fixed
+			width: 500px
+			height: 500px
+			top: 50%
+			left: 50%
+			margin: -250px 0 0 -250px
+			background-color: #fff
+			@include opacity(0)
+			@include background(linear-gradient(top, #333, #222))
+			@include border-radius(2px)
+			@include box-shadow(0 0 30px rgba(0, 0, 0, 0.75), 0 1px 3px rgba(0, 0, 0, 0.85))
+			border: 1px solid #000
+			.icon-remove
+				position: absolute
+				top: 10px
+				right: 10px
+			.form-horizontal
+				margin-top: 15px
+				.form-row
+					width: 480px
+					padding: 0 10px
+					overflow: hidden
+					min-height: 76px
+					@include background(linear-gradient(top, transparent 0%, transparent 99%, rgba(255, 255, 255, 0.05) 100%))
+					@include box-shadow(inset 0 -1px 0 rgba(255, 255, 255, 0.125))
+					&+.form-row
+						border-top: 1px solid #222
+						.form-element
+							padding-top: 10px
+					.form-element
+						float: left
+						padding-left: 10px
+						margin-left: 10px
+						@include box-sizing('border-box')
+						min-height: 76px
+						.meta
+							padding: 5px 0
+							label
+								font-size: 11px
+								color: #eee
+						.date-field
+							background-color: #fff
+							color: #bbb
+							@include border-radius(4px)
+							input[type="number"]
+								border: 0
+						.percentage-field
+							background-color: #fff
+							color: #bbb
+							@include border-radius(4px)
+							width: 60px
+							input[type="number"]
+								border: 0
+								width: 20px
+						&.alpha
+							margin-left: 0
+						&+.form-element
+							border-left: 1px solid #222
+							@include background(linear-gradient(right, transparent 0%, transparent 99%, rgba(255, 255, 255, 0.05) 100%))
+							@include box-shadow(inset 1px 0 0 rgba(255, 255, 255, 0.125))
+						$i: 1
+						@while $i < 13
+							&.slot-#{$i}
+								$unit-width: (($modal-width / 12) * $i) - 20
+								width: $unit-width
+								input
+									width: $unit-width - 22
+								select
+									width: $unit-width - 2
+								textarea
+									width: $unit-width - 32
+							$i: $i+1
+						input[type="number"].day-field, input[type="number"].month-field
+							text-align: center
+							width: 40px
+						input[type="number"].year-field
+							width: 61px
+							text-align: center
+	#task-create-palette
+		margin: 0
+		padding: 10px 0 0 0
+		.day-field, .month-field
+			width: 20px
+		.year-field
+			width: 35px
+		.form-actions
+			margin: 0
+			padding: 5px 10px 15px
+
+	#profile-palette
+		position: relative
+		width: 250px
+		background-color: #fff
+		border-right: 1px solid #ccc
+		float: left
+		z-index: 1
+		padding-top: 42px
+		@include box-shadow(0 0 5px rgba(0,0,0,0.25))
+		@include background(linear-gradient(top left, #fcfcfc #eeeeee))
+		&.affix
+			margin-top: 42px
+		.user-object
+			width: 250px
+			height: 200px
+			border-top: 1px solid #eee
+			@include box-shadow(-1px -1px 4px rgba(0,0,0,0.05))
+			@include transition-property('height')
+			@include transition-duration('.2s')
+			@include transition-timing-function('ease-in')
+			&:last-child
+				padding-bottom: 20px
+			.profile-image
+				position: relative
+				.img-polaroid
+					margin: 20px auto 10px
+					position: relative
+					width: 100px
+					height: 100px
+					display: block
+				h5
+					text-align: center
+					margin: 10px 0 5px
+					position: absolute
+					bottom: 0
+					display: block
+					width: 100%
+					text-shadow: 1px 1px 2px rgba(255, 255, 255, 1), -1px -1px 2px rgba(255, 255, 255, 1)
+					z-index: 11
+			.badges
+				text-align: center
+	#task-timeline
+		overflow: hidden
+		position: absolute
+		top: 42px
+		left: 250px
+		bottom: 0px
+		right: 0px
+		z-index: 0
+		background-position: -18px top
+		#task-timeline-wrapper
+			position: absolute
+			left: 0
+			top: 42px
+			z-index: 0
+			min-width: 100%
+			.timeline-object
+				height: 205px
+				padding: 0 5px
+				min-width: 100%
+				display: block
+				width: 100%
+				background-attachment: fixed
+				position: relative
+				@include transition-property('height')
+				@include transition-duration('.2s')
+				@include transition-timing-function('ease-in')
+				@include background(linear-gradient(transparent 8.9999999%, rgba(0, 0, 0, 0.25) 9%, rgba(0, 0, 0, 0.25) 10.666666667%, #fff 10.67%, #fff 11.667%, transparent 11.67%))
+				@include background-size(60px 60px)
+				@include box-shadow(inset 1px 1px 2px rgba(0,0,0,0.25))
+				.overage
+					background-color: rgba(0, 255, 255, 0.25)
+					position: absolute
+					top: 0
+					cursor: pointer
+					@include box-sizing('border-box')
+					border-left: 1px solid #000
+					border-right: 1px solid #000
+					height: 5px
+					@include box-shadow(inset 1px 1px 2px rgba(0,0,0,0.25))
+					&.danger
+						background-color: rgba(255, 0, 0, 0.25)
+				.task-element
+					overflow: hidden
+					height: 50px
+					background-color: #149bdf
+					position: absolute
+					@include border-radius(2px)
+					@include box-shadow(1px 1px 2px rgba(0, 0, 0, 0.35), 2px 2px 5px rgba(0, 0, 0, 0.25))
+					@include box-sizing(border-box)
+					@include background-size(20px 20px)
+					border: 1px solid rgba(0,0,0,0.5)
+					background-image: -webkit-gradient(linear, 0 100%, 100% 0, color-stop(0.25, rgba(255, 255, 255, 0.15)), color-stop(0.25, transparent), color-stop(0.5, transparent), color-stop(0.5, rgba(255, 255, 255, 0.15)), color-stop(0.75, rgba(255, 255, 255, 0.15)), color-stop(0.75, transparent), to(transparent))
+					background-image: -webkit-linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent)
+					cursor: move
+					z-index: 0
+					border: 1px solid rgba(0,0,0,0.6)
+					@include box-sizing('border-box')
+					@include transition-property('background-color, opacity')
+					@include transition-duration('.25s')
+					@include transition-timing-function('ease-in')
+					&:hover
+						background-color: darken(saturate(#149bdf, 10%), 5%)
+					&.red
+						background-color: lighten(#ce3635, 2%)
+						&:hover
+							background-color: darken(saturate(#ce3635, 10%), 5%)
+					&.green
+						background-color: lighten(#00A693, 2%)
+						&:hover
+							background-color: darken(saturate(#00A693, 10%), 5%)
+					&.yellow
+						background-color: lighten(#F4C430, 2%)
+						&:hover
+							background-color: darken(saturate(#F4C430, 10%), 5%)
+					.project-label-wrapper
+						font-family: $helvetica
+						font-weight: 200
+						height: 28px
+						padding: 10px 0
+						margin: 0 auto
+						position: relative
+						display: block
+						text-align: center
+						@include background(linear-gradient(bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0.35) 96.9999%, rgba(255,255,255,0.45) 97%, rgba(255,255,255,0.65) 100%))
+						@include box-shadow(inset -1px -1px 1px rgba(0,0,0,0.5))
+						.project-label
+							display: inline-block
+							height: 28px
+							font-size: 12px
+							line-height: 14px
+							background-color: rgba(255,255,255,0.5)
+							text-align: center
+							border: 1px solid rgba(0,0,0,0.35)
+							padding: 4px 15px
+							@include box-sizing(border-box)
+							@include border-radius(3px)
+						.percentage
+							display: inline-block
+							height: 14x
+							font-size: 11px
+							line-height: 14px
+							background-color: rgba(255,255,255,0.5)
+							text-align: center
+							border: 1px solid rgba(0,0,0,0.35)
+							padding: 4px 5px
+							@include box-sizing(border-box)
+							@include border-radius(3px)
+							font-weight: bold
+							font-style: none
+						.project-duration
+							font-size: 10px
+							font-weight: bold
+							position: absolute
+							top: 0
+							left: 25px
+							text-shadow: 0 0 10px rgba(255, 255, 255, 1.0), 0 -1px 0 rgba(255,255,255, 0.125)
+							.editable-date
+								cursor: pointer
+						.grip
+							height: 50px
+							width: 20px
+							position: absolute
+							top: 0
+							bottom: 0
+							background-color: rgba(255,255,255,0.05)
+							@include transition-property('background-color')
+							@include transition-duration('.15s')
+							@include transition-timing-function('ease-in')
+							z-index: 10
+							&:hover
+								background-color: rgba(255,255,255,0.45)
+							&.left
+								left: 0
+								cursor: w-resize
+							&.right
+								right: 0
+								cursor: e-resize
+	#graph-timeline
+		position: absolute
+		top: 0
+		left: 0
+		right: 0
+		height: 32px
+		z-index: 0
+		cursor: move
+		@include background(linear-gradient(rgba(0,0,0,0.25), rgba(0,0,0,0.3)))
+		&.affix
+			position: fixed
+			left: 250px
+			top: 42px
+		#graph-timeline-wrapper
+			height: 32px
+			position: relative
+			@include clearfix
+			overflow: visible			
+			.tick-mark
+				float: left
+				position: relative
+				.tick
+					display: inline-block
+					position: absolute
+					top: 0
+					left: 0
+				&.primary
+					width: 1px
+					height: 15px
+					.tick
+						width: 1px
+						height: 15px
+						background-color: #444
+						@include box-shadow(-1px 1px 1px rgba(255,255,255,0.1))
+					.date
+						position: absolute
+						font-size: 10px
+						line-height: 10px
+						font-weight: bold
+						top: 17px
+						width: 100px
+						text-align: center
+						left: -50px
+						color: #fff
+						text-shadow: -1px -1px 2px rgba(0,0,0,0.25), 1px 1px 2px rgba(0,0,0,0.75), 0 0 2px #000
+				&.secondary
+					width: 1px
+					height: 5px
+					.tick
+						width: 1px
+						height: 5px
+						background-color: #444
+						@include box-shadow(-1px 0 2px rgba(0,0,0,0.4))
+				&+.tick-mark
+					margin-left: 20px
