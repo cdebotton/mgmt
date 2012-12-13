@@ -18,11 +18,12 @@ define [
 
 		initialize: ->
 			BU.EventBus.on 'percentage-points-calculated', @drawRanges, @
+			BU.EventBus.on 'percentage-changed', @calculateOverages, @
 			@model.on 'add:tasks', @addOne, @
-			@model.on 'reset:tasks', @addAll, @
-			@model.on 'remove:tasks', @addAll, @
+			@model.on 'reset:tasks remove:tasks', @addAll, @
 			@model.get('tasks').on 'change:track', @adjustHeight, @
-			@model.get('tasks').on 'change:start_date change:end_date change:user', @calculateOverages, @
+			@model.get('tasks').on 'change:start_date change:end_date change:user change:percentage', @calculateOverages, @
+
 
 		render: ->
 			ctx = @model.toJSON()
@@ -51,7 +52,7 @@ define [
 					taskstart = task.get 'start_date'
 					taskend = task.get 'end_date'
 					if (startpoint < taskend) and (endpoint > taskstart)
-						totalPercentage += +task.get('pivot').percentage
+						totalPercentage += +task.get('pivot')?.get 'percentage'
 				range.push totalPercentage
 			BU.EventBus.trigger 'plot-ranges', ranges, @cid
 

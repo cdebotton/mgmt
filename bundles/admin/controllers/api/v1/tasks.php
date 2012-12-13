@@ -44,7 +44,7 @@ class Admin_Api_V1_Tasks_Controller extends Controller {
 		return Response::json($task);
 	}
 
-	final public function put_update($id)
+	public function put_update($id)
 	{
 		$task = Task::find($id);
 		$json = Input::json();
@@ -66,11 +66,18 @@ class Admin_Api_V1_Tasks_Controller extends Controller {
 		$task->color 				= $json->color;
 		$task->save();
 
-		if(isset($json->developer_id)) {
+		if (isset($json->developer_id)) {
 			$task->users()->sync(array($json->developer_id));
-			$pivot = $task->users()->pivot()->where_user_id($json->developer_id)->first();
-			$pivot->percentage = $json->pivot->percentage;
-			$pivot->save();
+
+			$user = Task::find($id)
+				->users()
+				->where_user_id($json->developer_id)
+				->first();
+
+			if ($user) {
+				$user->pivot->percentage = $json->pivot->percentage;
+				$user->pivot->save();
+			}
 		} 
 
 		return Response::json($task);
@@ -91,5 +98,19 @@ class Admin_Api_V1_Tasks_Controller extends Controller {
 	final public function delete_index($id)
 	{
 
+	}
+
+	final public function get_test($id, $user_id)
+	{
+		$user = Task::find($id)
+			->users()
+			->where_user_id($user_id)
+			->first();
+
+		$user->pivot->percentage = 75;
+		$user->pivot->save();
+		
+
+		return json_encode($user);
 	}
 }

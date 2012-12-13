@@ -52,6 +52,8 @@
         this.model.on('change:start_date', this.updatePositions, this);
         this.model.on('change:track', this.updatePositions, this);
         this.model.on('change:color', this.updateColor, this);
+        this.model.on('change:name change:client change:project_code', this.render, this);
+        this.model.get('pivot').on('change:percentage', this.render, this);
         if (this.model.get('color') !== null) {
           this.$el.addClass(this.model.get('color'));
         }
@@ -61,6 +63,7 @@
       TaskElement.prototype.render = function() {
         var ctx, html;
         BU.EventBus.trigger('where-am-i', this.cid, this.start, this.end);
+        BU.EventBus.trigger('percentage-changed');
         ctx = this.model.toJSON();
         html = BU.JST['TaskElement'](ctx);
         this.$el.html(html);

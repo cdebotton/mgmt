@@ -65,7 +65,7 @@ define [
 				'developer_id':		@$('[name="developer_id"]').val()
 				'color':			@$('[name="color"]').val()
 			
-			@model.get('pivot').percentange = $('[name="percentange"]').val()
+			@model.get('pivot').set 'percentage', $('[name="percentage"]').val()
 			@model.save()
 			@closeModal e
 

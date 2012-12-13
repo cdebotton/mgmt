@@ -4,7 +4,7 @@
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['backbone', 'underscore', 'ns', 'relational'], function(Backbone, _, namespace) {
+  define(['backbone', 'underscore', 'ns', 'relational', 'models/pivot'], function(Backbone, _, namespace) {
     namespace('BU.Model.Task');
     BU.Model.Task = (function(_super) {
 
@@ -14,6 +14,18 @@
         this.parse = __bind(this.parse, this);
         return Task.__super__.constructor.apply(this, arguments);
       }
+
+      Task.prototype.relations = [
+        {
+          type: Backbone.HasOne,
+          relatedModel: BU.Model.Pivot,
+          key: 'pivot',
+          reverseRelation: {
+            includeInJSON: 'id',
+            key: 'task'
+          }
+        }
+      ];
 
       Task.prototype.defaults = {
         start_date: new Date,

@@ -94,7 +94,7 @@
           'developer_id': this.$('[name="developer_id"]').val(),
           'color': this.$('[name="color"]').val()
         });
-        this.model.get('pivot').percentange = $('[name="percentange"]').val();
+        this.model.get('pivot').set('percentage', $('[name="percentage"]').val());
         this.model.save();
         return this.closeModal(e);
       };

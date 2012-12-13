@@ -23,11 +23,11 @@
 
       UserTimeline.prototype.initialize = function() {
         BU.EventBus.on('percentage-points-calculated', this.drawRanges, this);
+        BU.EventBus.on('percentage-changed', this.calculateOverages, this);
         this.model.on('add:tasks', this.addOne, this);
-        this.model.on('reset:tasks', this.addAll, this);
-        this.model.on('remove:tasks', this.addAll, this);
+        this.model.on('reset:tasks remove:tasks', this.addAll, this);
         this.model.get('tasks').on('change:track', this.adjustHeight, this);
-        return this.model.get('tasks').on('change:start_date change:end_date change:user', this.calculateOverages, this);
+        return this.model.get('tasks').on('change:start_date change:end_date change:user change:percentage', this.calculateOverages, this);
       };
 
       UserTimeline.prototype.render = function() {
@@ -42,7 +42,7 @@
       };
 
       UserTimeline.prototype.calculateOverages = function() {
-        var date, dates, endpoint, ends, i, k, range, ranges, startpoint, starts, task, taskend, tasks, taskstart, totalPercentage, _i, _j, _k, _len, _len1, _ref;
+        var date, dates, endpoint, ends, i, k, range, ranges, startpoint, starts, task, taskend, tasks, taskstart, totalPercentage, _i, _j, _k, _len, _len1, _ref, _ref1;
         tasks = this.model.get('tasks');
         starts = tasks.pluck('start_date');
         ends = tasks.pluck('end_date');
@@ -68,7 +68,7 @@
             taskstart = task.get('start_date');
             taskend = task.get('end_date');
             if ((startpoint < taskend) && (endpoint > taskstart)) {
-              totalPercentage += +task.get('pivot').percentage;
+              totalPercentage += +((_ref1 = task.get('pivot')) != null ? _ref1.get('percentage') : void 0);
             }
           }
           range.push(totalPercentage);

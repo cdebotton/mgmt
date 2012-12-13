@@ -2,12 +2,21 @@ define [
 	'backbone'
 	'underscore'
 	'ns'
-	'relational'
+	'relational',
+	'models/pivot'
 ], (Backbone, _, namespace) ->
 	
 	namespace 'BU.Model.Task'
 
 	class BU.Model.Task extends Backbone.RelationalModel
+		relations: [{
+			type:				Backbone.HasOne
+			relatedModel:		BU.Model.Pivot
+			key:				'pivot'
+			reverseRelation:
+				includeInJSON:	'id'
+				key:			'task'
+		}]
 		defaults:
 			start_date: new Date
 			end_date: new Date

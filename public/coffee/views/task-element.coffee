@@ -34,11 +34,14 @@ define [
 			@model.on 'change:start_date', @updatePositions, @
 			@model.on 'change:track', @updatePositions, @
 			@model.on 'change:color', @updateColor, @
+			@model.on 'change:name change:client change:project_code', @render, @
+			@model.get('pivot').on 'change:percentage', @render, @
 			if @model.get('color') isnt null then @$el.addClass @model.get 'color'
 			BU.EventBus.on 'gridpoint-dispatch', @gridPointsReceived, @
 
 		render: ->
 			BU.EventBus.trigger 'where-am-i', @cid, @start, @end
+			BU.EventBus.trigger 'percentage-changed'
 			ctx = @model.toJSON()
 			html = BU.JST['TaskElement'] ctx
 			@$el.html html
