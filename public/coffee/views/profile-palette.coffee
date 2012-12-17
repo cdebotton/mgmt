@@ -4,8 +4,8 @@ define [
 	'views/user-badge'
 ], (Backbone, namespace) ->
 
-	namespace 'BU.View.ProfilePalette'
-	class BU.View.ProfilePalette extends Backbone.View
+	namespace 'BU.Views.ProfilePalette'
+	class BU.Views.ProfilePalette extends Backbone.View
 
 		el: '#profile-palette'
 
@@ -17,7 +17,7 @@ define [
 			@addAll()
 
 		addOne: (user) =>
-			view = new BU.View.UserBadge
+			view = new BU.Views.UserBadge
 				model: user
 			el = view.render().$el
 			@$el.append el

@@ -4,9 +4,9 @@
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['backbone', 'ns', 'jquery', 'jst', 'animate'], function(Backbone, ns, $) {
-    ns('BU.View.EditModal');
-    return BU.View.EditModal = (function(_super) {
+  define(['backbone', 'underscore', 'ns', 'jquery', 'jst', 'animate', 'models/task'], function(Backbone, _, ns, $) {
+    ns('BU.Views.EditModal');
+    return BU.Views.EditModal = (function(_super) {
 
       __extends(EditModal, _super);
 
@@ -16,6 +16,8 @@
         this.printUsers = __bind(this.printUsers, this);
 
         this.saveTask = __bind(this.saveTask, this);
+
+        this.bindEscape = __bind(this.bindEscape, this);
 
         this.closeModal = __bind(this.closeModal, this);
 
@@ -38,15 +40,30 @@
       };
 
       EditModal.prototype.render = function() {
-        var ctx, html;
-        ctx = this.model.toJSON();
-        ctx.user_list = window.users;
-        ctx.start_month = this.model.get('start_date').getMonth() + 1;
-        ctx.start_day = this.model.get('start_date').getDate();
-        ctx.start_year = this.model.get('start_date').getFullYear();
-        ctx.end_month = this.model.get('end_date').getMonth() + 1;
-        ctx.end_day = this.model.get('end_date').getDate();
-        ctx.end_year = this.model.get('end_date').getFullYear();
+        var ctx, html, task, today;
+        this.body = $('body');
+        if (this.model.has('task')) {
+          task = this.model.get('task');
+          ctx = this.model.get('task').toJSON();
+          ctx.user_list = window.users;
+          ctx.start_month = task.get('start_date').getMonth() + 1;
+          ctx.start_day = task.get('start_date').getDate();
+          ctx.start_year = task.get('start_date').getFullYear();
+          ctx.end_month = task.get('end_date').getMonth() + 1;
+          ctx.end_day = task.get('end_date').getDate();
+          ctx.end_year = task.get('end_date').getFullYear();
+        } else {
+          today = new Date;
+          ctx = {
+            start_month: today.getMonth() + 1,
+            start_day: today.getDate(),
+            start_year: today.getFullYear(),
+            end_month: today.getMonth() + 1,
+            end_day: today.getDate(),
+            end_year: today.getFullYear(),
+            user_list: window.users
+          };
+        }
         html = BU.JST.EditModal(ctx);
         this.$el.html(html);
         this.expose();
@@ -54,6 +71,7 @@
       };
 
       EditModal.prototype.expose = function() {
+        this.body.bind('keyup', this.bindEscape);
         return this.$el.css('opacity', 0).animate({
           opacity: 1
         }, 150, 'ease-in', this.dropModal);
@@ -80,27 +98,52 @@
             return _this.$el.remove();
           });
         });
+        this.body.unbind('keyup', this.bindEscape);
         return e.preventDefault();
       };
 
+      EditModal.prototype.bindEscape = function(e) {
+        if (e.keyCode === 27) {
+          return this.closeModal(e);
+        }
+      };
+
       EditModal.prototype.saveTask = function(e) {
-        this.model.set({
+        var attr, attrs, key, task;
+        attrs = {
           'author_id': window.author_id,
           'name': this.$('[name="name"]').val(),
           'project_code': this.$('[name="project_code"]').val(),
           'client': this.$('[name="client"]').val(),
           'start_date': new Date(this.$('[name="start_year"]').val(), parseInt(this.$('[name="start_month"]').val()) - 1, this.$('[name="start_day"]').val()),
           'end_date': new Date(this.$('[name="end_year"]').val(), parseInt(this.$('[name="end_month"]').val()) - 1, this.$('[name="end_day"]').val()),
-          'developer_id': this.$('[name="developer_id"]').val(),
-          'color': this.$('[name="color"]').val()
-        });
-        this.model.get('pivot').set('percentage', $('[name="percentage"]').val());
-        this.model.save();
+          'color': this.$('[name="color"]').val(),
+          'track': 0,
+          'percentage': $('[name="percentage"]').val(),
+          'user': {
+            'id': parseInt(this.$('[name="developer_id"]').val())
+          }
+        };
+        if (this.model.has('task')) {
+          for (attr in attrs) {
+            key = attrs[attr];
+            this.model.get('task').set(attr, key);
+          }
+          this.model.get('task').save();
+        } else {
+          task = new BU.Models.Task(attrs);
+          task.save(null, {
+            wait: true,
+            success: function(task, attrs, status) {
+              return task.set('id', attrs.id);
+            }
+          });
+        }
         return this.closeModal(e);
       };
 
       EditModal.prototype.printUsers = function(array, opts) {
-        var buffer, item, key, user, _i, _len;
+        var buffer, item, key, user, _i, _len, _ref;
         if (array != null ? array.length : void 0) {
           buffer = '';
           for (key = _i = 0, _len = array.length; _i < _len; key = ++_i) {
@@ -108,7 +151,7 @@
             item = {
               id: user.id,
               email: user.email,
-              selected: this.model.has('user') && +user.id === +this.model.get('user').get('id') ? ' SELECTED' : ''
+              selected: ((_ref = this.model.get('task')) != null ? _ref.has('user') : void 0) && +user.id === +this.model.get('task').get('user').get('id') ? ' SELECTED' : ''
             };
             buffer += opts.fn(item);
           }
@@ -119,7 +162,7 @@
       };
 
       EditModal.prototype.printColors = function(opts) {
-        var buffer, color, colors, id;
+        var buffer, color, colors, id, _ref;
         colors = {
           blue: 'Blue',
           red: 'Red',
@@ -132,7 +175,7 @@
           buffer += opts.fn({
             id: id,
             color: color,
-            selected: this.model.get('color') === id ? ' SELECTED' : ''
+            selected: ((_ref = this.model.get('task')) != null ? _ref.get('color') : void 0) === id ? ' SELECTED' : ''
           });
         }
         return buffer;

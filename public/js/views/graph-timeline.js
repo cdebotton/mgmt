@@ -5,8 +5,8 @@
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   define(['backbone', 'ns', 'jst'], function(Backbone, namespace) {
-    namespace('BU.View.GraphTimeline');
-    return BU.View.GraphTimeline = (function(_super) {
+    namespace('BU.Views.GraphTimeline');
+    return BU.Views.GraphTimeline = (function(_super) {
       var DAY_TO_MILLISECONDS, DRAGGING, RANGE;
 
       __extends(GraphTimeline, _super);

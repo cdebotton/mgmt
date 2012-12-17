@@ -4,8 +4,8 @@ define [
 	'jst'
 ], (Backbone, namespace) ->
 
-	namespace 'BU.View.GraphTimeline'
-	class BU.View.GraphTimeline extends Backbone.View
+	namespace 'BU.Views.GraphTimeline'
+	class BU.Views.GraphTimeline extends Backbone.View
 
 		el: '#graph-timeline-wrapper'
 		DAY_TO_MILLISECONDS = 86400000

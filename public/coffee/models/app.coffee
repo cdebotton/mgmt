@@ -6,14 +6,14 @@ define [
 	'collections/users'
 ], (Backbone, namespace) ->
 
-	namespace 'BU.Model.App'
-	class BU.Model.App extends Backbone.RelationalModel
+	namespace 'BU.Models.App'
+	class BU.Models.App extends Backbone.RelationalModel
 
 		relations: [{
 			type:				Backbone.HasMany
 			key:				'users'
-			relatedModel:		BU.Model.User
-			collectionType:		BU.Collection.Users
+			relatedModel:		BU.Models.User
+			collectionType:		BU.Collections.Users
 			reverseRelation:
 				type:			Backbone.HasOne
 				key:			'app'
@@ -21,5 +21,13 @@ define [
 		}]
 
 		initialize: ->
+			@get('users').each @sanitizeUsers
 
-	BU.Model.App.setup()
+		sanitizeUsers: (user, key) =>
+			user.get('tasks').each @sanitizeTasks
+
+		sanitizeTasks: (task, key) =>
+			task.attributes['percentage'] = task.get('pivot').percentage
+			delete task.attributes['pivot']
+
+	BU.Models.App.setup()

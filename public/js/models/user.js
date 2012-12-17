@@ -4,8 +4,8 @@
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   define(['backbone', 'ns', 'relational', 'models/role', 'collections/roles', 'models/task', 'collections/tasks'], function(Backbone, namespace) {
-    namespace('BU.Model.User');
-    BU.Model.User = (function(_super) {
+    namespace('BU.Models.User');
+    BU.Models.User = (function(_super) {
 
       __extends(User, _super);
 
@@ -21,19 +21,13 @@
         {
           type: Backbone.HasMany,
           key: 'roles',
-          relatedModel: BU.Model.Role,
-          collectionType: BU.Collection.Roles,
-          reverseRelation: {
-            type: Backbone.HasMany,
-            key: 'user',
-            keySource: 'user_id',
-            includeInJSON: 'id'
-          }
+          relatedModel: BU.Models.Role,
+          collectionType: BU.Collections.Roles
         }, {
           type: Backbone.HasMany,
           key: 'tasks',
-          relatedModel: BU.Model.Task,
-          collectionType: BU.Collection.Tasks,
+          relatedModel: BU.Models.Task,
+          collectionType: BU.Collections.Tasks,
           reverseRelation: {
             type: Backbone.HasOne,
             key: 'user',
@@ -54,7 +48,7 @@
       return User;
 
     })(Backbone.RelationalModel);
-    return BU.Model.User.setup();
+    return BU.Models.User.setup();
   });
 
 }).call(this);

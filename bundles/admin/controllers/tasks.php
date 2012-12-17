@@ -14,7 +14,6 @@ class Admin_Tasks_Controller extends Admin_Base_Controller {
 	{
 		$developers = User::with(array('roles', 'tasks'))
 			->get();
-
 		$userArray = array('null' => 'User');
 		foreach($developers as $dev)
 		{
@@ -25,7 +24,6 @@ class Admin_Tasks_Controller extends Admin_Base_Controller {
 			'red'		=> 'Red',
 			'green'		=> 'Green',
 			'yellow'	=> 'Yellow'
-
 		);
 		return View::make('admin::tasks.index')
 			->with('developers', $userArray)

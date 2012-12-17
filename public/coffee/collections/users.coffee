@@ -4,9 +4,9 @@ define [
 	'models/user'
 ], (Backbone, namespace) ->
 
-	namespace 'BU.Collection.Users'
-	class BU.Collection.Users extends Backbone.Collection
+	namespace 'BU.Collections.Users'
+	class BU.Collections.Users extends Backbone.Collection
 
-		model: BU.Model.User
+		model: BU.Models.User
 
 		initialize: ->

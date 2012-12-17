@@ -1,8 +1,8 @@
 define ['backbone', 'underscore', 'ns', 'dropdown'], (Backbone, _, namespace) ->
 
-	namespace 'BU.View.CreatePalette'
+	namespace 'BU.Views.CreatePalette'
 
-	class BU.View.CreatePalette extends Backbone.View
+	class BU.Views.CreatePalette extends Backbone.View
 		el: '#task-create-palette'
 
 		events:

@@ -5,8 +5,8 @@
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   define(['backbone', 'ns', 'views/user-timeline'], function(Backbone, namespace) {
-    namespace('BU.View.TaskTimeline');
-    return BU.View.TaskTimeline = (function(_super) {
+    namespace('BU.Views.TaskTimeline');
+    return BU.Views.TaskTimeline = (function(_super) {
 
       __extends(TaskTimeline, _super);
 
@@ -27,7 +27,7 @@
 
       TaskTimeline.prototype.addOne = function(user) {
         var el, view;
-        view = new BU.View.UserTimeline({
+        view = new BU.Views.UserTimeline({
           model: user
         });
         el = view.render().$el;

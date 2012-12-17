@@ -3,5 +3,5 @@ define [
 	'ns'
 ], (Backbone, ns) ->
 
-	ns 'BU.View.DateGuides'
-	class BU.View.DateGuides extends Backbone.View
+	ns 'BU.Views.DateGuides'
+	class BU.Views.DateGuides extends Backbone.View

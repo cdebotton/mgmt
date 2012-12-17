@@ -117,8 +117,8 @@
         task.end_date.setHours(0, 0, 0, 0);
       }
     }
-    return window.BUScheduler = new BU.View.App({
-      model: new BU.Model.App({
+    return window.BUScheduler = new BU.Views.App({
+      model: new BU.Models.App({
         users: window.users
       })
     });

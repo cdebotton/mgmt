@@ -4,8 +4,8 @@ define [
 	'views/user-timeline'
 ], (Backbone, namespace) ->
 
-	namespace 'BU.View.TaskTimeline'
-	class BU.View.TaskTimeline extends Backbone.View
+	namespace 'BU.Views.TaskTimeline'
+	class BU.Views.TaskTimeline extends Backbone.View
 
 		el: '#task-timeline-wrapper'
 
@@ -17,7 +17,7 @@ define [
 			@addAll()
 
 		addOne: (user) =>
-			view = new BU.View.UserTimeline
+			view = new BU.Views.UserTimeline
 				model: user
 			el = view.render().$el
 			@$el.append el

@@ -4,7 +4,7 @@ define [
 	'models/task'
 ], (Backbone, namespace) ->
 
-	namespace 'BU.Collection.Tasks'
-	class BU.Collection.Tasks extends Backbone.Collection
+	namespace 'BU.Collections.Tasks'
+	class BU.Collections.Tasks extends Backbone.Collection
 
-		model: BU.Model.Task
+		model: BU.Models.Task

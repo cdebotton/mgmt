@@ -4,11 +4,11 @@
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['backbone', 'underscore', 'jquery', 'ns', 'views/create-palette', 'views/profile-palette', 'views/task-timeline', 'views/graph-timeline', 'views/date-guides', 'views/edit-modal', 'models/task'], function(Backbone, _, $, namespace) {
+  define(['backbone', 'underscore', 'jquery', 'ns', 'views/create-palette', 'views/profile-palette', 'views/task-timeline', 'views/graph-timeline', 'views/date-guides', 'views/edit-modal', 'models/edit-modal', 'models/task'], function(Backbone, _, $, namespace) {
     namespace('BU.EventBus');
     BU.EventBus = _.extend({}, Backbone.Events);
-    namespace('BU.View.App');
-    return BU.View.App = (function(_super) {
+    namespace('BU.Views.App');
+    return BU.Views.App = (function(_super) {
 
       __extends(App, _super);
 
@@ -35,17 +35,17 @@
         this.dy = this.$el.offset().top;
         this.window.on('scroll', this.affix);
         this.window.on('resize', this.adjust);
-        _.extend({}, this.sub_views, {
-          graphTimeline: new BU.View.GraphTimeline({
+        this.sub_views = _.extend({}, {
+          graphTimeline: new BU.Views.GraphTimeline({
             model: this.model
           }),
-          profilePalette: new BU.View.ProfilePalette({
+          profilePalette: new BU.Views.ProfilePalette({
             model: this.model
           }),
-          taskTimeline: new BU.View.TaskTimeline({
+          taskTimeline: new BU.Views.TaskTimeline({
             model: this.model
           }),
-          dateGuides: new BU.View.DateGuides
+          dateGuides: new BU.Views.DateGuides
         });
         return this.adjust();
       };
@@ -75,13 +75,22 @@
       };
 
       App.prototype.createNewTask = function(e) {
-        this.openModal(new BU.Model.Task);
+        this.openModal();
         return e.preventDefault();
       };
 
       App.prototype.openModal = function(task) {
-        this.modal = new BU.View.EditModal({
-          model: task
+        var params;
+        if (task == null) {
+          task = null;
+        }
+        params = {};
+        params['users'] = this.model.get('users');
+        if (task !== null) {
+          params['task'] = task;
+        }
+        this.modal = new BU.Views.EditModal({
+          model: new BU.Models.EditModal(params)
         });
         return this.$el.append(this.modal.render().$el);
       };

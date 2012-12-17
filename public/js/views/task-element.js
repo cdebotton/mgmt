@@ -5,8 +5,8 @@
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   define(['backbone', 'ns', 'jst'], function(Backbone, namespace) {
-    namespace('BU.View.TaskElement');
-    return BU.View.TaskElement = (function(_super) {
+    namespace('BU.Views.TaskElement');
+    return BU.Views.TaskElement = (function(_super) {
       var DAY_TO_MILLISECONDS, PX_PER_DAY;
 
       __extends(TaskElement, _super);
@@ -53,7 +53,7 @@
         this.model.on('change:track', this.updatePositions, this);
         this.model.on('change:color', this.updateColor, this);
         this.model.on('change:name change:client change:project_code', this.render, this);
-        this.model.get('pivot').on('change:percentage', this.render, this);
+        this.model.on('change:percentage', this.render, this);
         if (this.model.get('color') !== null) {
           this.$el.addClass(this.model.get('color'));
         }

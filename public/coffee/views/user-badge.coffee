@@ -4,8 +4,8 @@ define [
 	'jst'
 ], (Backbone, namespace) ->
 
-	namespace 'BU.View.UserBadge'
-	class BU.View.UserBadge extends Backbone.View
+	namespace 'BU.Views.UserBadge'
+	class BU.Views.UserBadge extends Backbone.View
 
 		tagName: 'article'
 		

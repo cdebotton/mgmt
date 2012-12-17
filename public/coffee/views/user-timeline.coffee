@@ -7,8 +7,8 @@ define [
 	'views/overage'
 ], (Backbone, _, namespace) ->
 
-	namespace 'BU.View.UserTimeline'
-	class BU.View.UserTimeline extends Backbone.View
+	namespace 'BU.Views.UserTimeline'
+	class BU.Views.UserTimeline extends Backbone.View
 
 		tagName: 'article'
 
@@ -19,11 +19,11 @@ define [
 		initialize: ->
 			BU.EventBus.on 'percentage-points-calculated', @drawRanges, @
 			BU.EventBus.on 'percentage-changed', @calculateOverages, @
+			BU.EventBus.on 'task-added', @taskCreated, @
 			@model.on 'add:tasks', @addOne, @
 			@model.on 'reset:tasks remove:tasks', @addAll, @
 			@model.get('tasks').on 'change:track', @adjustHeight, @
 			@model.get('tasks').on 'change:start_date change:end_date change:user change:percentage', @calculateOverages, @
-
 
 		render: ->
 			ctx = @model.toJSON()
@@ -52,7 +52,7 @@ define [
 					taskstart = task.get 'start_date'
 					taskend = task.get 'end_date'
 					if (startpoint < taskend) and (endpoint > taskstart)
-						totalPercentage += +task.get('pivot')?.get 'percentage'
+						totalPercentage += +task.get 'percentage'
 				range.push totalPercentage
 			BU.EventBus.trigger 'plot-ranges', ranges, @cid
 
@@ -61,14 +61,18 @@ define [
 			_.each @overages, (range) -> range.clear()
 			@overages = []
 			for range in response
-				view = new BU.View.Overage
+				view = new BU.Views.Overage
 					model: new Backbone.Model range
 				html = view.render().$el
 				@overages.push view
 				@$el.append html
 
+		taskCreated: (task, userId) ->
+			if userId is @model.get 'id'
+				@addOne task
+
 		addOne: (task) =>
-			view = new BU.View.TaskElement
+			view = new BU.Views.TaskElement
 				model: task
 			html = view.render().$el
 			@$el.append html

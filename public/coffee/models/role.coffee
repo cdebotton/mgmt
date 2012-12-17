@@ -6,7 +6,7 @@ define [
 	'models/user'
 ], (Backbone, namespace) ->
 
-	namespace 'BU.Model.Role'
-	class BU.Model.Role extends Backbone.RelationalModel
+	namespace 'BU.Models.Role'
+	class BU.Models.Role extends Backbone.RelationalModel
 
-	BU.Model.Role.setup()
+	BU.Models.Role.setup()

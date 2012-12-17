@@ -5,8 +5,8 @@
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   define(['backbone', 'ns', 'views/user-badge'], function(Backbone, namespace) {
-    namespace('BU.View.ProfilePalette');
-    return BU.View.ProfilePalette = (function(_super) {
+    namespace('BU.Views.ProfilePalette');
+    return BU.Views.ProfilePalette = (function(_super) {
 
       __extends(ProfilePalette, _super);
 
@@ -27,7 +27,7 @@
 
       ProfilePalette.prototype.addOne = function(user) {
         var el, view;
-        view = new BU.View.UserBadge({
+        view = new BU.Views.UserBadge({
           model: user
         });
         el = view.render().$el;

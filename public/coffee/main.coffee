@@ -78,6 +78,6 @@ require ['views/app', 'models/app'], ->
 			task.start_date.setHours 0, 0, 0, 0
 			task.end_date = new Date task.end_date
 			task.end_date.setHours 0, 0, 0, 0
-	window.BUScheduler = new BU.View.App
-		model: new BU.Model.App
+	window.BUScheduler = new BU.Views.App
+		model: new BU.Models.App
 			users: window.users

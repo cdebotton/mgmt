@@ -4,5 +4,5 @@ define [
 	'relational'
 ], (Backbone, ns) ->
 
-	ns 'BU.Model.Pivot'
-	class BU.Model.Pivot extends Backbone.RelationalModel
+	ns 'BU.Models.Pivot'
+	class BU.Models.Pivot extends Backbone.RelationalModel

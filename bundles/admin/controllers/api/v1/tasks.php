@@ -35,13 +35,24 @@ class Admin_Api_V1_Tasks_Controller extends Controller {
 		$task->start_date			= $json->start_date;
 		$task->name					= $json->name;
 		$task->project_code			= $json->project_code;
+		$task->track				= $json->track;
 		$task->color 				= $json->color;
-		#$task->pivot->percentage	= $json->pivot->percentage;
-
 		$task->save();
-		$task->users()->attach($json->developer_id);
 
-		return Response::json($task);
+		$task->users()->attach($json->user_id);
+
+		$user = Task::find($task->id)
+				->users()
+				->where_user_id($json->user_id)
+				->first();
+
+		if ($user) {
+			$user->pivot->percentage = $json->percentage;
+			$user->pivot->save();
+		}
+		
+		$json->id = $task->id;
+		return Response::json($json, 200);
 	}
 
 	public function put_update($id)
@@ -66,16 +77,16 @@ class Admin_Api_V1_Tasks_Controller extends Controller {
 		$task->color 				= $json->color;
 		$task->save();
 
-		if (isset($json->developer_id)) {
-			$task->users()->sync(array($json->developer_id));
+		if (isset($json->user_id)) {
+			$task->users()->sync(array($json->user_id));
 
 			$user = Task::find($id)
 				->users()
-				->where_user_id($json->developer_id)
+				->where_user_id($json->user_id)
 				->first();
 
 			if ($user) {
-				$user->pivot->percentage = $json->pivot->percentage;
+				$user->pivot->percentage = $json->percentage;
 				$user->pivot->save();
 			}
 		} 

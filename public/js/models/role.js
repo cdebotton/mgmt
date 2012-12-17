@@ -4,8 +4,8 @@
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   define(['backbone', 'ns', 'relational', 'collections/users', 'models/user'], function(Backbone, namespace) {
-    namespace('BU.Model.Role');
-    BU.Model.Role = (function(_super) {
+    namespace('BU.Models.Role');
+    BU.Models.Role = (function(_super) {
 
       __extends(Role, _super);
 
@@ -16,7 +16,7 @@
       return Role;
 
     })(Backbone.RelationalModel);
-    return BU.Model.Role.setup();
+    return BU.Models.Role.setup();
   });
 
 }).call(this);

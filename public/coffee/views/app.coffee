@@ -9,14 +9,15 @@ define [
 	'views/graph-timeline'
 	'views/date-guides'
 	'views/edit-modal'
+	'models/edit-modal'
 	'models/task'
 ], (Backbone, _, $, namespace) ->
 	
 	namespace 'BU.EventBus'
 	BU.EventBus = _.extend {}, Backbone.Events
 
-	namespace 'BU.View.App'
-	class BU.View.App extends Backbone.View
+	namespace 'BU.Views.App'
+	class BU.Views.App extends Backbone.View
 
 		el: '#schedule-viewport'
 
@@ -31,14 +32,15 @@ define [
 			@dy = @$el.offset().top
 			@window.on 'scroll', @affix
 			@window.on 'resize', @adjust
-			_.extend {}, @sub_views,
-				graphTimeline:	new BU.View.GraphTimeline
+			@sub_views = _.extend {}, {
+				graphTimeline:	new BU.Views.GraphTimeline
 					model: @model
-				profilePalette:	new BU.View.ProfilePalette
+				profilePalette:	new BU.Views.ProfilePalette
 					model: @model
-				taskTimeline:	new BU.View.TaskTimeline
+				taskTimeline:	new BU.Views.TaskTimeline
 					model: @model
-				dateGuides: 	new BU.View.DateGuides
+				dateGuides: 	new BU.Views.DateGuides
+			}
 			@adjust()
 
 		disableSelection: (e) -> e.preventDefault()
@@ -59,10 +61,13 @@ define [
 			BU.EventBus.trigger 'adjust', w, h
 
 		createNewTask: (e) =>
-			@openModal new BU.Model.Task
+			@openModal()
 			e.preventDefault()
 
-		openModal: (task) ->
-			@modal = new BU.View.EditModal
-				model: task
+		openModal: (task = null) ->
+			params = {}
+			params['users'] = @model.get('users')
+			if task isnt null then params['task'] = task
+			@modal = new BU.Views.EditModal
+				model: new BU.Models.EditModal params
 			@$el.append @modal.render().$el

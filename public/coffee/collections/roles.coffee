@@ -4,7 +4,7 @@ define [
 	'models/role'
 ], (Backbone, namespace) ->
 
-	namespace 'BU.Collection.Roles'
-	class BU.Collection.Roles extends Backbone.Collection
+	namespace 'BU.Collections.Roles'
+	class BU.Collections.Roles extends Backbone.Collection
 
-		model: BU.Model.Role
+		model: BU.Models.Role

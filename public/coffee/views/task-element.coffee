@@ -4,8 +4,8 @@ define [
 	'jst'
 ], (Backbone, namespace) ->
 
-	namespace 'BU.View.TaskElement'
-	class BU.View.TaskElement extends Backbone.View
+	namespace 'BU.Views.TaskElement'
+	class BU.Views.TaskElement extends Backbone.View
 
 		DAY_TO_MILLISECONDS = 86400000
 
@@ -35,7 +35,7 @@ define [
 			@model.on 'change:track', @updatePositions, @
 			@model.on 'change:color', @updateColor, @
 			@model.on 'change:name change:client change:project_code', @render, @
-			@model.get('pivot').on 'change:percentage', @render, @
+			@model.on 'change:percentage', @render, @
 			if @model.get('color') isnt null then @$el.addClass @model.get 'color'
 			BU.EventBus.on 'gridpoint-dispatch', @gridPointsReceived, @
 

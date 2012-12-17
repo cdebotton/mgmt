@@ -8,26 +8,21 @@ define [
 	'collections/tasks'
 	], (Backbone, namespace) ->
 		
-	namespace 'BU.Model.User'
-	class BU.Model.User extends Backbone.RelationalModel
+	namespace 'BU.Models.User'
+	class BU.Models.User extends Backbone.RelationalModel
 
 		url: -> "/admin/api/v1/users" + if not @isNew() then "/update/#{@get 'id'}" else ''
 
 		relations: [{
 			type:				Backbone.HasMany
 			key:				'roles'
-			relatedModel:		BU.Model.Role
-			collectionType:		BU.Collection.Roles
-			reverseRelation:
-				type:			Backbone.HasMany
-				key: 			'user'
-				keySource:		'user_id'
-				includeInJSON:	'id'
+			relatedModel:		BU.Models.Role
+			collectionType:		BU.Collections.Roles
 		}, {
 			type:				Backbone.HasMany
 			key:				'tasks'
-			relatedModel:		BU.Model.Task
-			collectionType:		BU.Collection.Tasks
+			relatedModel:		BU.Models.Task
+			collectionType:		BU.Collections.Tasks
 			reverseRelation:
 				type:			Backbone.HasOne
 				key:			'user'
@@ -42,4 +37,4 @@ define [
 		
 		initialize: ->
 
-	BU.Model.User.setup()
+	BU.Models.User.setup()

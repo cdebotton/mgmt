@@ -5,8 +5,8 @@
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   define(['backbone', 'underscore', 'ns', 'jst', 'views/task-element', 'views/overage'], function(Backbone, _, namespace) {
-    namespace('BU.View.UserTimeline');
-    return BU.View.UserTimeline = (function(_super) {
+    namespace('BU.Views.UserTimeline');
+    return BU.Views.UserTimeline = (function(_super) {
 
       __extends(UserTimeline, _super);
 
@@ -24,6 +24,7 @@
       UserTimeline.prototype.initialize = function() {
         BU.EventBus.on('percentage-points-calculated', this.drawRanges, this);
         BU.EventBus.on('percentage-changed', this.calculateOverages, this);
+        BU.EventBus.on('task-added', this.taskCreated, this);
         this.model.on('add:tasks', this.addOne, this);
         this.model.on('reset:tasks remove:tasks', this.addAll, this);
         this.model.get('tasks').on('change:track', this.adjustHeight, this);
@@ -42,7 +43,7 @@
       };
 
       UserTimeline.prototype.calculateOverages = function() {
-        var date, dates, endpoint, ends, i, k, range, ranges, startpoint, starts, task, taskend, tasks, taskstart, totalPercentage, _i, _j, _k, _len, _len1, _ref, _ref1;
+        var date, dates, endpoint, ends, i, k, range, ranges, startpoint, starts, task, taskend, tasks, taskstart, totalPercentage, _i, _j, _k, _len, _len1, _ref;
         tasks = this.model.get('tasks');
         starts = tasks.pluck('start_date');
         ends = tasks.pluck('end_date');
@@ -68,7 +69,7 @@
             taskstart = task.get('start_date');
             taskend = task.get('end_date');
             if ((startpoint < taskend) && (endpoint > taskstart)) {
-              totalPercentage += +((_ref1 = task.get('pivot')) != null ? _ref1.get('percentage') : void 0);
+              totalPercentage += +task.get('percentage');
             }
           }
           range.push(totalPercentage);
@@ -88,7 +89,7 @@
         _results = [];
         for (_i = 0, _len = response.length; _i < _len; _i++) {
           range = response[_i];
-          view = new BU.View.Overage({
+          view = new BU.Views.Overage({
             model: new Backbone.Model(range)
           });
           html = view.render().$el;
@@ -98,9 +99,15 @@
         return _results;
       };
 
+      UserTimeline.prototype.taskCreated = function(task, userId) {
+        if (userId === this.model.get('id')) {
+          return this.addOne(task);
+        }
+      };
+
       UserTimeline.prototype.addOne = function(task) {
         var html, view;
-        view = new BU.View.TaskElement({
+        view = new BU.Views.TaskElement({
           model: task
         });
         html = view.render().$el;

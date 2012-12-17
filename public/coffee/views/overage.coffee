@@ -4,8 +4,8 @@ define [
 	'jst'
 ], (Backbone, ns) ->
 
-	ns 'BU.View.Overage'
-	class BU.View.Overage extends Backbone.View
+	ns 'BU.Views.Overage'
+	class BU.Views.Overage extends Backbone.View
 		
 		tagName:	'div'
 		

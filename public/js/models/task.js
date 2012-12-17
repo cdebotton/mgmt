@@ -4,9 +4,9 @@
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['backbone', 'underscore', 'ns', 'relational', 'models/pivot'], function(Backbone, _, namespace) {
-    namespace('BU.Model.Task');
-    BU.Model.Task = (function(_super) {
+  define(['backbone', 'underscore', 'ns', 'relational'], function(Backbone, _, namespace) {
+    namespace('BU.Models.Task');
+    BU.Models.Task = (function(_super) {
 
       __extends(Task, _super);
 
@@ -15,75 +15,40 @@
         return Task.__super__.constructor.apply(this, arguments);
       }
 
-      Task.prototype.relations = [
-        {
-          type: Backbone.HasOne,
-          relatedModel: BU.Model.Pivot,
-          key: 'pivot',
-          reverseRelation: {
-            includeInJSON: 'id',
-            key: 'task'
-          }
-        }
-      ];
-
-      Task.prototype.defaults = {
-        start_date: new Date,
-        end_date: new Date,
-        color: 'blue'
-      };
-
       Task.prototype.initialize = function() {
-        this.on('change:start_date', this.adjustDate, this);
-        this.on('change:end_date', this.adjustDate, this);
-        this.on('change:track', this.fixTrack, this);
-        this.on('change:developer_id', this.locateTrack, this);
-        return this.fixTrack();
+        this.on('change:user', this.locateTrack, this);
+        if (!!this.isNew()) {
+          return this.locateTrack();
+        }
       };
 
       Task.prototype.findConflicts = function(attrs, status) {
-        var conflicts, _ref;
-        return conflicts = (_ref = this.get('user')) != null ? _ref.get('tasks').filter(function(task) {
-          var _ref1, _ref2, _ref3, _ref4;
-          return task.get('id') !== attrs.id && task.get('track') === attrs.track && (((task.get('start_date') < (_ref1 = attrs.start_date) && _ref1 < task.get('end_date'))) || ((task.get('start_date') < (_ref2 = attrs.end_date) && _ref2 < task.get('end_date')) || ((attrs.start_date < (_ref3 = task.get('start_date')) && _ref3 < attrs.end_date)) || ((attrs.start_date < (_ref4 = task.get('end_date')) && _ref4 < attrs.end_date)) || task.get('start_date').toString() === attrs.start_date.toString()) || task.get('end_date').toString() === attrs.end_date.toString());
-        }) : void 0;
+        var conflicts, _ref, _ref1,
+          _this = this;
+        return conflicts = typeof this.get === "function" ? (_ref = this.get('user')) != null ? typeof _ref.get === "function" ? (_ref1 = _ref.get('tasks')) != null ? _ref1.filter(function(task) {
+          var adjacent, crash, endpoint, foreign, startpoint, taskend, taskstart;
+          startpoint = attrs.start_date;
+          endpoint = attrs.end_date;
+          taskstart = task.get('start_date');
+          taskend = task.get('end_date');
+          foreign = task.cid !== _this.cid;
+          adjacent = +task.get('track') === +attrs.track;
+          crash = (startpoint < taskend) && (endpoint > taskstart);
+          return foreign && adjacent && crash;
+        }) : void 0 : void 0 : void 0 : void 0;
       };
 
       Task.prototype.validate = function(attrs, status) {
         var conflicts;
-        conflicts = this.findConflicts(attrs, status);
-        if ((conflicts != null ? conflicts.length : void 0) > 0) {
-          return 'Collision conflict.';
-        }
-        if (attrs.track < 0) {
-          return 'Track error.';
-        }
-      };
-
-      Task.prototype.adjustDate = function(model, value, status) {
-        var changed, date, key, _ref, _results;
-        _ref = status.changes;
-        _results = [];
-        for (key in _ref) {
-          changed = _ref[key];
-          if (changed === true) {
-            date = this.get(key);
-            if (date instanceof Date) {
-              date.setHours('00');
-              date.setMinutes('00');
-              _results.push(this.attributes[key] = date);
-            } else {
-              _results.push(void 0);
-            }
-          } else {
-            _results.push(void 0);
+        if ((status != null ? status.silent : void 0) !== true) {
+          conflicts = this.findConflicts(attrs, status);
+          if ((conflicts != null ? conflicts.length : void 0) > 0) {
+            return 'Collision conflict.';
+          }
+          if (attrs.track < 0) {
+            return 'Track error.';
           }
         }
-        return _results;
-      };
-
-      Task.prototype.fixTrack = function() {
-        return this.set('track', parseInt(this.get('track')));
       };
 
       Task.prototype.url = function() {
@@ -91,7 +56,7 @@
       };
 
       Task.prototype.parse = function() {
-        var _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8, _ref9;
+        var _ref, _ref1, _ref10, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8, _ref9;
         if ((_ref = this.attributes) != null) {
           _ref['start_date'] = new Date((_ref1 = this.attributes) != null ? _ref1['start_date'] : void 0);
         }
@@ -113,15 +78,17 @@
         if ((_ref8 = this.attributes) != null) {
           _ref8['end_date'].setMinutes(0);
         }
-        return (_ref9 = this.attributes) != null ? _ref9['end_date'].setSeconds(0) : void 0;
+        if ((_ref9 = this.attributes) != null) {
+          _ref9['end_date'].setSeconds(0);
+        }
+        return (_ref10 = this.attributes) != null ? _ref10['track'] = parseInt(this.attributes['track']) : void 0;
       };
 
       Task.prototype.locateTrack = function() {
         var conflicts, fakeAttrs, track, _ref;
-        this.set('user', this.get('developer_id'));
         track = 0;
         conflicts = true;
-        while (conflicts === true && track < 10) {
+        while (conflicts === true && track < 1000) {
           fakeAttrs = _.extend({}, this.attributes, {
             track: track
           });
@@ -129,13 +96,14 @@
             track++;
           }
         }
-        return this.set('track', track);
+        this.set('track', track);
+        return this;
       };
 
       return Task;
 
     })(Backbone.RelationalModel);
-    return BU.Model.Task.setup();
+    return BU.Models.Task.setup();
   });
 
 }).call(this);
