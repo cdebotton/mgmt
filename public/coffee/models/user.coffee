@@ -1,11 +1,13 @@
 define [
-	'backbone',
-	'ns',
-	'relational',
-	'models/role',
-	'collections/roles',
-	'models/task',
+	'backbone'
+	'ns'
+	'relational'
+	'models/role'
+	'collections/roles'
+	'models/task'
 	'collections/tasks'
+	'models/discipline'
+	'collections/disciplines'
 	], (Backbone, namespace) ->
 		
 	namespace 'BU.Models.User'
@@ -28,6 +30,11 @@ define [
 				key:			'user'
 				keySource:		'user_id'
 				includeInJSON:	'id'
+		}, {
+			type: 				Backbone.HasMany
+			key:				'disciplines'
+			relatedModel:		BU.Models.Discipline
+			collectionType:		BU.Collections.Disciplines
 		}]
 
 		defaults:
@@ -36,5 +43,6 @@ define [
 			photo: 'http://placehold.it/100x100'
 		
 		initialize: ->
+			console.log @toJSON()
 
 	BU.Models.User.setup()

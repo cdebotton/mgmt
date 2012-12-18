@@ -3,7 +3,7 @@
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['backbone', 'ns', 'relational', 'models/role', 'collections/roles', 'models/task', 'collections/tasks'], function(Backbone, namespace) {
+  define(['backbone', 'ns', 'relational', 'models/role', 'collections/roles', 'models/task', 'collections/tasks', 'models/discipline', 'collections/disciplines'], function(Backbone, namespace) {
     namespace('BU.Models.User');
     BU.Models.User = (function(_super) {
 
@@ -34,6 +34,11 @@
             keySource: 'user_id',
             includeInJSON: 'id'
           }
+        }, {
+          type: Backbone.HasMany,
+          key: 'disciplines',
+          relatedModel: BU.Models.Discipline,
+          collectionType: BU.Collections.Disciplines
         }
       ];
 
@@ -43,7 +48,9 @@
         photo: 'http://placehold.it/100x100'
       };
 
-      User.prototype.initialize = function() {};
+      User.prototype.initialize = function() {
+        return console.log(this.toJSON());
+      };
 
       return User;
 

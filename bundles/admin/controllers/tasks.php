@@ -12,7 +12,7 @@ class Admin_Tasks_Controller extends Admin_Base_Controller {
 
 	public function get_index ()
 	{
-		$developers = User::with(array('roles', 'tasks'))
+		$developers = User::with(array('roles', 'tasks', 'disciplines'))
 			->get();
 		$userArray = array('null' => 'User');
 		foreach($developers as $dev)

@@ -61,6 +61,10 @@ class Create_Disciplines_Table {
 		User::find(4)
 			->disciplines()
 			->sync(array(1));
+
+		User::find(5)
+			->disciplines()
+			->sync(array(1));
 	}
 
 	/**
