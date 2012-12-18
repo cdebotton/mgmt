@@ -73,12 +73,12 @@ class Authorized_Custom_Users_Table {
 		
 		Role::create(array(
 			'id'   => 2,
-			'name' => 'Developer'
+			'name' => 'Member'
 		));
 
 		Role::create(array(
 			'id'   => 3,
-			'name' => 'Member'
+			'name' => 'Demo'
 		));
 		
 		Schema::create('rules', function($table)
@@ -161,7 +161,7 @@ class Authorized_Custom_Users_Table {
 
 		User::find(1)
 			->roles()
-			->attach(1);
+			->sync(array(1,2));
 
 		User::find(2)
 			->roles()

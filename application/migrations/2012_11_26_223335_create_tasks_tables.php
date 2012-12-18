@@ -1,6 +1,6 @@
 <?php
 
-class Tasks_Tables_Two {
+class Create_Tasks_Tables {
 	/**
 	 * Make changes to the database.
 	 *
@@ -14,14 +14,17 @@ class Tasks_Tables_Two {
 			$table->integer('author_id');
 			$table->date('start_date');
 			$table->date('end_date');
+			$table->string('name');
 			$table->string('project_code', 10);
 			$table->string('client');
 			$table->text('description');
 			$table->boolean('complete');
+			$table->string('color')->nullable();
+			$table->integer('track')->default(0);
 			$table->timestamps();
 		});
 
-		Schema::create('task_users', function ($table)
+		Schema::create('task_user', function ($table)
 		{
 			$table->increments('id');
 			$table->integer('task_id');
@@ -39,8 +42,7 @@ class Tasks_Tables_Two {
 	 */
 	public function down()
 	{
-		Schema::drop('tasks');
-		Schema::drop('tasks_users');
+		Schema::drop(array('tasks', 'task_user'));
 	}
 
 }
