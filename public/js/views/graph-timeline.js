@@ -7,7 +7,7 @@
   define(['backbone', 'ns', 'jst'], function(Backbone, namespace) {
     namespace('BU.Views.GraphTimeline');
     return BU.Views.GraphTimeline = (function(_super) {
-      var DAY_TO_MILLISECONDS, DRAGGING, RANGE;
+      var DAY_TO_MILLISECONDS, DRAGGING, PX_PER_DAY, RANGE;
 
       __extends(GraphTimeline, _super);
 
@@ -45,6 +45,8 @@
       GraphTimeline.prototype.OFFSET = 0;
 
       DRAGGING = false;
+
+      PX_PER_DAY = 41;
 
       GraphTimeline.prototype.events = {
         'mousedown': 'startDrag'
@@ -95,7 +97,7 @@
         while (d <= end) {
           epoch = d.getTime();
           this.grid[epoch] = dx;
-          dx += 21;
+          dx += PX_PER_DAY;
           if (c % 7 === 0) {
             this.ticks.dates.push({
               dx: dx,
@@ -194,7 +196,7 @@
       GraphTimeline.prototype.calculateOffset = function(start, target) {
         var epochDiff, px;
         epochDiff = this.calculateDayOffset(start, target);
-        px = -(21 * epochDiff) - 75;
+        px = -(PX_PER_DAY * epochDiff) - 75;
         return px;
       };
 

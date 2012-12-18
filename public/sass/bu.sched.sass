@@ -116,6 +116,47 @@ $modal-width: 480px
 							padding: 0 10px
 						.nav-header
 							padding: 0 10px
+			#timescale-wrapper
+				height: 30px
+				padding: 5px 0
+				float: left
+				position: relative
+				display: block
+				width: 300px
+				border-left: 1px solid #ccc
+				overflow: hidden
+				.scale-label
+					line-height: 30px
+					float: left
+					color: #aaa
+					padding: 0 20px
+				#timescale-slider
+					overflow: visible
+					float: left
+					display: block
+					height: 10px
+					background-color: #000
+					width: 200px
+					margin: 10px 0
+					cursor: pointer
+					background-size: 20px 20px
+					background-image: -webkit-linear-gradient(45deg, rgba(255, 255, 255, 0.25) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.25) 50%, rgba(255, 255, 255, 0.25) 75%, transparent 75%, transparent)
+					@include box-shadow(-1px -1px 3px rgba(0, 0, 0, 0.75))
+					@include border-radius(3px)
+					position: relative
+					#timescale-knob
+						cursor: pointer
+						width: 10px
+						height: 10px
+						padding: 5px
+						position: absolute
+						top: -6px
+						left: 0
+						background-color: #fff
+						@include background(linear-gradient(top, #fff, #eee))
+						border: 1px solid #ccc
+						@include box-shadow(0 0 5px rgba(0, 0, 0, 0.65))
+						@include border-radius(10px)
 	.striped-cheech
 		position: fixed
 		top: 0
@@ -451,4 +492,4 @@ $modal-width: 480px
 						background-color: #444
 						@include box-shadow(-1px 0 2px rgba(0,0,0,0.4))
 				&+.tick-mark
-					margin-left: 20px
+					margin-left: 40px

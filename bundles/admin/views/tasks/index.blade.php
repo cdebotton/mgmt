@@ -5,13 +5,17 @@
 		<header class="navbar">
 			<div class="navbar-inner">
 				<a href="#" class="brand">Task Timeline</a>
-				{{ Form::open() }}
-					<ul class="nav">
-						<li>
-							<a href="#" id="new-task-toggle">Create New Task</a>
-						</li>
-					</ul>
-				{{ Form::close() }}
+				<ul class="nav">
+					<li>
+						<a href="#" id="new-task-toggle">Create New Task</a>
+					</li>
+				</ul>
+				<div id="timescale-wrapper">
+					<span class="scale-label">Scale</span>
+					<div id="timescale-slider">
+						<div id="timescale-knob"></div>
+					</div>
+				</div>
 			</div>
 		</header>
 		<section id="profile-palette">

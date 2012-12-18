@@ -19,6 +19,7 @@ define [
 		XHOME: 0
 		OFFSET: 0
 		DRAGGING = false
+		PX_PER_DAY = 41
 		events:
 			'mousedown':	'startDrag'
 
@@ -66,7 +67,7 @@ define [
 			while d <= end
 				epoch = d.getTime()
 				@grid[epoch] = dx
-				dx += 21
+				dx += PX_PER_DAY
 				if c % 7 is 0
 					@ticks.dates.push {
 						dx: dx
@@ -135,7 +136,7 @@ define [
 
 		calculateOffset: (start, target) ->
 			epochDiff = @calculateDayOffset start, target
-			px = - (21 * epochDiff) - 75
+			px = - (PX_PER_DAY * epochDiff) - 75
 			px
 
 		getMonth: (date) -> @months[date.getMonth()]

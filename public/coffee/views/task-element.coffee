@@ -9,7 +9,7 @@ define [
 
 		DAY_TO_MILLISECONDS = 86400000
 
-		PX_PER_DAY = 21
+		PX_PER_DAY = 41
 
 		tagName: 'div'
 

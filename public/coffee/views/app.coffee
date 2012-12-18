@@ -11,6 +11,7 @@ define [
 	'views/edit-modal'
 	'models/edit-modal'
 	'models/task'
+	'views/scale-controller'
 ], (Backbone, _, $, namespace) ->
 	
 	namespace 'BU.EventBus'
@@ -33,13 +34,14 @@ define [
 			@window.on 'scroll', @affix
 			@window.on 'resize', @adjust
 			@sub_views = _.extend {}, {
-				graphTimeline:	new BU.Views.GraphTimeline
-					model: @model
-				profilePalette:	new BU.Views.ProfilePalette
-					model: @model
-				taskTimeline:	new BU.Views.TaskTimeline
-					model: @model
-				dateGuides: 	new BU.Views.DateGuides
+				graphTimeline:		new BU.Views.GraphTimeline
+										model: @model
+				profilePalette:		new BU.Views.ProfilePalette
+										model: @model
+				taskTimeline:		new BU.Views.TaskTimeline
+										model: @model
+				dateGuides: 		new BU.Views.DateGuides
+				scaleController:	new BU.Views.ScaleController
 			}
 			@adjust()
 
