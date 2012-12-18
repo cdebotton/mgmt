@@ -39,7 +39,7 @@
       };
 
       TaskElement.prototype.initialize = function() {
-        BU.EventBus.on('update-zoom', this.updateZoom, this);
+        BU.EventBus.on('zoom-grid-updated', this.updateZoom, this);
         BU.EventBus.on('offset-timeline', this.offsetTimeline, this);
         BU.JST.Hb.registerHelper('formatDate', this.formatDate);
         BU.EventBus.on('start-drag', this.setOpacity, this);
@@ -199,7 +199,8 @@
       };
 
       TaskElement.prototype.updateZoom = function(zoom) {
-        return console.log(zoom);
+        BU.EventBus.trigger('where-am-i', this.cid, this.model.get('start_date'), this.model.get('end_date'));
+        return BU.EventBus.trigger('percentage-changed');
       };
 
       return TaskElement;

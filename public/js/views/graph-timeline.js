@@ -36,7 +36,7 @@
 
       GraphTimeline.prototype.grid = {};
 
-      RANGE = 504;
+      RANGE = 1008;
 
       GraphTimeline.prototype.XHOME = 0;
 
@@ -65,22 +65,7 @@
         this.body.on('mouseup', this.stopDrag);
         this.parent = this.$el.parent();
         this.dy = this.$el.offset().top;
-        this.today = new Date();
-        this.today.setHours(0);
-        this.today.setMinutes(0);
-        this.today.setSeconds(0);
-        this.today.setMilliseconds(0);
-        this.currentTime = this.today.getTime();
-        this.start = new Date(this.currentTime - this.countMilli(RANGE / 2));
-        this.start.setHours(0);
-        this.start.setMinutes(0);
-        this.start.setSeconds(0);
-        this.start.setMilliseconds(0);
-        this.end = new Date(this.currentTime + this.countMilli(RANGE / 2));
-        this.end.setHours(0);
-        this.end.setMinutes(0);
-        this.end.setSeconds(0);
-        this.end.setMilliseconds(0);
+        this.generateDateRanges();
         this.drawTicks();
         BU.EventBus.on('where-am-i', this.locateTimelineObject, this);
         this.render();
@@ -97,6 +82,25 @@
           _results1.push(this.zoomLevels.push(num));
         }
         return _results1;
+      };
+
+      GraphTimeline.prototype.generateDateRanges = function() {
+        this.today = new Date();
+        this.today.setHours(0);
+        this.today.setMinutes(0);
+        this.today.setSeconds(0);
+        this.today.setMilliseconds(0);
+        this.currentTime = this.today.getTime();
+        this.start = new Date(this.currentTime - this.countMilli(RANGE / 2));
+        this.start.setHours(0);
+        this.start.setMinutes(0);
+        this.start.setSeconds(0);
+        this.start.setMilliseconds(0);
+        this.end = new Date(this.currentTime + this.countMilli(RANGE / 2));
+        this.end.setHours(0);
+        this.end.setMinutes(0);
+        this.end.setSeconds(0);
+        return this.end.setMilliseconds(0);
       };
 
       GraphTimeline.prototype.drawTicks = function() {
@@ -147,7 +151,7 @@
           html = BU.JST['GraphTimeline'](ctx);
           this.$el.html(html);
         }
-        dx = -this.calculateOffset(this.start, this.today);
+        dx = -this.calculateOffset();
         this.$el.css({
           width: 4 * Math.abs(dx),
           left: dx
@@ -288,11 +292,13 @@
         var px;
         if (PX_PER_DAY !== (px = this.zoomLevels[zoom])) {
           PX_PER_DAY = px;
+          this.generateDateRanges();
           this.drawTicks();
           this.render(false);
-          return this.$('.tick-mark+.tick-mark').css({
+          this.$('.tick-mark+.tick-mark').css({
             marginLeft: px - 1
           });
+          return BU.EventBus.trigger('zoom-grid-updated');
         }
       };
 

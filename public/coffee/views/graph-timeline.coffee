@@ -14,7 +14,7 @@ define [
 		currentTime: null
 		ticks: {dates: []}
 		grid: {}
-		RANGE = 504
+		RANGE = 1008
 		XHOME: 0
 		OFFSET: 0
 		DRAGGING = false
@@ -37,6 +37,17 @@ define [
 			@parent = @$el.parent()
 			@dy = @$el.offset().top
 
+			@generateDateRanges()
+			@drawTicks()
+			BU.EventBus.on 'where-am-i', @locateTimelineObject, @
+			@render()
+
+			min = 11
+			lim = 201
+			range = [min...lim]
+			@zoomLevels.push num for num in range by 2
+
+		generateDateRanges: () ->
 			@today = new Date()
 			@today.setHours 0
 			@today.setMinutes 0
@@ -55,15 +66,6 @@ define [
 			@end.setMinutes 0
 			@end.setSeconds 0
 			@end.setMilliseconds 0
-
-			@drawTicks()
-			BU.EventBus.on 'where-am-i', @locateTimelineObject, @
-			@render()
-
-			min = 11
-			lim = 201
-			range = [min...lim]
-			@zoomLevels.push num for num in range by 2
 
 		drawTicks: () ->
 			@ticks = {dates: []}
@@ -96,7 +98,7 @@ define [
 				ctx = @ticks
 				html = BU.JST['GraphTimeline'] ctx
 				@$el.html html
-			dx = -@calculateOffset @start, @today
+			dx = -@calculateOffset()
 			@$el.css
 				width: 4 * Math.abs dx
 				left: dx
@@ -187,10 +189,10 @@ define [
 		updateZoom: (zoom) ->
 			if PX_PER_DAY isnt (px = @zoomLevels[zoom])
 				PX_PER_DAY = px
-
+				@generateDateRanges()
 				@drawTicks()
 				@render false
 				@$('.tick-mark+.tick-mark').css {
 					marginLeft: px-1
 				}
-			
+				BU.EventBus.trigger 'zoom-grid-updated'

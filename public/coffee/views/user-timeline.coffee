@@ -17,6 +17,7 @@ define [
 		overages: []
 
 		initialize: ->
+			BU.EventBus.on 'zoom-grid-updated', @calculateOverages, @
 			BU.EventBus.on 'percentage-points-calculated', @drawRanges, @
 			BU.EventBus.on 'percentage-changed', @calculateOverages, @
 			BU.EventBus.on 'task-added', @taskCreated, @

@@ -22,6 +22,7 @@
       UserTimeline.prototype.overages = [];
 
       UserTimeline.prototype.initialize = function() {
+        BU.EventBus.on('zoom-grid-updated', this.calculateOverages, this);
         BU.EventBus.on('percentage-points-calculated', this.drawRanges, this);
         BU.EventBus.on('percentage-changed', this.calculateOverages, this);
         BU.EventBus.on('task-added', this.taskCreated, this);
