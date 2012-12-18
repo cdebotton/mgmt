@@ -17,6 +17,8 @@
 
         this.onDrag = __bind(this.onDrag, this);
 
+        this.jumpDrag = __bind(this.jumpDrag, this);
+
         this.startDrag = __bind(this.startDrag, this);
         return ScaleController.__super__.constructor.apply(this, arguments);
       }
@@ -25,7 +27,7 @@
 
       ScaleController.prototype.events = {
         'mousedown #timescale-knob': 'startDrag',
-        'mousedown #timescale-slider': 'startDrag',
+        'mousedown #timescale-slider': 'jumpDrag',
         'blur #timescale-input': 'updateZoomInput'
       };
 
@@ -47,19 +49,24 @@
       };
 
       ScaleController.prototype.startDrag = function(e) {
-        var zoom;
+        this.body.on('mousemove', this.onDrag);
+        this.body.on('mouseup', this.stopDrag);
         this.initX = e.pageX;
+        return e.stopPropagation();
+      };
+
+      ScaleController.prototype.jumpDrag = function(e) {
+        var zoom;
+        this.startDrag(e);
         this.offset = e.offsetX - 10;
         if (this.offset < 0) {
           this.offset = 0;
         } else if (this.offset > 180) {
           this.offset = 180;
         }
-        this.knob.css('left', this.offset);
         zoom = this.zoomToOffset(this.offset, this.total);
         this.model.set('zoom', zoom);
-        this.body.on('mousemove', this.onDrag);
-        this.body.on('mouseup', this.stopDrag);
+        this.knob.css('left', this.offset);
         return BU.EventBus.trigger('update-zoom', this.model.get('zoom'));
       };
 
