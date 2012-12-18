@@ -1,8 +1,8 @@
 				<ul class="nav">
 					<li{{ URI::is('admin') ? ' class="active"' : '' }}>
 						<a href="{{ URL::to('admin') }}"><i class="icon-home"></i> Dashboad</a>
-					<li{{ URI::is('admin/tasks') ? ' class="active"' : '' }}>
-						<a href="{{ URL::to_action('admin::tasks') }}"><i class="icon-wrench"></i> Tasks</a>
+					<li{{ URI::is('admin/schedules') ? ' class="active"' : '' }}>
+						<a href="{{ URL::to_action('admin::schedules') }}"><i class="icon-wrench"></i> Schedules</a>
 					</li>
 					<li{{ URI::is('admin/projects') ? ' class="active"' : '' }}>
 						<a href="{{ URL::to_action('admin::projects') }}"><i class="icon-th-list"></i> Projects</a>

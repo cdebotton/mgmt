@@ -10,7 +10,7 @@ Validator::register('chronology', function ($attribute, $value, $parameters)
 	return strtotime($end_date) > strtotime($start_date);
 });
 
-class Admin_Tasks_Controller extends Admin_Base_Controller {
+class Admin_Schedules_Controller extends Admin_Base_Controller {
 
 	public $restful = true;
 

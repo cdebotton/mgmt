@@ -52,7 +52,7 @@
       };
 
       Task.prototype.url = function() {
-        return "/admin/api/v1/tasks" + (!this.isNew() ? "/update/" + (this.get('id')) : '');
+        return "/admin/api/v1/schedules" + (!this.isNew() ? "/update/" + (this.get('id')) : '');
       };
 
       Task.prototype.parse = function() {

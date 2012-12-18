@@ -2,7 +2,7 @@
 
 use Client\Project\Task as Task;
 
-class Admin_Api_V1_Tasks_Controller extends Controller {
+class Admin_Api_V1_Schedules_Controller extends Controller {
 	public $restful = true;
 
 	public function __construct()

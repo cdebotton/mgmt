@@ -5,12 +5,16 @@
 		<header class="navbar">
 			<div class="navbar-inner">
 				<a href="#" class="brand">Task Timeline</a>
+				<ul id="view-selector" class="nav">
+					<li class="active"><a href="#"><span class="icon icon-tasks"></span> Tasks</a></li>
+					<li><a href="#"><span class="icon icon-calendar"></span> Calendar</a></li>
+				</ul>
 				<ul class="nav">
 					<li>
-						<a href="#" id="new-task-toggle">Create New Task</a>
+						<a href="#" id="new-task-toggle"><span class="icon icon-file"></span> Create New Task</a>
 					</li>
 					<li class="dropdown" id="filter-menu">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Filters <span class="caret"></span></a>
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="icon icon-filter"></span> Filters <span class="caret"></span></a>
 						<ul class="dropdown-menu" role="menu">
 							<li class="dropdown-submenu">
 								<a tabindex="-1" href="#">Role</a>
