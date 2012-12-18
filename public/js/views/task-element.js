@@ -39,6 +39,7 @@
       };
 
       TaskElement.prototype.initialize = function() {
+        BU.EventBus.on('update-zoom', this.updateZoom, this);
         BU.EventBus.on('offset-timeline', this.offsetTimeline, this);
         BU.JST.Hb.registerHelper('formatDate', this.formatDate);
         BU.EventBus.on('start-drag', this.setOpacity, this);
@@ -195,6 +196,10 @@
 
       TaskElement.prototype.updateColor = function() {
         return this.$el[0].className = "task-element " + (this.model.get('color'));
+      };
+
+      TaskElement.prototype.updateZoom = function(zoom) {
+        return console.log(zoom);
       };
 
       return TaskElement;

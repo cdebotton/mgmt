@@ -21,6 +21,7 @@ define [
 			'click .icon-edit':	'editModal'
 
 		initialize: ->
+			BU.EventBus.on 'update-zoom', @updateZoom, @
 			BU.EventBus.on 'offset-timeline', @offsetTimeline, @
 			BU.JST.Hb.registerHelper 'formatDate', @formatDate
 			BU.EventBus.on 'start-drag', @setOpacity, @
@@ -132,3 +133,6 @@ define [
 			e.preventDefault()
 
 		updateColor: => @$el[0].className = "task-element #{@model.get 'color'}"
+
+		updateZoom: (zoom) ->
+			console.log zoom

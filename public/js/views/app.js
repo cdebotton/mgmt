@@ -4,7 +4,7 @@
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['backbone', 'underscore', 'jquery', 'ns', 'views/create-palette', 'views/profile-palette', 'views/task-timeline', 'views/graph-timeline', 'views/date-guides', 'views/edit-modal', 'models/edit-modal', 'models/task', 'views/scale-controller'], function(Backbone, _, $, namespace) {
+  define(['backbone', 'underscore', 'jquery', 'ns', 'views/create-palette', 'views/profile-palette', 'views/task-timeline', 'views/graph-timeline', 'views/date-guides', 'views/edit-modal', 'models/edit-modal', 'models/task', 'views/scale-controller', 'models/scale-controller'], function(Backbone, _, $, namespace) {
     namespace('BU.EventBus');
     BU.EventBus = _.extend({}, Backbone.Events);
     namespace('BU.Views.App');
@@ -46,7 +46,9 @@
             model: this.model
           }),
           dateGuides: new BU.Views.DateGuides,
-          scaleController: new BU.Views.ScaleController
+          scaleController: new BU.Views.ScaleController({
+            model: new BU.Models.ScaleController
+          })
         });
         return this.adjust();
       };

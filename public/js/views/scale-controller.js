@@ -4,13 +4,15 @@
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['backbone', 'ns'], function(Backbone, ns) {
+  define(['backbone', 'ns', 'animate'], function(Backbone, ns) {
     ns('BU.Views.ScaleController');
     return BU.Views.ScaleController = (function(_super) {
 
       __extends(ScaleController, _super);
 
       function ScaleController() {
+        this.updateZoomInput = __bind(this.updateZoomInput, this);
+
         this.stopDrag = __bind(this.stopDrag, this);
 
         this.onDrag = __bind(this.onDrag, this);
@@ -22,18 +24,25 @@
       ScaleController.prototype.el = '#timescale-wrapper';
 
       ScaleController.prototype.events = {
-        'mousedown #timescale-knob': 'startDrag'
+        'mousedown #timescale-knob': 'startDrag',
+        'blur #timescale-input': 'updateZoomInput'
       };
 
       ScaleController.prototype.initX = 0;
 
-      ScaleController.prototype.offset = 0;
+      ScaleController.prototype.offset = 144;
 
       ScaleController.prototype.initialize = function() {
+        this.model.on('change:zoom', this.render, this);
         this.slider = this.$('#timescale-slider');
         this.knob = this.$('#timescale-knob');
         this.body = $('body');
-        return this.total = this.slider.width() - 20;
+        this.total = this.slider.width() - 20;
+        this.input = this.$('#timescale-input');
+        this.knob.animate({
+          'left': this.offset
+        }, 375, 'ease-in');
+        return this.render();
       };
 
       ScaleController.prototype.startDrag = function(e) {
@@ -43,7 +52,7 @@
       };
 
       ScaleController.prototype.onDrag = function(e) {
-        var dx, percentage;
+        var dx, zoom;
         dx = e.pageX - this.initX;
         this.offset += dx;
         if (this.offset < 0) {
@@ -53,13 +62,41 @@
         }
         this.knob.css('left', this.offset);
         this.initX = e.pageX;
-        percentage = Math.ceil(100 * (this.offset / this.total));
-        return console.log(percentage);
+        zoom = this.zoomToOffset(this.offset, this.total);
+        this.model.set('zoom', zoom);
+        return BU.EventBus.trigger('update-zoom', this.model.get('zoom'));
+      };
+
+      ScaleController.prototype.render = function() {
+        return this.input.val(this.model.get('zoom'));
       };
 
       ScaleController.prototype.stopDrag = function(e) {
         this.body.off('mousemove', this.onDrag);
         return this.body.off('mouseup', this.stopDrag);
+      };
+
+      ScaleController.prototype.updateZoomInput = function(e) {
+        var zoom;
+        zoom = e.currentTarget.value;
+        if (zoom > 100) {
+          zoom = 100;
+        } else if (zoom < 0) {
+          zoom = 0;
+        }
+        this.model.set('zoom', zoom);
+        this.knob.animate({
+          left: this.offsetToZoom(zoom)
+        }, 375, 'ease-in');
+        return BU.EventBus.trigger('update-zoom', this.model.get('zoom'));
+      };
+
+      ScaleController.prototype.zoomToOffset = function(offset, total) {
+        return Math.ceil(100 * (offset / total));
+      };
+
+      ScaleController.prototype.offsetToZoom = function(value) {
+        return Math.round(value * (this.total / 100));
       };
 
       return ScaleController;

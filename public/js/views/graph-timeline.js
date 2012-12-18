@@ -28,8 +28,6 @@
 
       GraphTimeline.prototype.days = ['Mon', 'Tues', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun'];
 
-      GraphTimeline.prototype.today = new Date();
-
       GraphTimeline.prototype.currentTime = null;
 
       GraphTimeline.prototype.ticks = {
@@ -48,12 +46,15 @@
 
       PX_PER_DAY = 41;
 
+      GraphTimeline.prototype.zoomLevels = [];
+
       GraphTimeline.prototype.events = {
         'mousedown': 'startDrag'
       };
 
       GraphTimeline.prototype.initialize = function() {
-        var end, start, today;
+        var lim, min, num, range, _i, _j, _len, _results, _results1, _step;
+        BU.EventBus.on('update-zoom', this.updateZoom, this);
         BU.EventBus.on('on-scroll', this.affix, this);
         BU.EventBus.on('adjust', this.adjust, this);
         BU.EventBus.on('update-timeline-transform', this.updateTransform, this);
@@ -64,37 +65,50 @@
         this.body.on('mouseup', this.stopDrag);
         this.parent = this.$el.parent();
         this.dy = this.$el.offset().top;
-        today = new Date();
-        today.setHours(0);
-        today.setMinutes(0);
-        today.setSeconds(0);
-        today.setMilliseconds(0);
-        this.currentTime = today.getTime();
-        start = new Date(this.currentTime - this.countMilli(RANGE / 2));
-        start.setHours(0);
-        start.setMinutes(0);
-        start.setSeconds(0);
-        start.setMilliseconds(0);
-        end = new Date(this.currentTime + this.countMilli(RANGE / 2));
-        end.setHours(0);
-        end.setMinutes(0);
-        end.setSeconds(0);
-        end.setMilliseconds(0);
-        this.drawTicks(start, end);
+        this.today = new Date();
+        this.today.setHours(0);
+        this.today.setMinutes(0);
+        this.today.setSeconds(0);
+        this.today.setMilliseconds(0);
+        this.currentTime = this.today.getTime();
+        this.start = new Date(this.currentTime - this.countMilli(RANGE / 2));
+        this.start.setHours(0);
+        this.start.setMinutes(0);
+        this.start.setSeconds(0);
+        this.start.setMilliseconds(0);
+        this.end = new Date(this.currentTime + this.countMilli(RANGE / 2));
+        this.end.setHours(0);
+        this.end.setMinutes(0);
+        this.end.setSeconds(0);
+        this.end.setMilliseconds(0);
+        this.drawTicks();
         BU.EventBus.on('where-am-i', this.locateTimelineObject, this);
-        return this.render(start, today);
+        this.render();
+        min = 11;
+        lim = 201;
+        range = (function() {
+          _results = [];
+          for (var _i = min; min <= lim ? _i < lim : _i > lim; min <= lim ? _i++ : _i--){ _results.push(_i); }
+          return _results;
+        }).apply(this);
+        _results1 = [];
+        for (_j = 0, _len = range.length, _step = 2; _j < _len; _j += _step) {
+          num = range[_j];
+          _results1.push(this.zoomLevels.push(num));
+        }
+        return _results1;
       };
 
-      GraphTimeline.prototype.drawTicks = function(start, end) {
+      GraphTimeline.prototype.drawTicks = function() {
         var c, d, dx, epoch, _results;
         this.ticks = {
           dates: []
         };
         dx = 0;
         c = 0;
-        d = start;
+        d = this.start;
         _results = [];
-        while (d <= end) {
+        while (d <= this.end) {
           epoch = d.getTime();
           this.grid[epoch] = dx;
           dx += PX_PER_DAY;
@@ -113,20 +127,27 @@
 
       GraphTimeline.prototype.locateTimelineObject = function(cid, start_date, end_date) {
         var dx, dx2, p1, p2, x;
-        p1 = (new Date(start_date)).getTime();
-        p2 = (new Date(end_date)).getTime();
+        this.start_date = start_date;
+        this.end_date = end_date;
+        p1 = (new Date(this.start_date)).getTime();
+        p2 = (new Date(this.end_date)).getTime();
         x = this.grid[this.currentTime];
         dx = this.grid[p1] - x + 50;
         dx2 = this.grid[p2] - x + 50;
         return BU.EventBus.trigger('gridpoint-dispatch', cid, dx, dx2, this.OFFSET);
       };
 
-      GraphTimeline.prototype.render = function(start, target) {
+      GraphTimeline.prototype.render = function(redraw) {
         var ctx, dx, html;
-        ctx = this.ticks;
-        html = BU.JST['GraphTimeline'](ctx);
-        this.$el.html(html);
-        dx = -this.calculateOffset(start, target);
+        if (redraw == null) {
+          redraw = true;
+        }
+        if (redraw === true) {
+          ctx = this.ticks;
+          html = BU.JST['GraphTimeline'](ctx);
+          this.$el.html(html);
+        }
+        dx = -this.calculateOffset(this.start, this.today);
         this.$el.css({
           width: 4 * Math.abs(dx),
           left: dx
@@ -189,15 +210,14 @@
         }
       };
 
-      GraphTimeline.prototype.calculateDayOffset = function(start, target) {
-        return (target.getTime() - start.getTime()) / DAY_TO_MILLISECONDS;
+      GraphTimeline.prototype.calculateDayOffset = function() {
+        return (this.today.getTime() - this.start.getTime()) / DAY_TO_MILLISECONDS;
       };
 
-      GraphTimeline.prototype.calculateOffset = function(start, target) {
+      GraphTimeline.prototype.calculateOffset = function() {
         var epochDiff, px;
-        epochDiff = this.calculateDayOffset(start, target);
-        px = -(PX_PER_DAY * epochDiff) - 75;
-        return px;
+        epochDiff = this.calculateDayOffset();
+        return px = -(PX_PER_DAY * epochDiff) - 75;
       };
 
       GraphTimeline.prototype.getMonth = function(date) {
@@ -262,6 +282,18 @@
           });
         }
         return BU.EventBus.trigger('percentage-points-calculated', response, caller);
+      };
+
+      GraphTimeline.prototype.updateZoom = function(zoom) {
+        var px;
+        if (PX_PER_DAY !== (px = this.zoomLevels[zoom])) {
+          PX_PER_DAY = px;
+          this.drawTicks();
+          this.render(false);
+          return this.$('.tick-mark+.tick-mark').css({
+            marginLeft: px - 1
+          });
+        }
       };
 
       return GraphTimeline;

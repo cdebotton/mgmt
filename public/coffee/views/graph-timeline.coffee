@@ -11,7 +11,6 @@ define [
 		DAY_TO_MILLISECONDS = 86400000
 		months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec']
 		days: ['Mon', 'Tues', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun']
-		today: new Date()
 		currentTime: null
 		ticks: {dates: []}
 		grid: {}
@@ -20,10 +19,12 @@ define [
 		OFFSET: 0
 		DRAGGING = false
 		PX_PER_DAY = 41
+		zoomLevels: []
 		events:
 			'mousedown':	'startDrag'
 
 		initialize: ->
+			BU.EventBus.on 'update-zoom', @updateZoom, @
 			BU.EventBus.on 'on-scroll', @affix, @
 			BU.EventBus.on 'adjust', @adjust, @
 			BU.EventBus.on 'update-timeline-transform', @updateTransform, @
@@ -36,35 +37,40 @@ define [
 			@parent = @$el.parent()
 			@dy = @$el.offset().top
 
-			today = new Date()
-			today.setHours 0
-			today.setMinutes 0
-			today.setSeconds 0
-			today.setMilliseconds 0
-			@currentTime = today.getTime()
+			@today = new Date()
+			@today.setHours 0
+			@today.setMinutes 0
+			@today.setSeconds 0
+			@today.setMilliseconds 0
+			@currentTime = @today.getTime()
 
-			start = new Date @currentTime - @countMilli RANGE / 2
-			start.setHours 0
-			start.setMinutes 0
-			start.setSeconds 0
-			start.setMilliseconds 0
+			@start = new Date @currentTime - @countMilli RANGE / 2
+			@start.setHours 0
+			@start.setMinutes 0
+			@start.setSeconds 0
+			@start.setMilliseconds 0
 
-			end = new Date @currentTime + @countMilli RANGE / 2
-			end.setHours 0
-			end.setMinutes 0
-			end.setSeconds 0
-			end.setMilliseconds 0
+			@end = new Date @currentTime + @countMilli RANGE / 2
+			@end.setHours 0
+			@end.setMinutes 0
+			@end.setSeconds 0
+			@end.setMilliseconds 0
 
-			@drawTicks start, end
+			@drawTicks()
 			BU.EventBus.on 'where-am-i', @locateTimelineObject, @
-			@render start, today
+			@render()
 
-		drawTicks: (start, end) ->
+			min = 11
+			lim = 201
+			range = [min...lim]
+			@zoomLevels.push num for num in range by 2
+
+		drawTicks: () ->
 			@ticks = {dates: []}
 			dx = 0
 			c = 0
-			d = start
-			while d <= end
+			d = @start
+			while d <= @end
 				epoch = d.getTime()
 				@grid[epoch] = dx
 				dx += PX_PER_DAY
@@ -77,19 +83,20 @@ define [
 				c++
 				d.setDate d.getDate() + 1
 
-		locateTimelineObject: (cid, start_date, end_date) ->
-			p1 = (new Date start_date).getTime()
-			p2 = (new Date end_date).getTime()
+		locateTimelineObject: (cid, @start_date, @end_date) ->
+			p1 = (new Date @start_date).getTime()
+			p2 = (new Date @end_date).getTime()
 			x = @grid[@currentTime]
 			dx = @grid[p1] - x + 50
 			dx2 = @grid[p2] - x + 50
 			BU.EventBus.trigger 'gridpoint-dispatch', cid, dx, dx2, @OFFSET
 
-		render: (start, target) ->
-			ctx = @ticks
-			html = BU.JST['GraphTimeline'] ctx
-			@$el.html html
-			dx = -@calculateOffset start, target
+		render: (redraw = true) ->
+			if redraw is true
+				ctx = @ticks
+				html = BU.JST['GraphTimeline'] ctx
+				@$el.html html
+			dx = -@calculateOffset @start, @today
 			@$el.css
 				width: 4 * Math.abs dx
 				left: dx
@@ -131,13 +138,13 @@ define [
 				return buffer
 			else options.elseFn()
 
-		calculateDayOffset: (start, target) ->
-			(target.getTime() - start.getTime()) / DAY_TO_MILLISECONDS
+		calculateDayOffset: () ->
+			(@today.getTime() - @start.getTime()) / DAY_TO_MILLISECONDS
 
-		calculateOffset: (start, target) ->
-			epochDiff = @calculateDayOffset start, target
+		calculateOffset: () ->
+			epochDiff = @calculateDayOffset()
 			px = - (PX_PER_DAY * epochDiff) - 75
-			px
+
 
 		getMonth: (date) -> @months[date.getMonth()]
 
@@ -176,3 +183,14 @@ define [
 					value: range[2]
 				}
 			BU.EventBus.trigger 'percentage-points-calculated', response, caller
+
+		updateZoom: (zoom) ->
+			if PX_PER_DAY isnt (px = @zoomLevels[zoom])
+				PX_PER_DAY = px
+
+				@drawTicks()
+				@render false
+				@$('.tick-mark+.tick-mark').css {
+					marginLeft: px-1
+				}
+			

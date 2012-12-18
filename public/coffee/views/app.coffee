@@ -12,6 +12,7 @@ define [
 	'models/edit-modal'
 	'models/task'
 	'views/scale-controller'
+	'models/scale-controller'
 ], (Backbone, _, $, namespace) ->
 	
 	namespace 'BU.EventBus'
@@ -42,6 +43,7 @@ define [
 										model: @model
 				dateGuides: 		new BU.Views.DateGuides
 				scaleController:	new BU.Views.ScaleController
+										model: new BU.Models.ScaleController
 			}
 			@adjust()
 

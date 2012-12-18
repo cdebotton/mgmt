@@ -15,6 +15,7 @@
 					<div id="timescale-slider">
 						<div id="timescale-knob"></div>
 					</div>
+					<input type="number" id="timescale-input">
 				</div>
 			</div>
 		</header>
