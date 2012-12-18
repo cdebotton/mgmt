@@ -1,6 +1,6 @@
 <?php
 
-use User\Task as Task;
+use Client\Project\Task as Task;
 
 class Admin_Api_V1_Tasks_Controller extends Controller {
 	public $restful = true;

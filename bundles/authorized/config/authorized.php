@@ -1,5 +1,8 @@
 <?php 
 
+use User\Role as Role;
+use User\Role\Rule as Rule;
+
 /**
  * Authorized for Laravel
  * 

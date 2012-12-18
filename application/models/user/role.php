@@ -1,5 +1,9 @@
 <?php
 
+namespace User;
+
+use Eloquent;
+
 class Role extends Eloquent {
 
 	/**
@@ -9,7 +13,7 @@ class Role extends Eloquent {
 	*/
 	public function rules()
 	{
-		return $this->has_many_and_belongs_to('Rule');
+		return $this->has_many_and_belongs_to('User\\Role\\Rule');
 	}
 
 	/**

@@ -1,4 +1,6 @@
-<?php namespace User;
+<?php
+
+namespace Client\Project;
 
 use Eloquent;
 use Validator;
