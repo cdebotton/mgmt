@@ -1,28 +1,28 @@
 /**
  * Backbone-relational.js 0.6.0
+ * ----- AMD Fork by Dexnode -----
  * (c) 2011 Paul Uithol
  * 
  * Backbone-relational may be freely distributed under the MIT license; see the accompanying LICENSE.txt.
  * For details and documentation: https://github.com/PaulUithol/Backbone-relational.
  * Depends on Backbone (and thus on Underscore as well): https://github.com/documentcloud/backbone.
  */
-( function( undefined ) {
-	"use strict";
-	
-	/**
-	 * CommonJS shim
-	 **/
-	var _, Backbone, exports;
-	if ( typeof require !== 'undefined' ) {
-		_ = require( 'underscore' );
-		Backbone = require( 'backbone' );
-	//	exports = module.exports = Backbone;
-	}
-	else {
-		_ = window._;
-		Backbone = window.Backbone;
-		exports = window;
-	}
+
+(function(root, factory) {
+  // Set up appropriately for the environment.
+  if (typeof exports !== 'undefined') {
+    // Node/CommonJS
+    factory(root, exports, require('underscore'), require('backbone'));
+  } else if (typeof define === 'function' && define.amd) {
+    // AMD
+    define('relational', ['underscore', 'backbone', 'exports'], function(_, Backbone, exports) {
+      factory(root, exports, _, Backbone);
+    });
+  } else {
+    // Browser globals
+    factory(root, {}, root._, root.Backbone);
+  }
+}(this, function(root, exports, _, Backbone) {
 
 	Backbone.Relational = {
 		showWarnings: true
@@ -1701,4 +1701,5 @@
 
 		return child;
 	};
-})();
+
+}));
