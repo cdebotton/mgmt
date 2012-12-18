@@ -1,4 +1,8 @@
 <?php
+
+use User\Role as Role;
+use User\Discipline as Discipline;
+
 Validator::register('chronology', function ($attribute, $value, $parameters)
 {
 	$start_date = Input::get('start_year') . '-' . ((int) Input::get('start_month') + 1) . '-' . Input::get('start_day');
@@ -14,6 +18,8 @@ class Admin_Tasks_Controller extends Admin_Base_Controller {
 	{
 		$developers = User::with(array('roles', 'tasks', 'disciplines'))
 			->get();
+		$roles = Role::all();
+		$disciplines = Discipline::all();
 		$userArray = array('null' => 'User');
 		foreach($developers as $dev)
 		{
@@ -28,7 +34,9 @@ class Admin_Tasks_Controller extends Admin_Base_Controller {
 		return View::make('admin::tasks.index')
 			->with('developers', $userArray)
 			->with('dev_json', eloquent_to_json($developers))
-			->with('colors', $colors);
+			->with('colors', $colors)
+			->with('disciplines', $disciplines)
+			->with('roles', $roles);
 	}
 
 	public function get_create ()
