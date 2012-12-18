@@ -4,6 +4,11 @@ class User extends Eloquent {
 	
 	public static $hidden = array('password');
 
+	public function disciplines()
+	{
+		return $this->has_many_and_belongs_to('User\\Discipline');
+	}
+
 	public function tasks()
 	{
 		return $this->has_many_and_belongs_to('Client\\Project\\Task')->with('percentage');
