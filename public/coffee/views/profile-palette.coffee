@@ -1,8 +1,9 @@
 define [
-	'backbone',
-	'ns',
+	'backbone'
+	'underscore'
+	'ns'
 	'views/user-badge'
-], (Backbone, namespace) ->
+], (Backbone, _, namespace) ->
 
 	namespace 'BU.Views.ProfilePalette'
 	class BU.Views.ProfilePalette extends Backbone.View
@@ -10,6 +11,7 @@ define [
 		el: '#profile-palette'
 
 		initialize: ->
+			BU.EventBus.on 'set-filter', @setFilter, @
 			BU.EventBus.on 'nav-affix', @affix, @
 			BU.EventBus.on 'nav-affix', @affix, @
 			@model.on 'add:user', @addOne, @
@@ -28,3 +30,13 @@ define [
 		affix: (toggle) ->
 			if toggle is true then @$el.addClass 'affix'
 			else @$el.removeClass 'affix'
+
+		setFilter: (type, filter) ->
+			@$el.html ''
+			if type is null then return @addAll()
+			users = @model.get('users').filter (user) ->
+				matches = user.get(type).filter (item) ->
+					+item.get('id') is +filter
+				matches.length > 0
+			
+			if users.length > 0 then _.each users, @addOne

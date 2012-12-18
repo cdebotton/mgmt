@@ -9,22 +9,24 @@
 					<li>
 						<a href="#" id="new-task-toggle">Create New Task</a>
 					</li>
-					<li class="dropdown">
+					<li class="dropdown" id="filter-menu">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Filters <span class="caret"></span></a>
 						<ul class="dropdown-menu" role="menu">
 							<li class="dropdown-submenu">
 								<a tabindex="-1" href="#">Role</a>
 								<ul class="dropdown-menu">
+									<li><a href="#" data-reset-filter="true">All</a></li>
 									@foreach($roles as $role)
-									<li><a href="#">{{ $role->name }}</a></li>
+									<li><a href="#" data-role="{{ $role->id }}">{{ $role->name }}</a></li>
 									@endforeach
 								</ul>
 							</li>
 							<li class="dropdown-submenu">
 								<a tabindex="-1" href="#">Discipline</a>
 								<ul class="dropdown-menu">
+									<li><a href="#" data-reset-filter="true">All</a></li>
 									@foreach($disciplines as $discipline)
-									<li><a href="#">{{ $discipline->name }}</a></li>
+									<li><a href="#" data-discipline="{{ $discipline->id }}">{{ $discipline->name }}</a></li>
 									@endforeach
 								</ul>
 							</li>

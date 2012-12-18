@@ -4,7 +4,7 @@
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['backbone', 'ns', 'views/user-timeline'], function(Backbone, namespace) {
+  define(['backbone', 'underscore', 'ns', 'views/user-timeline'], function(Backbone, _, namespace) {
     namespace('BU.Views.TaskTimeline');
     return BU.Views.TaskTimeline = (function(_super) {
 
@@ -18,6 +18,7 @@
       TaskTimeline.prototype.el = '#task-timeline-wrapper';
 
       TaskTimeline.prototype.initialize = function() {
+        BU.EventBus.on('set-filter', this.setFilter, this);
         this.parent = this.$el.parent();
         this.model.on('add:user', this.addOne, this);
         this.model.on('reset:user', this.addAll, this);
@@ -36,6 +37,24 @@
 
       TaskTimeline.prototype.addAll = function(users) {
         return this.model.get('users').each(this.addOne);
+      };
+
+      TaskTimeline.prototype.setFilter = function(type, filter) {
+        var users;
+        this.$el.html('');
+        if (type === null) {
+          return this.addAll();
+        }
+        users = this.model.get('users').filter(function(user) {
+          var matches;
+          matches = user.get(type).filter(function(item) {
+            return +item.get('id') === +filter;
+          });
+          return matches.length > 0;
+        });
+        if (users.length > 0) {
+          return _.each(users, this.addOne);
+        }
       };
 
       return TaskTimeline;

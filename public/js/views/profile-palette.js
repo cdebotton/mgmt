@@ -4,7 +4,7 @@
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['backbone', 'ns', 'views/user-badge'], function(Backbone, namespace) {
+  define(['backbone', 'underscore', 'ns', 'views/user-badge'], function(Backbone, _, namespace) {
     namespace('BU.Views.ProfilePalette');
     return BU.Views.ProfilePalette = (function(_super) {
 
@@ -18,6 +18,7 @@
       ProfilePalette.prototype.el = '#profile-palette';
 
       ProfilePalette.prototype.initialize = function() {
+        BU.EventBus.on('set-filter', this.setFilter, this);
         BU.EventBus.on('nav-affix', this.affix, this);
         BU.EventBus.on('nav-affix', this.affix, this);
         this.model.on('add:user', this.addOne, this);
@@ -43,6 +44,24 @@
           return this.$el.addClass('affix');
         } else {
           return this.$el.removeClass('affix');
+        }
+      };
+
+      ProfilePalette.prototype.setFilter = function(type, filter) {
+        var users;
+        this.$el.html('');
+        if (type === null) {
+          return this.addAll();
+        }
+        users = this.model.get('users').filter(function(user) {
+          var matches;
+          matches = user.get(type).filter(function(item) {
+            return +item.get('id') === +filter;
+          });
+          return matches.length > 0;
+        });
+        if (users.length > 0) {
+          return _.each(users, this.addOne);
         }
       };
 

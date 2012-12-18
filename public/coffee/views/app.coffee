@@ -13,6 +13,8 @@ define [
 	'models/task'
 	'views/scale-controller'
 	'models/scale-controller'
+	'views/graph-filters'
+	'models/graph-filters'
 ], (Backbone, _, $, namespace) ->
 	
 	namespace 'BU.EventBus'
@@ -44,6 +46,8 @@ define [
 				dateGuides: 		new BU.Views.DateGuides
 				scaleController:	new BU.Views.ScaleController
 										model: new BU.Models.ScaleController
+				graphFilters:		new BU.Views.GraphFilters
+										model: new BU.Models.GraphFilters
 			}
 			@adjust()
 
