@@ -4,7 +4,7 @@
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['backbone', 'underscore', 'jquery', 'ns', 'views/create-palette', 'views/profile-palette', 'views/task-timeline', 'views/graph-timeline', 'views/date-guides', 'views/edit-modal', 'models/edit-modal', 'models/task', 'views/scale-controller', 'models/scale-controller', 'views/graph-filters', 'models/graph-filters'], function(Backbone, _, $, namespace) {
+  define(['backbone', 'underscore', 'jquery', 'ns', 'views/create-palette', 'views/profile-palette', 'views/task-timeline', 'views/graph-timeline', 'views/date-guides', 'views/edit-modal', 'models/edit-modal', 'models/task', 'views/scale-controller', 'models/scale-controller', 'views/graph-filters', 'models/graph-filters', 'views/view-selector', 'models/view-selector', 'views/calendar'], function(Backbone, _, $, namespace) {
     namespace('BU.EventBus');
     BU.EventBus = _.extend({}, Backbone.Events);
     namespace('BU.Views.App');
@@ -51,6 +51,12 @@
           }),
           graphFilters: new BU.Views.GraphFilters({
             model: new BU.Models.GraphFilters
+          }),
+          viewSelector: new BU.Views.ViewSelector({
+            model: new BU.Models.ViewSelector
+          }),
+          calendarView: new BU.Views.CalendarView({
+            model: this.model
           })
         });
         return this.adjust();

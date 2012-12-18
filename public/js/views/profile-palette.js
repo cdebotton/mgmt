@@ -18,12 +18,24 @@
       ProfilePalette.prototype.el = '#profile-palette';
 
       ProfilePalette.prototype.initialize = function() {
+        this.startLisening();
+        return this.addAll();
+      };
+
+      ProfilePalette.prototype.startLisening = function() {
         BU.EventBus.on('set-filter', this.setFilter, this);
         BU.EventBus.on('nav-affix', this.affix, this);
         BU.EventBus.on('nav-affix', this.affix, this);
         this.model.on('add:user', this.addOne, this);
-        this.model.on('reset:user', this.addAll, this);
-        return this.addAll();
+        return this.model.on('reset:user', this.addAll, this);
+      };
+
+      ProfilePalette.prototype.stopLisening = function() {
+        BU.EventBus.off('set-filter', this.setFilter, this);
+        BU.EventBus.off('nav-affix', this.affix, this);
+        BU.EventBus.off('nav-affix', this.affix, this);
+        this.model.off('add:user', this.addOne, this);
+        return this.model.off('reset:user', this.addAll, this);
       };
 
       ProfilePalette.prototype.addOne = function(user) {

@@ -18,7 +18,7 @@
       Overage.prototype.className = 'overage';
 
       Overage.prototype.initialize = function() {
-        BU.EventBus.on('offset-timeline', this.offsetTimeline, this);
+        this.startListening();
         this.$el.css({
           marginLeft: this.model.get('x'),
           width: this.model.get('width')
@@ -28,6 +28,14 @@
         } else if (parseInt(this.model.get('value')) === 0) {
           return this.$el.hide();
         }
+      };
+
+      Overage.prototype.startListening = function() {
+        return BU.EventBus.on('offset-timeline', this.offsetTimeline, this);
+      };
+
+      Overage.prototype.stopListening = function() {
+        return BU.EventBus.off('offset-timeline', this.offsetTimeline, this);
       };
 
       Overage.prototype.render = function() {

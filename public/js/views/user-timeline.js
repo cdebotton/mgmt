@@ -22,6 +22,10 @@
       UserTimeline.prototype.overages = [];
 
       UserTimeline.prototype.initialize = function() {
+        return this.startListening();
+      };
+
+      UserTimeline.prototype.startListening = function() {
         BU.EventBus.on('zoom-grid-updated', this.calculateOverages, this);
         BU.EventBus.on('percentage-points-calculated', this.drawRanges, this);
         BU.EventBus.on('percentage-changed', this.calculateOverages, this);
@@ -30,6 +34,17 @@
         this.model.on('reset:tasks remove:tasks', this.addAll, this);
         this.model.get('tasks').on('change:track', this.adjustHeight, this);
         return this.model.get('tasks').on('change:start_date change:end_date change:user change:percentage', this.calculateOverages, this);
+      };
+
+      UserTimeline.prototype.stopListening = function() {
+        BU.EventBus.off('zoom-grid-updated', this.calculateOverages, this);
+        BU.EventBus.off('percentage-points-calculated', this.drawRanges, this);
+        BU.EventBus.off('percentage-changed', this.calculateOverages, this);
+        BU.EventBus.off('task-added', this.taskCreated, this);
+        this.model.off('add:tasks', this.addOne, this);
+        this.model.off('reset:tasks remove:tasks', this.addAll, this);
+        this.model.get('tasks').off('change:track', this.adjustHeight, this);
+        return this.model.get('tasks').off('change:start_date change:end_date change:user change:percentage', this.calculateOverages, this);
       };
 
       UserTimeline.prototype.render = function() {

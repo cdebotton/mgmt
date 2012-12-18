@@ -6,8 +6,8 @@
 			<div class="navbar-inner">
 				<a href="#" class="brand">Task Timeline</a>
 				<ul id="view-selector" class="nav">
-					<li class="active"><a href="#"><span class="icon icon-tasks"></span> Tasks</a></li>
-					<li><a href="#"><span class="icon icon-calendar"></span> Calendar</a></li>
+					<li class="active"><a href="#" data-view="task"><span class="icon icon-tasks"></span> Tasks</a></li>
+					<li><a href="#" data-view="calendar"><span class="icon icon-calendar"></span> Calendar</a></li>
 				</ul>
 				<ul class="nav">
 					<li>
@@ -58,6 +58,9 @@
 					
 				</div>
 			</div>
+		</section>
+		<section id="calendar-view">
+			
 		</section>
 	</section>
 	<script>
