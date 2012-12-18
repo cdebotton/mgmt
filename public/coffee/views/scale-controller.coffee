@@ -11,6 +11,7 @@ define [
 
 		events:
 			'mousedown #timescale-knob':	'startDrag'
+			'mousedown #timescale-slider':	'startDrag'
 			'blur #timescale-input':		'updateZoomInput'
 
 		initX: 0
@@ -28,8 +29,17 @@ define [
 
 		startDrag: (e) =>
 			@initX = e.pageX
+			@offset = e.offsetX - 10
+			if @offset < 0
+				@offset = 0
+			else if @offset > 180
+				@offset = 180
+			@knob.css 'left', @offset
+			zoom = @zoomToOffset @offset, @total
+			@model.set 'zoom', zoom
 			@body.on 'mousemove', @onDrag
 			@body.on 'mouseup', @stopDrag
+			BU.EventBus.trigger 'update-zoom', @model.get 'zoom'
 
 		onDrag: (e) =>
 			dx = e.pageX - @initX

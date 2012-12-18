@@ -48,9 +48,7 @@
         photo: 'http://placehold.it/100x100'
       };
 
-      User.prototype.initialize = function() {
-        return console.log(this.toJSON());
-      };
+      User.prototype.initialize = function() {};
 
       return User;
 

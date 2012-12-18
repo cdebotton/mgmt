@@ -25,6 +25,7 @@
 
       ScaleController.prototype.events = {
         'mousedown #timescale-knob': 'startDrag',
+        'mousedown #timescale-slider': 'startDrag',
         'blur #timescale-input': 'updateZoomInput'
       };
 
@@ -46,9 +47,20 @@
       };
 
       ScaleController.prototype.startDrag = function(e) {
+        var zoom;
         this.initX = e.pageX;
+        this.offset = e.offsetX - 10;
+        if (this.offset < 0) {
+          this.offset = 0;
+        } else if (this.offset > 180) {
+          this.offset = 180;
+        }
+        this.knob.css('left', this.offset);
+        zoom = this.zoomToOffset(this.offset, this.total);
+        this.model.set('zoom', zoom);
         this.body.on('mousemove', this.onDrag);
-        return this.body.on('mouseup', this.stopDrag);
+        this.body.on('mouseup', this.stopDrag);
+        return BU.EventBus.trigger('update-zoom', this.model.get('zoom'));
       };
 
       ScaleController.prototype.onDrag = function(e) {

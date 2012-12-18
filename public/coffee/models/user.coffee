@@ -43,6 +43,5 @@ define [
 			photo: 'http://placehold.it/100x100'
 		
 		initialize: ->
-			console.log @toJSON()
 
 	BU.Models.User.setup()
