@@ -17,6 +17,8 @@
 
       TaskTimeline.prototype.el = '#task-timeline-wrapper';
 
+      TaskTimeline.prototype.views = [];
+
       TaskTimeline.prototype.initialize = function() {
         BU.EventBus.on('set-filter', this.setFilter, this);
         this.parent = this.$el.parent();
@@ -31,6 +33,7 @@
         view = new BU.Views.UserTimeline({
           model: user
         });
+        this.views.push(view);
         el = view.render().$el;
         return this.$el.append(el);
       };
@@ -41,7 +44,9 @@
 
       TaskTimeline.prototype.setFilter = function(type, filter) {
         var users;
-        this.$el.html('');
+        _.each(this.views, function(view) {
+          return view.remove();
+        });
         if (type === null) {
           return this.addAll();
         }

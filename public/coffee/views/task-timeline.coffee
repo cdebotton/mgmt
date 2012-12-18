@@ -10,6 +10,8 @@ define [
 
 		el: '#task-timeline-wrapper'
 
+		views: []
+
 		initialize: ->
 			BU.EventBus.on 'set-filter', @setFilter, @
 			@parent = @$el.parent()
@@ -21,6 +23,7 @@ define [
 		addOne: (user) =>
 			view = new BU.Views.UserTimeline
 				model: user
+			@views.push view
 			el = view.render().$el
 			@$el.append el
 
@@ -28,11 +31,10 @@ define [
 			@model.get('users').each @addOne
 
 		setFilter: (type, filter) ->
-			@$el.html ''
+			_.each @views, (view) -> view.remove()
 			if type is null then return @addAll()
 			users = @model.get('users').filter (user) ->
 				matches = user.get(type).filter (item) ->
 					+item.get('id') is +filter
 				matches.length > 0
-			
 			if users.length > 0 then _.each users, @addOne
