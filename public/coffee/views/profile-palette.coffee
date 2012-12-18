@@ -11,10 +11,10 @@ define [
 		el: '#profile-palette'
 
 		initialize: ->
-			@startLisening()
+			@startListening()
 			@addAll()
 
-		startLisening: ->
+		startListening: ->
 			BU.EventBus.on 'set-filter', @setFilter, @
 			BU.EventBus.on 'nav-affix', @affix, @
 			BU.EventBus.on 'nav-affix', @affix, @

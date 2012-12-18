@@ -60,7 +60,8 @@
 			</div>
 		</section>
 		<section id="calendar-view">
-			
+			<div class="container">
+			</div>
 		</section>
 	</section>
 	<script>

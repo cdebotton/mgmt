@@ -511,3 +511,38 @@ $modal-width: 480px
 						@include box-shadow(-1px 0 2px rgba(0,0,0,0.4))
 				&+.tick-mark
 					margin-left: 40px
+	#calendar-view
+		width: 100%
+		min-height: 600px
+		@include background(45deg, #fff, #eee)
+		display: none
+		.container
+			padding: 20px
+			width: 920px
+			background-color: rgba(255, 255, 255, 0.525)
+			margin: 20px auto
+			min-height: 400px
+			@include box-shadow(0 0 30px rgba(0, 0, 0, 0.125), -1px -1px 5px rgba(0, 0, 0, .5))
+			@include border-radius(3px)
+			overflow: hidden
+			.user-calendar-item
+				width: 920px
+				overflow: hidden
+				.left-container
+					width: 220px
+					float: left
+					.profile-image
+						width: 220px
+						text-align: center
+						height: 200px
+						.img-polaroid
+						h5
+						.badges
+					.calendar-type
+				&+.user-calendar-item
+					padding-top: 25px
+					margin-top: 25px
+					border-top: 1px solid #ccc
+				.right-container
+					width: 900px
+					float: left

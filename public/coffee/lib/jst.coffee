@@ -8,7 +8,8 @@ define [
 	'text!templates/task-element.html'
 	'text!templates/edit-modal.html'
 	'text!templates/overage.html'
-], (namespace, Handlebars, _, UserBadge, UserTimeline, GraphTimeline, TaskElement, EditModal, OverageTemplate) ->
+	'text!templates/user-calendar.html'
+], (namespace, Handlebars, _, UserBadge, UserTimeline, GraphTimeline, TaskElement, EditModal, OverageTemplate, UserCalendar) ->
 
 	namespace 'BU.JST'
 	BU.JST =
@@ -19,3 +20,4 @@ define [
 		TaskElement:	Handlebars.compile TaskElement
 		EditModal:		Handlebars.compile EditModal
 		Overage:		Handlebars.compile OverageTemplate
+		UserCalendar:	Handlebars.compile UserCalendar

@@ -18,11 +18,11 @@
       ProfilePalette.prototype.el = '#profile-palette';
 
       ProfilePalette.prototype.initialize = function() {
-        this.startLisening();
+        this.startListening();
         return this.addAll();
       };
 
-      ProfilePalette.prototype.startLisening = function() {
+      ProfilePalette.prototype.startListening = function() {
         BU.EventBus.on('set-filter', this.setFilter, this);
         BU.EventBus.on('nav-affix', this.affix, this);
         BU.EventBus.on('nav-affix', this.affix, this);

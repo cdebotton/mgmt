@@ -20,12 +20,22 @@
       TaskTimeline.prototype.views = [];
 
       TaskTimeline.prototype.initialize = function() {
-        BU.EventBus.on('set-filter', this.setFilter, this);
+        this.startListening();
         this.parent = this.$el.parent();
         this.model.on('add:user', this.addOne, this);
         this.model.on('reset:user', this.addAll, this);
         this.model.on('remove:user', this.addAll, this);
         return this.addAll();
+      };
+
+      TaskTimeline.prototype.startListening = function() {
+        BU.EventBus.on('set-filter', this.setFilter, this);
+        return this.$el.parent().show();
+      };
+
+      TaskTimeline.prototype.stopListening = function() {
+        BU.EventBus.off('set-filter', this.setFilter, this);
+        return this.$el.parent().hide();
       };
 
       TaskTimeline.prototype.addOne = function(user) {

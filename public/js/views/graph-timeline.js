@@ -85,7 +85,8 @@
         BU.EventBus.on('adjust', this.adjust, this);
         BU.EventBus.on('update-timeline-transform', this.updateTransform, this);
         BU.EventBus.on('plot-ranges', this.plotRanges, this);
-        return BU.EventBus.on('where-am-i', this.locateTimelineObject, this);
+        BU.EventBus.on('where-am-i', this.locateTimelineObject, this);
+        return this.$el.parent().show();
       };
 
       GraphTimeline.prototype.stopListening = function() {
@@ -94,7 +95,8 @@
         BU.EventBus.off('adjust', this.adjust, this);
         BU.EventBus.off('update-timeline-transform', this.updateTransform, this);
         BU.EventBus.off('plot-ranges', this.plotRanges, this);
-        return BU.EventBus.off('where-am-i', this.locateTimelineObject, this);
+        BU.EventBus.off('where-am-i', this.locateTimelineObject, this);
+        return this.$el.parent().hide();
       };
 
       GraphTimeline.prototype.generateDateRanges = function() {

@@ -46,6 +46,7 @@ define [
 			BU.EventBus.on 'update-timeline-transform', @updateTransform, @
 			BU.EventBus.on 'plot-ranges', @plotRanges, @
 			BU.EventBus.on 'where-am-i', @locateTimelineObject, @
+			@$el.parent().show()
 
 		stopListening: ->
 			BU.EventBus.off 'update-zoom', @updateZoom, @
@@ -54,6 +55,7 @@ define [
 			BU.EventBus.off 'update-timeline-transform', @updateTransform, @
 			BU.EventBus.off 'plot-ranges', @plotRanges, @
 			BU.EventBus.off 'where-am-i', @locateTimelineObject, @
+			@$el.parent().hide()
 
 		generateDateRanges: () ->
 			@today = new Date()
