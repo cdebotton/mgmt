@@ -29,8 +29,14 @@
       };
 
       App.prototype.initialize = function() {
+        this.model.get('session').on('change:id', this.authed, this);
+        return this.model.get('session').fetch();
+      };
+
+      App.prototype.authed = function(model, value, changes) {
         BU.EventBus.on('open-modal', this.openModal, this);
         BU.EventBus.on('set-view', this.setView, this);
+        BU.Session = this.model.get('session');
         this.window = $(window);
         this.header = this.$('.navbar');
         this.dy = this.$el.offset().top;
@@ -100,6 +106,9 @@
         var params;
         if (task == null) {
           task = null;
+        }
+        if (!BU.Session.isAdmin()) {
+          return false;
         }
         params = {};
         params['users'] = this.model.get('users');

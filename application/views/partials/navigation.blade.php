@@ -1,6 +1,9 @@
 				<ul class="nav">
 					<li{{ URI::is('/') ? ' class="active"' : '' }}>
 						<a href="{{ URL::to('') }}"><i class="icon-home"></i> Dashboad</a>
+					<li>
+						<a href="{{ URL::to('profile') }}"> My Profile</a>
+					</li>
 					<li{{ URI::is('schedules') ? ' class="active"' : '' }}>
 						<a href="{{ URL::to_action('schedules') }}"><i class="icon-wrench"></i> Schedules</a>
 					</li>

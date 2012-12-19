@@ -4,7 +4,7 @@
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['backbone', 'ns', 'relational', 'models/user', 'collections/users'], function(Backbone, namespace) {
+  define(['backbone', 'ns', 'relational', 'models/user', 'collections/users', 'models/session'], function(Backbone, namespace) {
     namespace('BU.Models.App');
     BU.Models.App = (function(_super) {
 
@@ -28,11 +28,21 @@
             key: 'app',
             includeInJson: 'id'
           }
+        }, {
+          type: Backbone.HasOne,
+          key: 'session',
+          relatedModel: BU.Models.Session,
+          reverseRelation: {
+            type: Backbone.HasOne,
+            key: 'app',
+            includeInJSON: false
+          }
         }
       ];
 
       App.prototype.initialize = function() {
-        return this.get('users').each(this.sanitizeUsers);
+        this.get('users').each(this.sanitizeUsers);
+        return this.set('session', new BU.Models.Session);
       };
 
       App.prototype.sanitizeUsers = function(user, key) {

@@ -32,8 +32,13 @@ define [
 			'click #new-task-toggle': 'createNewTask'
 
 		initialize: ->
+			@model.get('session').on 'change:id', @authed, @
+			@model.get('session').fetch()
+
+		authed: (model, value, changes) ->
 			BU.EventBus.on 'open-modal', @openModal, @
 			BU.EventBus.on 'set-view', @setView, @
+			BU.Session = @model.get 'session'
 			@window = $(window)
 			@header = @$ '.navbar'
 			@dy = @$el.offset().top
@@ -85,6 +90,7 @@ define [
 			e.preventDefault()
 
 		openModal: (task = null) ->
+			if not BU.Session.isAdmin() then return false
 			params = {}
 			params['users'] = @model.get('users')
 			if task isnt null then params['task'] = task

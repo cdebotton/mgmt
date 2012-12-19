@@ -2,21 +2,6 @@
 
 class Base_Controller extends Controller {
 	
-	public $navigation = array(
-		'Dashboard' => array(
-			'icon' => 'icon-home',
-			'action' => 'admin::dashboard'
-			),
-		'Tasks' => array(
-			'icon' => 'icon-wrench',
-			'action' => 'admin::tasks'
-			),
-		'Users' => array(
-			'icon' => 'icon-user',
-			'action' => 'admin::users'
-			)
-		);
-
 	/**
 	 * Catch-all method for requests that can't be matched.
 	 *

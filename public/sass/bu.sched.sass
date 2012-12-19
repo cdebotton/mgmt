@@ -387,6 +387,8 @@ $modal-width: 480px
 					@include transition-property('background-color, opacity')
 					@include transition-duration('.25s')
 					@include transition-timing-function('ease-in')
+					&.no-drag
+						cursor: default
 					&:hover
 						background-color: darken(saturate(#149bdf, 10%), 5%)
 					&.red

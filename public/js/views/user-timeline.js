@@ -26,25 +26,29 @@
       };
 
       UserTimeline.prototype.startListening = function() {
-        BU.EventBus.on('zoom-grid-updated', this.calculateOverages, this);
-        BU.EventBus.on('percentage-points-calculated', this.drawRanges, this);
-        BU.EventBus.on('percentage-changed', this.calculateOverages, this);
+        if (BU.Session.isAdmin()) {
+          BU.EventBus.on('percentage-points-calculated', this.drawRanges, this);
+          BU.EventBus.on('percentage-changed', this.calculateOverages, this);
+          this.model.get('tasks').on('change:start_date change:end_date change:user change:percentage', this.calculateOverages, this);
+          BU.EventBus.on('zoom-grid-updated', this.calculateOverages, this);
+        }
         BU.EventBus.on('task-added', this.taskCreated, this);
         this.model.on('add:tasks', this.addOne, this);
         this.model.on('reset:tasks remove:tasks', this.addAll, this);
-        this.model.get('tasks').on('change:track', this.adjustHeight, this);
-        return this.model.get('tasks').on('change:start_date change:end_date change:user change:percentage', this.calculateOverages, this);
+        return this.model.get('tasks').on('change:track', this.adjustHeight, this);
       };
 
       UserTimeline.prototype.stopListening = function() {
-        BU.EventBus.off('zoom-grid-updated', this.calculateOverages, this);
-        BU.EventBus.off('percentage-points-calculated', this.drawRanges, this);
-        BU.EventBus.off('percentage-changed', this.calculateOverages, this);
+        if (BU.Session.isAdmin()) {
+          BU.EventBus.off('percentage-points-calculated', this.drawRanges, this);
+          BU.EventBus.off('zoom-grid-updated', this.calculateOverages, this);
+          BU.EventBus.off('percentage-changed', this.calculateOverages, this);
+          this.model.get('tasks').off('change:start_date change:end_date change:user change:percentage', this.calculateOverages, this);
+        }
         BU.EventBus.off('task-added', this.taskCreated, this);
         this.model.off('add:tasks', this.addOne, this);
         this.model.off('reset:tasks remove:tasks', this.addAll, this);
-        this.model.get('tasks').off('change:track', this.adjustHeight, this);
-        return this.model.get('tasks').off('change:start_date change:end_date change:user change:percentage', this.calculateOverages, this);
+        return this.model.get('tasks').off('change:track', this.adjustHeight, this);
       };
 
       UserTimeline.prototype.render = function() {
@@ -54,7 +58,9 @@
         this.$el.html(html);
         this.addAll();
         this.adjustHeight();
-        this.calculateOverages();
+        if (BU.Session.isAdmin()) {
+          this.calculateOverages();
+        }
         return this;
       };
 

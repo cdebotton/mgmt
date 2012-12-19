@@ -20,32 +20,36 @@ define [
 			@startListening()
 
 		startListening: ->
-			BU.EventBus.on 'zoom-grid-updated', @calculateOverages, @
-			BU.EventBus.on 'percentage-points-calculated', @drawRanges, @
-			BU.EventBus.on 'percentage-changed', @calculateOverages, @
+			if BU.Session.isAdmin()
+				BU.EventBus.on 'percentage-points-calculated', @drawRanges, @
+				BU.EventBus.on 'percentage-changed', @calculateOverages, @
+				@model.get('tasks').on 'change:start_date change:end_date change:user change:percentage', @calculateOverages, @
+				BU.EventBus.on 'zoom-grid-updated', @calculateOverages, @			
+
 			BU.EventBus.on 'task-added', @taskCreated, @
 			@model.on 'add:tasks', @addOne, @
 			@model.on 'reset:tasks remove:tasks', @addAll, @
 			@model.get('tasks').on 'change:track', @adjustHeight, @
-			@model.get('tasks').on 'change:start_date change:end_date change:user change:percentage', @calculateOverages, @
 
 		stopListening: ->
-			BU.EventBus.off 'zoom-grid-updated', @calculateOverages, @
-			BU.EventBus.off 'percentage-points-calculated', @drawRanges, @
-			BU.EventBus.off 'percentage-changed', @calculateOverages, @
+			if BU.Session.isAdmin()
+				BU.EventBus.off 'percentage-points-calculated', @drawRanges, @
+				BU.EventBus.off 'zoom-grid-updated', @calculateOverages, @
+				BU.EventBus.off 'percentage-changed', @calculateOverages, @
+				@model.get('tasks').off 'change:start_date change:end_date change:user change:percentage', @calculateOverages, @
+
 			BU.EventBus.off 'task-added', @taskCreated, @
 			@model.off 'add:tasks', @addOne, @
 			@model.off 'reset:tasks remove:tasks', @addAll, @
 			@model.get('tasks').off 'change:track', @adjustHeight, @
-			@model.get('tasks').off 'change:start_date change:end_date change:user change:percentage', @calculateOverages, @
-			
 		render: ->
 			ctx = @model.toJSON()
 			html = BU.JST['UserTimeline'] ctx
 			@$el.html html
 			@addAll()
 			@adjustHeight()
-			@calculateOverages()
+			if BU.Session.isAdmin()
+				@calculateOverages()
 			@
 
 		calculateOverages: () ->
