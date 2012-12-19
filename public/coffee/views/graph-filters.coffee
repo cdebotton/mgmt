@@ -1,6 +1,7 @@
 define [
 	'backbone'
 	'ns'
+	'dropdown'
 ], (Backbone, ns) ->
 
 	ns 'BU.Views.GraphFilters'

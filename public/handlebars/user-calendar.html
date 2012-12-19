@@ -12,13 +12,18 @@
 			{{/each}}	
 		</div>	
 	</article>
-	<nav class="calendar-type">
-		<a href="#">By Project</a>
-		<a href="#">By Date</a>
-	</nav>
 </div>
 <div class="right-container">
 	<section class="calendar-content">
-
+		{{#printSchedule events}}
+		<article class="event-group">
+			<h4 class="event-title">{{ readableDate }}</h4>
+			{{#if list}}
+				{{#each list}}
+					<div class="event-item"><span class="key {{ color }}"></span> {{ title }}</div>
+				{{/each}}
+			{{/if}}
+		</article>
+		{{/printSchedule}}
 	</section>
 </div>

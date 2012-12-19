@@ -100,6 +100,10 @@
         return this;
       };
 
+      Task.prototype.comparator = function(task) {
+        return task.get('start_date');
+      };
+
       return Task;
 
     })(Backbone.RelationalModel);

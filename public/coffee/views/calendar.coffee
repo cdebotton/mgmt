@@ -27,7 +27,6 @@ define [
 			html = view.render().$el
 			@container.append html
 
-
 		addAll: (collection) ->
 			@container.html ''
 			@model.get('users').each @addOne

@@ -53,4 +53,6 @@ define [
 			@set 'track', track
 			@
 
+		comparator: (task) -> task.get('start_date')
+
 	BU.Models.Task.setup()
