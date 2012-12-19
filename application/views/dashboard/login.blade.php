@@ -1,7 +1,7 @@
-@layout('admin::layouts.default')
+@layout('layouts.default')
 
 @section('content')
-	{{ Form::horizontal_open('admin/login', 'post', array('id' => 'login-form')) }}
+	{{ Form::horizontal_open('login', 'post', array('id' => 'login-form')) }}
 		{{ Form::token() }}
 		<div class="control-group">
 			{{ Form::label('email', 'E-mail', array('class' => 'control-label')) }}

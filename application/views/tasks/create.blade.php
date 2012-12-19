@@ -1,4 +1,4 @@
-@layout('admin::layouts.default')
+@layout('layouts.default')
 
 @section('content')
 	<header id="section-header">

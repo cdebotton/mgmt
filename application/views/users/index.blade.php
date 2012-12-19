@@ -1,4 +1,4 @@
-@layout('admin::layouts.default')
+@layout('layouts.default')
 
 @section('content')
 	<header id="section-header">
@@ -41,10 +41,10 @@
 					@endforelse
 				</div>
 				<div class="user-edit">
-					<a href="{{ URL::to('admin/users/edit/' . $user->id) }}" class="btn btn-small"><i class="icon-wrench"></i> Edit</a>
+					<a href="{{ URL::to('users/edit/' . $user->id) }}" class="btn btn-small"><i class="icon-wrench"></i> Edit</a>
 				</div>
 				<div class="user-delete">
-					<a href="{{ URL::to('admin/users/destroy/' . $user->id) }}" class="btn btn-small"><i class="icon-remove"></i> Rm</a>
+					<a href="{{ URL::to('users/destroy/' . $user->id) }}" class="btn btn-small"><i class="icon-remove"></i> Rm</a>
 				</div>
 			</article>
 		@empty

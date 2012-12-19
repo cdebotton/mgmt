@@ -1,4 +1,78 @@
 <?php
+/**
+ * Add assets to containers.
+ */
+Asset::add('styles', 'css/bu.sched.css');
+
+/**
+ * Handle all non-standard routes once logged in.
+ */
+Route::group(array('before' => 'admin-auth|page-title'), function ()
+{
+	
+	Route::controller(Controller::detect());
+});
+Route::get('/', 'dashboard@index');
+/**
+ * Route log-in and log-out actions.
+ */
+Route::get('login', function ()
+{
+	if (!Auth::guest()) return Redirect::to_action('dashboard@index');
+	Section::inject('title', 'Login | BU Scheduling');
+	return View::make('dashboard.login');
+});
+
+Route::post('login', function ()
+{
+	$data = array(
+		'username' => Input::get('email'),
+		'password' => Input::get('password')
+	);
+	if (Auth::attempt($data)) {
+		return Redirect::to_action('dashboard@index');
+	}
+	else {
+		return Redirect::back()
+			->with_input();
+	}
+});
+
+Route::get('logout', function ()
+{
+	Auth::logout();
+	return Redirect::to('login');
+});
+
+/**
+ * Route filters.
+ */
+ 
+Route::filter('admin-auth', function ()
+{
+	if(Auth::guest()) return Redirect::to('login');
+});
+
+Route::filter('page-title', function ()
+{
+	$uri = explode('/', URI::current());
+	$len = count($uri);
+	$title = 'Brooklyn United Management';
+	if ($len === 2) {
+		$title = ucwords($uri[1] . ' ' . Str::singular($uri[0])) . ' | ' . $title;
+	}
+	elseif ($len === 1) {
+		$title = ucwords($uri[0]) . ' | ' . $title;
+	}
+	Section::inject('title', $title);
+});
+
+Route::filter('deny-non-async', function ()
+{
+	if (!Request::ajax()) {
+		return Response::error('500');
+	}
+});
 
 /*
 |--------------------------------------------------------------------------
@@ -32,26 +106,6 @@
 |
 */
 
-Route::get('/', function()
-{
-	return View::make('home.index');
-});
-
-/*
-|--------------------------------------------------------------------------
-| Application 404 & 500 Error Handlers
-|--------------------------------------------------------------------------
-|
-| To centralize and simplify 404 handling, Laravel uses an awesome event
-| system to retrieve the response. Feel free to modify this function to
-| your tastes and the needs of your application.
-|
-| Similarly, we use an event to handle the display of 500 level errors
-| within the application. These errors are fired when there is an
-| uncaught exception thrown in the application.
-|
-*/
-
 Event::listen('404', function()
 {
 	return Response::error('404');
@@ -61,34 +115,6 @@ Event::listen('500', function()
 {
 	return Response::error('500');
 });
-
-/*
-|--------------------------------------------------------------------------
-| Route Filters
-|--------------------------------------------------------------------------
-|
-| Filters provide a convenient method for attaching functionality to your
-| routes. The built-in before and after filters are called before and
-| after every request to your application, and you may even create
-| other filters that can be attached to individual routes.
-|
-| Let's walk through an example...
-|
-| First, define a filter:
-|
-|		Route::filter('filter', function()
-|		{
-|			return 'Filtered!';
-|		});
-|
-| Next, attach the filter to a route:
-|
-|		Router::register('GET /', array('before' => 'filter', function()
-|		{
-|			return 'Hello World!';
-|		}));
-|
-*/
 
 Route::filter('before', function()
 {

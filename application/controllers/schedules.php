@@ -10,7 +10,7 @@ Validator::register('chronology', function ($attribute, $value, $parameters)
 	return strtotime($end_date) > strtotime($start_date);
 });
 
-class Admin_Schedules_Controller extends Admin_Base_Controller {
+class Schedules_Controller extends Base_Controller {
 
 	public $restful = true;
 
@@ -31,7 +31,7 @@ class Admin_Schedules_Controller extends Admin_Base_Controller {
 			'green'		=> 'Green',
 			'yellow'	=> 'Yellow'
 		);
-		return View::make('admin::tasks.index')
+		return View::make('tasks.index')
 			->with('developers', $userArray)
 			->with('dev_json', eloquent_to_json($developers))
 			->with('colors', $colors)
@@ -64,7 +64,7 @@ class Admin_Schedules_Controller extends Admin_Base_Controller {
 			$userArray[$dev->id] = $dev->email;
 		}
 
-		return View::make('admin::tasks.create')
+		return View::make('tasks.create')
 			->with('developers', $userArray)
 			->with('dates', $dates);
 	}

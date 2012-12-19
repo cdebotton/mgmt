@@ -36,7 +36,6 @@
 return array(
 
 	'docs' => array('handles' => 'docs'),
-	'admin' => array('handles' => 'admin'),
 	'breadcrumb' => array('auto' => true),
 	'zend' => array('auto' => true),
 	'authorized' => array('auto' => true),

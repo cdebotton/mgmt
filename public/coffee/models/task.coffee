@@ -9,6 +9,8 @@ define [
 
 	class BU.Models.Task extends Backbone.RelationalModel
 
+		url: -> "/api/v1/schedules" + if not @isNew() then "/update/#{@get 'id'}" else ''
+
 		initialize: ->
 			@on 'change:user', @locateTrack, @
 			@locateTrack() unless not @isNew()
@@ -28,9 +30,7 @@ define [
 			if status?.silent isnt true
 				conflicts = @findConflicts attrs, status
 				if conflicts?.length > 0 then return 'Collision conflict.'
-				if attrs.track < 0 then return 'Track error.'
-
-		url: -> "/admin/api/v1/schedules" + if not @isNew() then "/update/#{@get 'id'}" else ''
+				if attrs.track < 0 then return 'Track error.'	
 
 		parse: =>
 			@attributes?['start_date'] = new Date @attributes?['start_date']
