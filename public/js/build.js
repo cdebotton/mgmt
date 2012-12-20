@@ -11,6 +11,7 @@
 		"underscore": "vendors/underscore/underscore",
 		"handlebars": "vendors/handlebars/handlebars",
 		"modernizr": "vendors/modernizr/modernizr",
+		"mousetrap": 'vendors/mousetrap/mousetrap',
 		"text": "vendors/requirejs/text",
 		"templates": "../handlebars",
 		"ns": "lib/ns",
@@ -59,6 +60,9 @@
 		},
 		"handlebars": {
 			exports: "Handlebars"
+		},
+		"mousetrap": {
+			exports: "Mousetrap"
 		},
 		"animate": {
 			deps: ["jquery"],
