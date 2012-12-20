@@ -1,11 +1,12 @@
 define [
 	'backbone'
 	'underscore'
+	'jquery'
 	'ns'
 	'jst'
 	'views/task-element'
 	'views/overage'
-], (Backbone, _, namespace) ->
+], (Backbone, _, $, namespace) ->
 
 	namespace 'BU.Views.UserTimeline'
 	class BU.Views.UserTimeline extends Backbone.View
@@ -16,7 +17,15 @@ define [
 
 		overages: []
 
+		DRAGGING = false
+
+		OFFSET: 0
+
+		events:
+			'mousedown':	'startDrag'
+
 		initialize: ->
+			@body = $ 'body'
 			@startListening()
 
 		startListening: ->
@@ -104,3 +113,28 @@ define [
 			if highest > 2
 				@$el.css 'height', (highest * 60) + 65
 			else @$el.css 'height', 185
+
+		startDrag: (e) =>
+			@body.on 'mousemove', @onDrag
+			@body.on 'mouseup', @stopDrag
+			@XHOME = e.originalEvent.clientX
+			DRAGGING = true
+			e.stopPropagation()
+			e.preventDefault()
+
+		onDrag: (e) =>
+			if not DRAGGING then return false
+			e.stopPropagation()
+			nextDx = @XHOME - e.originalEvent.clientX
+			@OFFSET += parseInt nextDx * 1.75
+			@XHOME = e.originalEvent.clientX
+			values = ["#{@OFFSET}px", 0, 0].join ', '
+			BU.EventBus.trigger 'offset-timeline-from-user-timeline', values
+			e.preventDefault()
+
+		stopDrag: (e) =>
+			@body.off 'mousemove', @onDrag
+			@body.off 'mouseup', @stopDrag
+			DRAGGING = false
+			@XHOME = 0
+			e.preventDefault()

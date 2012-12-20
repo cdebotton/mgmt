@@ -57,8 +57,6 @@
         this.startListening();
         BU.JST.Hb.registerHelper('outputGraph', this.outputGraph);
         this.body = $('body');
-        this.body.on('mousemove', this.onDrag);
-        this.body.on('mouseup', this.stopDrag);
         this.parent = this.$el.parent();
         this.dy = this.$el.offset().top;
         this.generateDateRanges();
@@ -86,6 +84,7 @@
         BU.EventBus.on('update-timeline-transform', this.updateTransform, this);
         BU.EventBus.on('plot-ranges', this.plotRanges, this);
         BU.EventBus.on('where-am-i', this.locateTimelineObject, this);
+        BU.EventBus.on('offset-timeline-from-user-timeline', this.offsetTimelineFromUserTimeline, this);
         return this.$el.parent().show();
       };
 
@@ -96,6 +95,7 @@
         BU.EventBus.off('update-timeline-transform', this.updateTransform, this);
         BU.EventBus.off('plot-ranges', this.plotRanges, this);
         BU.EventBus.off('where-am-i', this.locateTimelineObject, this);
+        BU.EventBus.off('offset-timeline-from-user-timeline', this.offsetTimelineFromUserTimeline, this);
         return this.$el.parent().hide();
       };
 
@@ -175,6 +175,8 @@
       };
 
       GraphTimeline.prototype.startDrag = function(e) {
+        this.body.on('mousemove', this.onDrag);
+        this.body.on('mouseup', this.stopDrag);
         this.XHOME = e.originalEvent.clientX;
         DRAGGING = true;
         return e.preventDefault();
@@ -197,6 +199,8 @@
       };
 
       GraphTimeline.prototype.stopDrag = function(e) {
+        this.body.off('mousemove', this.onDrag);
+        this.body.off('mouseup', this.stopDrag);
         DRAGGING = false;
         this.XHOME = 0;
         return e.preventDefault();
@@ -281,6 +285,13 @@
           this.OFFSET -= -(left + 50);
         }
         values = ["" + this.OFFSET + "px", 0, 0].join(', ');
+        this.$el.css({
+          '-webkit-transform': "translate3d(" + values + ")"
+        });
+        return BU.EventBus.trigger('offset-timeline', values);
+      };
+
+      GraphTimeline.prototype.offsetTimelineFromUserTimeline = function(values) {
         this.$el.css({
           '-webkit-transform': "translate3d(" + values + ")"
         });

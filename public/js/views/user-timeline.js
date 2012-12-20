@@ -4,13 +4,20 @@
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['backbone', 'underscore', 'ns', 'jst', 'views/task-element', 'views/overage'], function(Backbone, _, namespace) {
+  define(['backbone', 'underscore', 'jquery', 'ns', 'jst', 'views/task-element', 'views/overage'], function(Backbone, _, $, namespace) {
     namespace('BU.Views.UserTimeline');
     return BU.Views.UserTimeline = (function(_super) {
+      var DRAGGING;
 
       __extends(UserTimeline, _super);
 
       function UserTimeline() {
+        this.stopDrag = __bind(this.stopDrag, this);
+
+        this.onDrag = __bind(this.onDrag, this);
+
+        this.startDrag = __bind(this.startDrag, this);
+
         this.addOne = __bind(this.addOne, this);
         return UserTimeline.__super__.constructor.apply(this, arguments);
       }
@@ -21,7 +28,16 @@
 
       UserTimeline.prototype.overages = [];
 
+      DRAGGING = false;
+
+      UserTimeline.prototype.OFFSET = 0;
+
+      UserTimeline.prototype.events = {
+        'mousedown': 'startDrag'
+      };
+
       UserTimeline.prototype.initialize = function() {
+        this.body = $('body');
         return this.startListening();
       };
 
@@ -151,6 +167,37 @@
         } else {
           return this.$el.css('height', 185);
         }
+      };
+
+      UserTimeline.prototype.startDrag = function(e) {
+        this.body.on('mousemove', this.onDrag);
+        this.body.on('mouseup', this.stopDrag);
+        this.XHOME = e.originalEvent.clientX;
+        DRAGGING = true;
+        e.stopPropagation();
+        return e.preventDefault();
+      };
+
+      UserTimeline.prototype.onDrag = function(e) {
+        var nextDx, values;
+        if (!DRAGGING) {
+          return false;
+        }
+        e.stopPropagation();
+        nextDx = this.XHOME - e.originalEvent.clientX;
+        this.OFFSET += parseInt(nextDx * 1.75);
+        this.XHOME = e.originalEvent.clientX;
+        values = ["" + this.OFFSET + "px", 0, 0].join(', ');
+        BU.EventBus.trigger('offset-timeline-from-user-timeline', values);
+        return e.preventDefault();
+      };
+
+      UserTimeline.prototype.stopDrag = function(e) {
+        this.body.off('mousemove', this.onDrag);
+        this.body.off('mouseup', this.stopDrag);
+        DRAGGING = false;
+        this.XHOME = 0;
+        return e.preventDefault();
       };
 
       return UserTimeline;

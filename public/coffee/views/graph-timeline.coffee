@@ -27,8 +27,6 @@ define [
 			@startListening()
 			BU.JST.Hb.registerHelper 'outputGraph', @outputGraph
 			@body = $ 'body'
-			@body.on 'mousemove', @onDrag
-			@body.on 'mouseup', @stopDrag
 			@parent = @$el.parent()
 			@dy = @$el.offset().top
 			@generateDateRanges()
@@ -46,6 +44,7 @@ define [
 			BU.EventBus.on 'update-timeline-transform', @updateTransform, @
 			BU.EventBus.on 'plot-ranges', @plotRanges, @
 			BU.EventBus.on 'where-am-i', @locateTimelineObject, @
+			BU.EventBus.on 'offset-timeline-from-user-timeline', @offsetTimelineFromUserTimeline, @
 			@$el.parent().show()
 
 		stopListening: ->
@@ -55,6 +54,7 @@ define [
 			BU.EventBus.off 'update-timeline-transform', @updateTransform, @
 			BU.EventBus.off 'plot-ranges', @plotRanges, @
 			BU.EventBus.off 'where-am-i', @locateTimelineObject, @
+			BU.EventBus.off 'offset-timeline-from-user-timeline', @offsetTimelineFromUserTimeline, @
 			@$el.parent().hide()
 
 		generateDateRanges: () ->
@@ -115,6 +115,8 @@ define [
 			@
 
 		startDrag: (e) =>
+			@body.on 'mousemove', @onDrag
+			@body.on 'mouseup', @stopDrag
 			@XHOME = e.originalEvent.clientX
 			DRAGGING = true
 			e.preventDefault()
@@ -131,6 +133,8 @@ define [
 			e.preventDefault()
 
 		stopDrag: (e) =>
+			@body.off 'mousemove', @onDrag
+			@body.off 'mouseup', @stopDrag
 			DRAGGING = false
 			@XHOME = 0
 			e.preventDefault()
@@ -181,6 +185,10 @@ define [
 			else if dx < 0 and left < 250
 				@OFFSET -= - (left + 50)
 			values = ["#{@OFFSET}px", 0, 0].join ', '
+			@$el.css '-webkit-transform': "translate3d(#{values})"
+			BU.EventBus.trigger 'offset-timeline', values
+
+		offsetTimelineFromUserTimeline: (values) ->
 			@$el.css '-webkit-transform': "translate3d(#{values})"
 			BU.EventBus.trigger 'offset-timeline', values
 
