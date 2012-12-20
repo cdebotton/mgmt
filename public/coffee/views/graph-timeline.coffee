@@ -1,6 +1,6 @@
 define [
-	'backbone',
-	'ns',
+	'backbone'
+	'ns'
 	'jst'
 ], (Backbone, namespace) ->
 

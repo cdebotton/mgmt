@@ -1,8 +1,10 @@
 define [
 	'backbone'
+	'jquery'
+	'mousetrap'
 	'ns'
 	'animate'
-], (Backbone, ns) ->
+], (Backbone, $, Mousetrap, ns) ->
 
 	ns 'BU.Views.ScaleController'
 	class BU.Views.ScaleController extends Backbone.View
@@ -28,10 +30,14 @@ define [
 			@render()
 
 		startListening: ->
+			Mousetrap.bind ['ctrl+shift+pageup'], @zoomIn
+			Mousetrap.bind ['ctrl+shift+pagedown'], @zoomOut
 			BU.EventBus.on 'set-view', @setView, @
 			@model.on 'change:zoom', @render, @
 
 		stopListening: ->
+			Mousetrap.unbind ['ctrl+shift+pageup'], @zoomIn
+			Mousetrap.unbind ['ctrl+shift+pagedown'], @zoomOut
 			@model.off 'change:zoom', @render, @
 			BU.EventBus.off 'set-view', @setView, @
 
@@ -52,6 +58,22 @@ define [
 			@model.set 'zoom', zoom
 			@knob.css 'left', @offset
 			BU.EventBus.trigger 'update-zoom', @model.get 'zoom'
+
+		zoomIn: (e) =>
+			zoom = @model.get('zoom') + 10
+			if zoom > 100 then zoom = 100
+			offset = Math.round zoom * (@total / 100)
+			@jumpDrag { offsetX: offset, stopPropagation: () -> return false }
+			@model.set 'zoom', zoom
+			return false
+
+		zoomOut: (e) =>
+			zoom = @model.get('zoom') - 10
+			if zoom < 0 then zoom = 0
+			offset = Math.round zoom * (@total / 100)
+			@jumpDrag { offsetX: offset, stopPropagation: () -> return false }
+			@model.set 'zoom', zoom
+			return false
 
 		onDrag: (e) =>
 			dx = e.pageX - @initX

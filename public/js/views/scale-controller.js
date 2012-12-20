@@ -4,7 +4,7 @@
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['backbone', 'ns', 'animate'], function(Backbone, ns) {
+  define(['backbone', 'jquery', 'mousetrap', 'ns', 'animate'], function(Backbone, $, Mousetrap, ns) {
     ns('BU.Views.ScaleController');
     return BU.Views.ScaleController = (function(_super) {
 
@@ -16,6 +16,10 @@
         this.stopDrag = __bind(this.stopDrag, this);
 
         this.onDrag = __bind(this.onDrag, this);
+
+        this.zoomOut = __bind(this.zoomOut, this);
+
+        this.zoomIn = __bind(this.zoomIn, this);
 
         this.jumpDrag = __bind(this.jumpDrag, this);
 
@@ -49,11 +53,15 @@
       };
 
       ScaleController.prototype.startListening = function() {
+        Mousetrap.bind(['ctrl+shift+pageup'], this.zoomIn);
+        Mousetrap.bind(['ctrl+shift+pagedown'], this.zoomOut);
         BU.EventBus.on('set-view', this.setView, this);
         return this.model.on('change:zoom', this.render, this);
       };
 
       ScaleController.prototype.stopListening = function() {
+        Mousetrap.unbind(['ctrl+shift+pageup'], this.zoomIn);
+        Mousetrap.unbind(['ctrl+shift+pagedown'], this.zoomOut);
         this.model.off('change:zoom', this.render, this);
         return BU.EventBus.off('set-view', this.setView, this);
       };
@@ -78,6 +86,40 @@
         this.model.set('zoom', zoom);
         this.knob.css('left', this.offset);
         return BU.EventBus.trigger('update-zoom', this.model.get('zoom'));
+      };
+
+      ScaleController.prototype.zoomIn = function(e) {
+        var offset, zoom;
+        zoom = this.model.get('zoom') + 10;
+        if (zoom > 100) {
+          zoom = 100;
+        }
+        offset = Math.round(zoom * (this.total / 100));
+        this.jumpDrag({
+          offsetX: offset,
+          stopPropagation: function() {
+            return false;
+          }
+        });
+        this.model.set('zoom', zoom);
+        return false;
+      };
+
+      ScaleController.prototype.zoomOut = function(e) {
+        var offset, zoom;
+        zoom = this.model.get('zoom') - 10;
+        if (zoom < 0) {
+          zoom = 0;
+        }
+        offset = Math.round(zoom * (this.total / 100));
+        this.jumpDrag({
+          offsetX: offset,
+          stopPropagation: function() {
+            return false;
+          }
+        });
+        this.model.set('zoom', zoom);
+        return false;
       };
 
       ScaleController.prototype.onDrag = function(e) {
