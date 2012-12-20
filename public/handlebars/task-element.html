@@ -1,13 +1,17 @@
 <div class="stripes"></div>
 <div class="project-label-wrapper">
-	<span class="project-label">{{ project_code }} - {{ name }} ({{ client }}) <a href="#" class="icon icon-edit"></a></span>
-	{{#if percentage }}
+	<span class="project-label">{{ project_code }} - {{ name }} ({{ client }}){{#if isAdmin}} <a href="#" class="icon icon-edit"></a>{{/if}}</span>
+	{{#if isAdmin }}
+		{{#if percentage }}
 	<span class="percentage">{{ percentage }}%</span>
+		{{/if}}
 	{{/if}}
 	<div class="project-duration">
 		<span class="editable-date start">{{{formatDate start_date}}}</span> - <span class="editable-date end">{{{formatDate end_date}}}
 	</span>
 	</div>
+	{{#if isAdmin}}
 	<div class="grip right"></div>
 	<div class="grip left"></div>
+	{{/if}}
 </div>

@@ -18,7 +18,7 @@ define [
 		offset: 144
 
 		initialize: ->
-			@model.on 'change:zoom', @render, @
+			@startListening()
 			@slider = @$ '#timescale-slider'
 			@knob = @$ '#timescale-knob'
 			@body = $ 'body'
@@ -26,6 +26,14 @@ define [
 			@input = @$ '#timescale-input'
 			@knob.animate { 'left': @offset }, 375, 'ease-in'
 			@render()
+
+		startListening: ->
+			BU.EventBus.on 'set-view', @setView, @
+			@model.on 'change:zoom', @render, @
+
+		stopListening: ->
+			@model.off 'change:zoom', @render, @
+			BU.EventBus.off 'set-view', @setView, @
 
 		startDrag: (e) =>
 			@body.on 'mousemove', @onDrag
@@ -78,3 +86,8 @@ define [
 
 		offsetToZoom: (value) ->
 			Math.round value * (@total / 100)
+
+		setView: (type) ->
+			switch type
+				when 'task' then @$el.css({ display: 'block', opacity: 0 }).stop().animate { opacity: 1 }, 75, 'ease-out'
+				else @$el.stop().animate { opacity: 0 }, 75, 'ease-in', => @$el.css { display: 'none' }

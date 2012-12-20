@@ -9,9 +9,9 @@
 <body id="bu-schedule">
 	<header class="navbar navbar-fixed">
 		<div class="navbar-inner">
-			{{ HTML::link_to_action('admin::dashboard@index', 'Brooklyn United Dev Schedule Management', null, array('class' => 'brand')) }}
+			{{ HTML::link_to_action('dashboard@index', 'Brooklyn United Dev Schedule Management', array(), array('class' => 'brand')) }}
 			@if(!Auth::guest())
-				@include('admin::partials.navigation')
+				@include('partials.navigation')
 			@endif
 		</div>
 	</header>

@@ -15,6 +15,10 @@
         return Task.__super__.constructor.apply(this, arguments);
       }
 
+      Task.prototype.url = function() {
+        return "/api/v1/schedules" + (!this.isNew() ? "/update/" + (this.get('id')) : '');
+      };
+
       Task.prototype.initialize = function() {
         this.on('change:user', this.locateTrack, this);
         if (!!this.isNew()) {
@@ -49,10 +53,6 @@
             return 'Track error.';
           }
         }
-      };
-
-      Task.prototype.url = function() {
-        return "/admin/api/v1/tasks" + (!this.isNew() ? "/update/" + (this.get('id')) : '');
       };
 
       Task.prototype.parse = function() {
@@ -98,6 +98,10 @@
         }
         this.set('track', track);
         return this;
+      };
+
+      Task.prototype.comparator = function(task) {
+        return task.get('start_date');
       };
 
       return Task;

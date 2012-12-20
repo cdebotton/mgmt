@@ -21,22 +21,26 @@ define [
 			'click .icon-edit':	'editModal'
 
 		initialize: ->
+			@body = $ 'body'
+			if BU.Session.isAdmin()
+				BU.EventBus.on 'start-drag', @setOpacity, @
+				BU.EventBus.on 'stop-drag', @unsetOpacity, @
+				@body.on 'mousemove', @scrubMove
+				@body.on 'mouseup', @scrubStop
+				@model.on 'change:end_date', @updatePositions, @
+				@model.on 'change:start_date', @updatePositions, @
+				@model.on 'change:track', @updatePositions, @
+				@model.on 'change:color', @updateColor, @
+				@model.on 'change:name change:client change:project_code', @render, @
+				@model.on 'change:percentage', @render, @
+			else @$el.addClass 'no-drag'
+
 			BU.EventBus.on 'zoom-grid-updated', @updateZoom, @
 			BU.EventBus.on 'offset-timeline', @offsetTimeline, @
-			BU.JST.Hb.registerHelper 'formatDate', @formatDate
-			BU.EventBus.on 'start-drag', @setOpacity, @
-			BU.EventBus.on 'stop-drag', @unsetOpacity, @
-			@body = $ 'body'
-			@body.on 'mousemove', @scrubMove
-			@body.on 'mouseup', @scrubStop
+			BU.JST.Hb.registerHelper 'formatDate', @formatDate	
 			@start = @model.get 'start_date'
 			@end = @model.get 'end_date'
-			@model.on 'change:end_date', @updatePositions, @
-			@model.on 'change:start_date', @updatePositions, @
-			@model.on 'change:track', @updatePositions, @
-			@model.on 'change:color', @updateColor, @
-			@model.on 'change:name change:client change:project_code', @render, @
-			@model.on 'change:percentage', @render, @
+			
 			if @model.get('color') isnt null then @$el.addClass @model.get 'color'
 			BU.EventBus.on 'gridpoint-dispatch', @gridPointsReceived, @
 
@@ -44,6 +48,7 @@ define [
 			BU.EventBus.trigger 'where-am-i', @cid, @start, @end
 			BU.EventBus.trigger 'percentage-changed'
 			ctx = @model.toJSON()
+			ctx.isAdmin = BU.Session.isAdmin()
 			html = BU.JST['TaskElement'] ctx
 			@$el.html html
 			@
@@ -65,6 +70,7 @@ define [
 				'-webkit-transform':	"translate3d(#{offset}px, 0, 0)"
 				
 		scrubStart: (e) =>
+			if not BU.Session.isAdmin() then return false
 			if e.which isnt 1 then return false
 			BU.EventBus.trigger 'start-drag', @model.get 'id'
 			@dragging = true
@@ -78,6 +84,7 @@ define [
 			e.preventDefault()
 
 		scrubMove: (e) =>
+			if not BU.Session.isAdmin() then return false
 			if not @dragging then return false
 			updateObject = {
 				start_date: @model.get 'start_date'
@@ -104,6 +111,7 @@ define [
 			BU.EventBus.trigger 'update-timeline-transform', e.pageX, left, right, dx
 
 		scrubStop: (e) =>
+			if not BU.Session.isAdmin() then return false
 			if @dragging
 				BU.EventBus.trigger 'stop-drag', @model.get 'id'
 				@dragging = false
@@ -129,10 +137,13 @@ define [
 				'-webkit-transform':	"translate3d(#{dx})"
 
 		editModal: (e) =>
+			if not BU.Session.isAdmin() then return false
 			BU.EventBus.trigger 'open-modal', @model
 			e.preventDefault()
 
-		updateColor: => @$el[0].className = "task-element #{@model.get 'color'}"
+		updateColor: =>
+			if not BU.Session.isAdmin() then return false
+			@$el[0].className = "task-element #{@model.get 'color'}"
 
 		updateZoom: (zoom) ->
 			BU.EventBus.trigger 'where-am-i', @cid, @model.get('start_date'), @model.get 'end_date'

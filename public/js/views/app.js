@@ -4,7 +4,7 @@
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['backbone', 'underscore', 'jquery', 'ns', 'views/create-palette', 'views/profile-palette', 'views/task-timeline', 'views/graph-timeline', 'views/date-guides', 'views/edit-modal', 'models/edit-modal', 'models/task', 'views/scale-controller', 'models/scale-controller', 'views/graph-filters', 'models/graph-filters'], function(Backbone, _, $, namespace) {
+  define(['backbone', 'underscore', 'jquery', 'ns', 'views/profile-palette', 'views/task-timeline', 'views/graph-timeline', 'views/date-guides', 'views/edit-modal', 'models/edit-modal', 'models/task', 'views/scale-controller', 'models/scale-controller', 'views/graph-filters', 'models/graph-filters', 'views/view-selector', 'models/view-selector', 'views/calendar'], function(Backbone, _, $, namespace) {
     namespace('BU.EventBus');
     BU.EventBus = _.extend({}, Backbone.Events);
     namespace('BU.Views.App');
@@ -29,13 +29,31 @@
       };
 
       App.prototype.initialize = function() {
+        this.model.get('session').on('change:id', this.authed, this);
+        return this.model.get('session').fetch();
+      };
+
+      App.prototype.authed = function(model, value, changes) {
         BU.EventBus.on('open-modal', this.openModal, this);
+        BU.EventBus.on('set-view', this.setView, this);
+        BU.Session = this.model.get('session');
         this.window = $(window);
         this.header = this.$('.navbar');
         this.dy = this.$el.offset().top;
         this.window.on('scroll', this.affix);
         this.window.on('resize', this.adjust);
         this.sub_views = _.extend({}, {
+          graphFilters: new BU.Views.GraphFilters({
+            model: new BU.Models.GraphFilters
+          }),
+          viewSelector: new BU.Views.ViewSelector({
+            model: new BU.Models.ViewSelector
+          }),
+          scaleController: new BU.Views.ScaleController({
+            model: new BU.Models.ScaleController
+          })
+        });
+        this.task_views = _.extend({}, {
           graphTimeline: new BU.Views.GraphTimeline({
             model: this.model
           }),
@@ -44,16 +62,15 @@
           }),
           taskTimeline: new BU.Views.TaskTimeline({
             model: this.model
-          }),
-          dateGuides: new BU.Views.DateGuides,
-          scaleController: new BU.Views.ScaleController({
-            model: new BU.Models.ScaleController
-          }),
-          graphFilters: new BU.Views.GraphFilters({
-            model: new BU.Models.GraphFilters
           })
         });
-        return this.adjust();
+        this.calendar_views = _.extend({}, {
+          calendarView: new BU.Views.CalendarView({
+            model: this.model
+          })
+        });
+        this.adjust();
+        return this.sub_views.viewSelector.model.set('currentView', 'task');
       };
 
       App.prototype.disableSelection = function(e) {
@@ -90,6 +107,9 @@
         if (task == null) {
           task = null;
         }
+        if (!BU.Session.isAdmin()) {
+          return false;
+        }
         params = {};
         params['users'] = this.model.get('users');
         if (task !== null) {
@@ -99,6 +119,30 @@
           model: new BU.Models.EditModal(params)
         });
         return this.$el.append(this.modal.render().$el);
+      };
+
+      App.prototype.setView = function(type) {
+        switch (type) {
+          case 'task':
+            _.each(this.task_views, function(view) {
+              view.startListening();
+              return view.$el.show();
+            });
+            return _.each(this.calendar_views, function(view) {
+              view.stopListening();
+              return view.$el.hide();
+            });
+          case 'calendar':
+            _.each(this.task_views, function(view) {
+              view.stopListening();
+              return view.$el.hide();
+            });
+            _.each(this.calendar_views, function(view) {
+              view.startListening();
+              return view.$el.show();
+            });
+            return this.calendar_views.calendarView.addAll();
+        }
       };
 
       return App;

@@ -36,7 +36,7 @@
       ScaleController.prototype.offset = 144;
 
       ScaleController.prototype.initialize = function() {
-        this.model.on('change:zoom', this.render, this);
+        this.startListening();
         this.slider = this.$('#timescale-slider');
         this.knob = this.$('#timescale-knob');
         this.body = $('body');
@@ -46,6 +46,16 @@
           'left': this.offset
         }, 375, 'ease-in');
         return this.render();
+      };
+
+      ScaleController.prototype.startListening = function() {
+        BU.EventBus.on('set-view', this.setView, this);
+        return this.model.on('change:zoom', this.render, this);
+      };
+
+      ScaleController.prototype.stopListening = function() {
+        this.model.off('change:zoom', this.render, this);
+        return BU.EventBus.off('set-view', this.setView, this);
       };
 
       ScaleController.prototype.startDrag = function(e) {
@@ -116,6 +126,27 @@
 
       ScaleController.prototype.offsetToZoom = function(value) {
         return Math.round(value * (this.total / 100));
+      };
+
+      ScaleController.prototype.setView = function(type) {
+        var _this = this;
+        switch (type) {
+          case 'task':
+            return this.$el.css({
+              display: 'block',
+              opacity: 0
+            }).stop().animate({
+              opacity: 1
+            }, 75, 'ease-out');
+          default:
+            return this.$el.stop().animate({
+              opacity: 0
+            }, 75, 'ease-in', function() {
+              return _this.$el.css({
+                display: 'none'
+              });
+            });
+        }
       };
 
       return ScaleController;

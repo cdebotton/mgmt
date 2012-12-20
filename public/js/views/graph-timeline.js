@@ -54,11 +54,7 @@
 
       GraphTimeline.prototype.initialize = function() {
         var lim, min, num, range, _i, _j, _len, _results, _results1, _step;
-        BU.EventBus.on('update-zoom', this.updateZoom, this);
-        BU.EventBus.on('on-scroll', this.affix, this);
-        BU.EventBus.on('adjust', this.adjust, this);
-        BU.EventBus.on('update-timeline-transform', this.updateTransform, this);
-        BU.EventBus.on('plot-ranges', this.plotRanges, this);
+        this.startListening();
         BU.JST.Hb.registerHelper('outputGraph', this.outputGraph);
         this.body = $('body');
         this.body.on('mousemove', this.onDrag);
@@ -67,7 +63,6 @@
         this.dy = this.$el.offset().top;
         this.generateDateRanges();
         this.drawTicks();
-        BU.EventBus.on('where-am-i', this.locateTimelineObject, this);
         this.render();
         min = 11;
         lim = 201;
@@ -82,6 +77,26 @@
           _results1.push(this.zoomLevels.push(num));
         }
         return _results1;
+      };
+
+      GraphTimeline.prototype.startListening = function() {
+        BU.EventBus.on('update-zoom', this.updateZoom, this);
+        BU.EventBus.on('on-scroll', this.affix, this);
+        BU.EventBus.on('adjust', this.adjust, this);
+        BU.EventBus.on('update-timeline-transform', this.updateTransform, this);
+        BU.EventBus.on('plot-ranges', this.plotRanges, this);
+        BU.EventBus.on('where-am-i', this.locateTimelineObject, this);
+        return this.$el.parent().show();
+      };
+
+      GraphTimeline.prototype.stopListening = function() {
+        BU.EventBus.off('update-zoom', this.updateZoom, this);
+        BU.EventBus.off('on-scroll', this.affix, this);
+        BU.EventBus.off('adjust', this.adjust, this);
+        BU.EventBus.off('update-timeline-transform', this.updateTransform, this);
+        BU.EventBus.off('plot-ranges', this.plotRanges, this);
+        BU.EventBus.off('where-am-i', this.locateTimelineObject, this);
+        return this.$el.parent().hide();
       };
 
       GraphTimeline.prototype.generateDateRanges = function() {

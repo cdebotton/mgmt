@@ -39,22 +39,26 @@
       };
 
       TaskElement.prototype.initialize = function() {
+        this.body = $('body');
+        if (BU.Session.isAdmin()) {
+          BU.EventBus.on('start-drag', this.setOpacity, this);
+          BU.EventBus.on('stop-drag', this.unsetOpacity, this);
+          this.body.on('mousemove', this.scrubMove);
+          this.body.on('mouseup', this.scrubStop);
+          this.model.on('change:end_date', this.updatePositions, this);
+          this.model.on('change:start_date', this.updatePositions, this);
+          this.model.on('change:track', this.updatePositions, this);
+          this.model.on('change:color', this.updateColor, this);
+          this.model.on('change:name change:client change:project_code', this.render, this);
+          this.model.on('change:percentage', this.render, this);
+        } else {
+          this.$el.addClass('no-drag');
+        }
         BU.EventBus.on('zoom-grid-updated', this.updateZoom, this);
         BU.EventBus.on('offset-timeline', this.offsetTimeline, this);
         BU.JST.Hb.registerHelper('formatDate', this.formatDate);
-        BU.EventBus.on('start-drag', this.setOpacity, this);
-        BU.EventBus.on('stop-drag', this.unsetOpacity, this);
-        this.body = $('body');
-        this.body.on('mousemove', this.scrubMove);
-        this.body.on('mouseup', this.scrubStop);
         this.start = this.model.get('start_date');
         this.end = this.model.get('end_date');
-        this.model.on('change:end_date', this.updatePositions, this);
-        this.model.on('change:start_date', this.updatePositions, this);
-        this.model.on('change:track', this.updatePositions, this);
-        this.model.on('change:color', this.updateColor, this);
-        this.model.on('change:name change:client change:project_code', this.render, this);
-        this.model.on('change:percentage', this.render, this);
         if (this.model.get('color') !== null) {
           this.$el.addClass(this.model.get('color'));
         }
@@ -66,6 +70,7 @@
         BU.EventBus.trigger('where-am-i', this.cid, this.start, this.end);
         BU.EventBus.trigger('percentage-changed');
         ctx = this.model.toJSON();
+        ctx.isAdmin = BU.Session.isAdmin();
         html = BU.JST['TaskElement'](ctx);
         this.$el.html(html);
         return this;
@@ -95,6 +100,9 @@
 
       TaskElement.prototype.scrubStart = function(e) {
         var obj;
+        if (!BU.Session.isAdmin()) {
+          return false;
+        }
         if (e.which !== 1) {
           return false;
         }
@@ -118,6 +126,9 @@
 
       TaskElement.prototype.scrubMove = function(e) {
         var date, days, dx, epoch, key, left, property, right, targetTrack, units, updateObject, _i, _len, _ref;
+        if (!BU.Session.isAdmin()) {
+          return false;
+        }
         if (!this.dragging) {
           return false;
         }
@@ -156,6 +167,9 @@
       };
 
       TaskElement.prototype.scrubStop = function(e) {
+        if (!BU.Session.isAdmin()) {
+          return false;
+        }
         if (this.dragging) {
           BU.EventBus.trigger('stop-drag', this.model.get('id'));
           this.dragging = false;
@@ -190,11 +204,17 @@
       };
 
       TaskElement.prototype.editModal = function(e) {
+        if (!BU.Session.isAdmin()) {
+          return false;
+        }
         BU.EventBus.trigger('open-modal', this.model);
         return e.preventDefault();
       };
 
       TaskElement.prototype.updateColor = function() {
+        if (!BU.Session.isAdmin()) {
+          return false;
+        }
         return this.$el[0].className = "task-element " + (this.model.get('color'));
       };
 

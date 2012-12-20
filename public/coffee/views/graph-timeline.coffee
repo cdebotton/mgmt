@@ -24,28 +24,38 @@ define [
 			'mousedown':	'startDrag'
 
 		initialize: ->
-			BU.EventBus.on 'update-zoom', @updateZoom, @
-			BU.EventBus.on 'on-scroll', @affix, @
-			BU.EventBus.on 'adjust', @adjust, @
-			BU.EventBus.on 'update-timeline-transform', @updateTransform, @
-			BU.EventBus.on 'plot-ranges', @plotRanges, @
+			@startListening()
 			BU.JST.Hb.registerHelper 'outputGraph', @outputGraph
-
 			@body = $ 'body'
 			@body.on 'mousemove', @onDrag
 			@body.on 'mouseup', @stopDrag
 			@parent = @$el.parent()
 			@dy = @$el.offset().top
-
 			@generateDateRanges()
 			@drawTicks()
-			BU.EventBus.on 'where-am-i', @locateTimelineObject, @
 			@render()
-
 			min = 11
 			lim = 201
 			range = [min...lim]
 			@zoomLevels.push num for num in range by 2
+
+		startListening: ->
+			BU.EventBus.on 'update-zoom', @updateZoom, @
+			BU.EventBus.on 'on-scroll', @affix, @
+			BU.EventBus.on 'adjust', @adjust, @
+			BU.EventBus.on 'update-timeline-transform', @updateTransform, @
+			BU.EventBus.on 'plot-ranges', @plotRanges, @
+			BU.EventBus.on 'where-am-i', @locateTimelineObject, @
+			@$el.parent().show()
+
+		stopListening: ->
+			BU.EventBus.off 'update-zoom', @updateZoom, @
+			BU.EventBus.off 'on-scroll', @affix, @
+			BU.EventBus.off 'adjust', @adjust, @
+			BU.EventBus.off 'update-timeline-transform', @updateTransform, @
+			BU.EventBus.off 'plot-ranges', @plotRanges, @
+			BU.EventBus.off 'where-am-i', @locateTimelineObject, @
+			@$el.parent().hide()
 
 		generateDateRanges: () ->
 			@today = new Date()

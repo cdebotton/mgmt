@@ -13,7 +13,7 @@ define [
 	namespace 'BU.Models.User'
 	class BU.Models.User extends Backbone.RelationalModel
 
-		url: -> "/admin/api/v1/users" + if not @isNew() then "/update/#{@get 'id'}" else ''
+		url: -> "/api/v1/users" + if not @isNew() then "/update/#{@get 'id'}" else ''
 
 		relations: [{
 			type:				Backbone.HasMany

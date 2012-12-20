@@ -12,7 +12,7 @@ define [
 		className:	'overage'
 
 		initialize: ->
-			BU.EventBus.on 'offset-timeline', @offsetTimeline, @
+			@startListening()
 			@$el.css
 				marginLeft: @model.get 'x'
 				width: @model.get 'width'
@@ -20,6 +20,12 @@ define [
 				@$el.addClass 'danger'
 			else if parseInt(@model.get 'value') is 0
 				@$el.hide()
+
+		startListening: ->
+			BU.EventBus.on 'offset-timeline', @offsetTimeline, @
+
+		stopListening: ->
+			BU.EventBus.off 'offset-timeline', @offsetTimeline, @
 
 		render: ->
 			ctx = @model.toJSON()

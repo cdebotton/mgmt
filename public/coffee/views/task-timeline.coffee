@@ -13,12 +13,20 @@ define [
 		views: []
 
 		initialize: ->
-			BU.EventBus.on 'set-filter', @setFilter, @
+			@startListening()
 			@parent = @$el.parent()
 			@model.on 'add:user', @addOne, @
 			@model.on 'reset:user', @addAll, @
 			@model.on 'remove:user', @addAll, @
 			@addAll()
+
+		startListening: ->
+			BU.EventBus.on 'set-filter', @setFilter, @
+			@$el.parent().show()
+
+		stopListening: ->
+			BU.EventBus.off 'set-filter', @setFilter, @
+			@$el.parent().hide()
 
 		addOne: (user) =>
 			view = new BU.Views.UserTimeline

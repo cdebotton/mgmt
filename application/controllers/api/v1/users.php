@@ -1,6 +1,6 @@
 <?php
 
-class Admin_Api_V1_Users_Controller extends Admin_Base_Controller
+class Api_V1_Users_Controller extends Base_Controller
 {
 	public $restful = true;
 

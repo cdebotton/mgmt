@@ -163,15 +163,18 @@ $modal-width: 480px
 						&:active
 							@include background(linear-gradient(top, #ddd, #ccc))
 							@include box-shadow(0 0 3px rgba(0, 0, 0, 0.85))
-			#timescale-input
-				float: left
-				width: 20px
-				height: 10px
-				padding: 5px
-				margin: 5px 10px
-				font-size: 10px
-				line-height: 10px
-				text-align: center
+				#timescale-input
+					float: left
+					width: 20px
+					height: 10px
+					padding: 5px
+					margin: 5px 10px
+					font-size: 10px
+					line-height: 10px
+					text-align: center
+			#view-selector
+				padding-left: 20px
+				border-right: 1px solid #ccc
 	.striped-cheech
 		position: fixed
 		top: 0
@@ -355,6 +358,15 @@ $modal-width: 480px
 					border-right: 1px solid #000
 					height: 5px
 					@include box-shadow(inset 1px 1px 2px rgba(0,0,0,0.25))
+					.overage-value
+						position: relative
+						display: block
+						text-align: center
+						font-size: 11px
+						font-weight: bold
+						top: -15px
+						color: #eee
+						text-shadow: 0 -1px 0 #000, -1px 0 0 #000, 1px 0 0 #000, 0 1px 0 #000
 					&.danger
 						background-color: rgba(255, 0, 0, 0.25)
 				.task-element
@@ -364,7 +376,6 @@ $modal-width: 480px
 					position: absolute
 					@include border-radius(2px)
 					@include box-shadow(1px 1px 2px rgba(0, 0, 0, 0.35), 2px 2px 5px rgba(0, 0, 0, 0.25))
-					@include box-sizing(border-box)
 					@include background-size(20px 20px)
 					border: 1px solid rgba(0,0,0,0.5)
 					background-image: -webkit-gradient(linear, 0 100%, 100% 0, color-stop(0.25, rgba(255, 255, 255, 0.15)), color-stop(0.25, transparent), color-stop(0.5, transparent), color-stop(0.5, rgba(255, 255, 255, 0.15)), color-stop(0.75, rgba(255, 255, 255, 0.15)), color-stop(0.75, transparent), to(transparent))
@@ -376,6 +387,8 @@ $modal-width: 480px
 					@include transition-property('background-color, opacity')
 					@include transition-duration('.25s')
 					@include transition-timing-function('ease-in')
+					&.no-drag
+						cursor: default
 					&:hover
 						background-color: darken(saturate(#149bdf, 10%), 5%)
 					&.red
@@ -508,3 +521,79 @@ $modal-width: 480px
 						@include box-shadow(-1px 0 2px rgba(0,0,0,0.4))
 				&+.tick-mark
 					margin-left: 40px
+	#calendar-view
+		width: 100%
+		min-height: 600px
+		@include background(45deg, #fff, #eee)
+		display: none
+		font-family: $helvetica
+		.container
+			padding: 20px
+			width: 920px
+			background-color: rgba(255, 255, 255, 0.825)
+			margin: 20px auto
+			min-height: 400px
+			@include box-shadow(0 0 30px rgba(0, 0, 0, 0.125), -1px -1px 5px rgba(0, 0, 0, .5))
+			@include border-radius(3px)
+			overflow: hidden
+			.user-calendar-item
+				border-top: 1px solid #ddd
+				padding-top: 25px
+				@include box-shadow(0 -1px 2px rgba(0, 0, 0, 0.325))
+				border-top: 1px solid #999
+				border-left: 1px solid #ccc
+				border-right: 1px solid #ccc
+				width: 920px
+				overflow: hidden
+				.left-container
+					width: 220px
+					float: left
+					.profile-image
+						width: 220px
+						text-align: center
+						height: 180px
+						.img-polaroid
+						h5
+						.badges
+					.calendar-type
+						width: 200px
+						position: relative
+						display: block
+						margin: 0 auto
+						text-align: center
+				&+.user-calendar-item
+					margin-top: 25px
+				.right-container
+					width: 700px
+					float: left
+					.event-group
+						.event-title
+							font-weight: 100
+							font-size: 30px
+							border-bottom: 1px solid #ddd
+						.event-item
+							padding: 5px 40px
+							font-weight: 200
+							.key
+								display: inline-block
+								width: 15px
+								height: 15px
+								margin-right: 15px
+								@include border-radius(2px)
+								@include box-shadow(1px 1px 2px rgba(0, 0, 0, 0.35), 1px 1px 3px rgba(0, 0, 0, 0.25))
+								@include box-sizing(border-box)
+								@include background-size(10px 10px)
+								background-image: -webkit-gradient(linear, 0 100%, 100% 0, color-stop(0.25, rgba(255, 255, 255, 0.15)), color-stop(0.25, transparent), color-stop(0.5, transparent), color-stop(0.5, rgba(255, 255, 255, 0.15)), color-stop(0.75, rgba(255, 255, 255, 0.15)), color-stop(0.75, transparent), to(transparent))
+								background-image: -webkit-linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent)
+								border: 1px solid rgba(0,0,0,0.6)
+								background-color: #149bdf
+								&.red
+									background-color: lighten(#ce3635, 2%)
+								&.green
+									background-color: lighten(#00A693, 2%)
+								&.yellow
+									background-color: lighten(#F4C430, 2%)
+							&+.event-item
+								border-top: 1px solid #eee
+						&+.event-group
+							border-top: 1px solid #eee

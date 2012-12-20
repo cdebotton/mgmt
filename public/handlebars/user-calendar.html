@@ -1,0 +1,29 @@
+<div class="left-container">
+	<article class="profile-image">
+	{{#if photo}}
+		<img src="{{ photo }}" class="img-polaroid" />
+	{{else}}
+		<img src="http://placehold.it/100x100" class="img-polaroid" />
+	{{/if}}
+		<h5>{{ first_name }} {{ last_name }}</h5>
+		<div class="badges">
+			{{#each disciplines}}
+				<span class="label label-info">{{ name }}</span>
+			{{/each}}	
+		</div>	
+	</article>
+</div>
+<div class="right-container">
+	<section class="calendar-content">
+		{{#printSchedule events}}
+		<article class="event-group">
+			<h4 class="event-title">{{ readableDate }}</h4>
+			{{#if list}}
+				{{#each list}}
+					<div class="event-item"><span class="key {{ color }}"></span> {{ title }}</div>
+				{{/each}}
+			{{/if}}
+		</article>
+		{{/printSchedule}}
+	</section>
+</div>

@@ -11,12 +11,22 @@ define [
 		el: '#profile-palette'
 
 		initialize: ->
+			@startListening()
+			@addAll()
+
+		startListening: ->
 			BU.EventBus.on 'set-filter', @setFilter, @
 			BU.EventBus.on 'nav-affix', @affix, @
 			BU.EventBus.on 'nav-affix', @affix, @
 			@model.on 'add:user', @addOne, @
 			@model.on 'reset:user', @addAll, @
-			@addAll()
+
+		stopLisening: ->
+			BU.EventBus.off 'set-filter', @setFilter, @
+			BU.EventBus.off 'nav-affix', @affix, @
+			BU.EventBus.off 'nav-affix', @affix, @
+			@model.off 'add:user', @addOne, @
+			@model.off 'reset:user', @addAll, @
 
 		addOne: (user) =>
 			view = new BU.Views.UserBadge
