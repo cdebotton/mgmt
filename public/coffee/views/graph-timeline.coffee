@@ -1,8 +1,9 @@
 define [
 	'backbone'
+	'mousetrap'
 	'ns'
 	'jst'
-], (Backbone, namespace) ->
+], (Backbone,  Mousetrap, namespace) ->
 
 	namespace 'BU.Views.GraphTimeline'
 	class BU.Views.GraphTimeline extends Backbone.View
@@ -38,6 +39,8 @@ define [
 			@zoomLevels.push num for num in range by 2
 
 		startListening: ->
+			Mousetrap.bind 'ctrl+shift+left', @shiftBackMonth
+			Mousetrap.bind 'ctrl+shift+right', @shiftRightMonth
 			BU.EventBus.on 'update-zoom', @updateZoom, @
 			BU.EventBus.on 'on-scroll', @affix, @
 			BU.EventBus.on 'adjust', @adjust, @
@@ -48,6 +51,8 @@ define [
 			@$el.parent().show()
 
 		stopListening: ->
+			Mousetrap.unbind 'ctrl+left', @shiftBackMonth
+			Mousetrap.unbind 'ctrl+right', @shiftRightMonth
 			BU.EventBus.off 'update-zoom', @updateZoom, @
 			BU.EventBus.off 'on-scroll', @affix, @
 			BU.EventBus.off 'adjust', @adjust, @
@@ -138,6 +143,19 @@ define [
 			DRAGGING = false
 			@XHOME = 0
 			e.preventDefault()
+
+		shiftBackMonth: (e) =>
+			time = new Date @currentTime - (30 * DAY_TO_MILLISECONDS)
+			time.setHours 0
+			time.setMinutes 0
+			time.setSeconds 0
+			time.setMilliseconds 0
+			px = @grid[time.getTime()]
+			#@$el.css '-webkit-transform': "translate3d(#{values.join ', '})"
+			#BU.EventBus.trigger 'offset-timeline', values
+
+		shiftRightMonth: (e) =>
+			console.log 'right'
 
 		affix: (scrollTop) ->
 			scrollTop += 42

@@ -38,7 +38,7 @@
         BU.EventBus.on('modal-closed', this.modalClosed, this);
         this.model.get('session').on('change:id', this.authed, this);
         this.model.get('session').fetch();
-        return Mousetrap.bind(['ctrl+shift+command+n', 'ctrl+shift+alt+n'], function() {
+        return Mousetrap.bind(['ctrl+shift+n', 'ctrl+shift+alt+n'], function() {
           return _this.openModal();
         });
       };

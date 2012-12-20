@@ -4,7 +4,7 @@
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['backbone', 'ns', 'jst'], function(Backbone, namespace) {
+  define(['backbone', 'mousetrap', 'ns', 'jst'], function(Backbone, Mousetrap, namespace) {
     namespace('BU.Views.GraphTimeline');
     return BU.Views.GraphTimeline = (function(_super) {
       var DAY_TO_MILLISECONDS, DRAGGING, PX_PER_DAY, RANGE;
@@ -12,6 +12,10 @@
       __extends(GraphTimeline, _super);
 
       function GraphTimeline() {
+        this.shiftRightMonth = __bind(this.shiftRightMonth, this);
+
+        this.shiftBackMonth = __bind(this.shiftBackMonth, this);
+
         this.stopDrag = __bind(this.stopDrag, this);
 
         this.onDrag = __bind(this.onDrag, this);
@@ -78,6 +82,8 @@
       };
 
       GraphTimeline.prototype.startListening = function() {
+        Mousetrap.bind('ctrl+shift+left', this.shiftBackMonth);
+        Mousetrap.bind('ctrl+shift+right', this.shiftRightMonth);
         BU.EventBus.on('update-zoom', this.updateZoom, this);
         BU.EventBus.on('on-scroll', this.affix, this);
         BU.EventBus.on('adjust', this.adjust, this);
@@ -89,6 +95,8 @@
       };
 
       GraphTimeline.prototype.stopListening = function() {
+        Mousetrap.unbind('ctrl+left', this.shiftBackMonth);
+        Mousetrap.unbind('ctrl+right', this.shiftRightMonth);
         BU.EventBus.off('update-zoom', this.updateZoom, this);
         BU.EventBus.off('on-scroll', this.affix, this);
         BU.EventBus.off('adjust', this.adjust, this);
@@ -204,6 +212,20 @@
         DRAGGING = false;
         this.XHOME = 0;
         return e.preventDefault();
+      };
+
+      GraphTimeline.prototype.shiftBackMonth = function(e) {
+        var px, time;
+        time = new Date(this.currentTime - (30 * DAY_TO_MILLISECONDS));
+        time.setHours(0);
+        time.setMinutes(0);
+        time.setSeconds(0);
+        time.setMilliseconds(0);
+        return px = this.grid[time.getTime()];
+      };
+
+      GraphTimeline.prototype.shiftRightMonth = function(e) {
+        return console.log('right');
       };
 
       GraphTimeline.prototype.affix = function(scrollTop) {

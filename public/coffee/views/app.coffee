@@ -38,7 +38,7 @@ define [
 			BU.EventBus.on 'modal-closed', @modalClosed, @
 			@model.get('session').on 'change:id', @authed, @
 			@model.get('session').fetch()
-			Mousetrap.bind ['ctrl+shift+command+n', 'ctrl+shift+alt+n'], => @openModal()
+			Mousetrap.bind ['ctrl+shift+n', 'ctrl+shift+alt+n'], => @openModal()
 
 		authed: (model, value, changes) ->
 			BU.EventBus.on 'open-modal', @openModal, @
