@@ -37,6 +37,9 @@ class User extends Eloquent {
 		if ( ! $roles = $cache->get($ckey)) 
 		{       
 			$roles = $this->roles()->lists('name');
+			foreach ($roles as &$role) {
+				$role = strtolower($role);
+			}
 			$cache->forever($ckey, $roles);
 		}
 
@@ -53,7 +56,7 @@ class User extends Eloquent {
 	{
 		if ( ! is_null($key))
 		{
-			return in_array($key, $this->roles_list);
+			return in_array(strtolower($key), $this->roles_list);
 		}
 
 		return false;

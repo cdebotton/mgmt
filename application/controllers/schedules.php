@@ -16,27 +16,36 @@ class Schedules_Controller extends Base_Controller {
 
 	public function get_index ()
 	{
-		$developers = User::with(array('roles', 'tasks', 'disciplines'))
-			->get();
-		$roles = Role::all();
-		$disciplines = Discipline::all();
-		$userArray = array('null' => 'User');
-		foreach($developers as $dev)
-		{
-			$userArray[$dev->id] = $dev->email;
+		if (Auth::user()->has_role('admin')) {
+			$developers = User::with(array('roles', 'tasks', 'disciplines'))
+				->get();
+			$roles = Role::all();
+			$disciplines = Discipline::all();
+			$userArray = array('null' => 'User');
+			foreach($developers as $dev)
+			{
+				$userArray[$dev->id] = $dev->email;
+			}
+			$colors = array(
+				'blue'		=> 'Blue', 
+				'red'		=> 'Red',
+				'green'		=> 'Green',
+				'yellow'	=> 'Yellow'
+			);
+			return View::make('tasks.index')
+				->with('developers', $userArray)
+				->with('dev_json', eloquent_to_json($developers))
+				->with('colors', $colors)
+				->with('disciplines', $disciplines)
+				->with('roles', $roles);
 		}
-		$colors = array(
-			'blue'		=> 'Blue', 
-			'red'		=> 'Red',
-			'green'		=> 'Green',
-			'yellow'	=> 'Yellow'
-		);
-		return View::make('tasks.index')
-			->with('developers', $userArray)
-			->with('dev_json', eloquent_to_json($developers))
-			->with('colors', $colors)
-			->with('disciplines', $disciplines)
-			->with('roles', $roles);
+		else {
+			$developers = User::with(array('roles', 'tasks', 'disciplines'))
+				->find(Auth::user()->id);
+			return View::make('tasks.index')
+				->with('dev_json', json_encode(array($developers->to_array())));
+		}
+		
 	}
 
 	public function get_create ()

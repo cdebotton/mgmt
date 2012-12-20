@@ -9,10 +9,11 @@ Asset::add('styles', 'css/bu.sched.css');
  */
 Route::group(array('before' => 'admin-auth|page-title'), function ()
 {
-	
 	Route::controller(Controller::detect());
+	Route::get('/', 'dashboard@index');	
+	Route::get('profile', 'users@profile');
 });
-Route::get('/', 'dashboard@index');
+
 /**
  * Route log-in and log-out actions.
  */
@@ -30,6 +31,9 @@ Route::post('login', function ()
 		'password' => Input::get('password')
 	);
 	if (Auth::attempt($data)) {
+		$user = Auth::user();
+		$user->last_login = date('Y-m-d h:m:g');
+		$user->save();
 		return Redirect::to_action('dashboard@index');
 	}
 	else {
@@ -69,7 +73,7 @@ Route::filter('page-title', function ()
 
 Route::filter('deny-non-async', function ()
 {
-	if (!Request::ajax()) {
+	if (!Request::ajax() || Auth::guest() || !Auth::user()->has_role('admin')) {
 		return Response::error('500');
 	}
 });

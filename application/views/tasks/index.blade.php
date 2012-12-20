@@ -9,6 +9,7 @@
 					<li class="active"><a href="#" data-view="task"><span class="icon icon-tasks"></span> Tasks</a></li>
 					<li><a href="#" data-view="calendar"><span class="icon icon-calendar"></span> Calendar</a></li>
 				</ul>
+				@if(Auth::user()->has_role('admin'))
 				<ul class="nav">
 					<li>
 						<a href="#" id="new-task-toggle"><span class="icon icon-file"></span> Create New Task</a>
@@ -37,6 +38,7 @@
 						</ul>
 					</li>
 				</ul>
+				@endif
 				<div id="timescale-wrapper">
 					<span class="scale-label">Scale</span>
 					<div id="timescale-slider">
