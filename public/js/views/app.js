@@ -4,15 +4,18 @@
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['backbone', 'underscore', 'jquery', 'ns', 'views/profile-palette', 'views/task-timeline', 'views/graph-timeline', 'views/date-guides', 'views/edit-modal', 'models/edit-modal', 'models/task', 'views/scale-controller', 'models/scale-controller', 'views/graph-filters', 'models/graph-filters', 'views/view-selector', 'models/view-selector', 'views/calendar'], function(Backbone, _, $, namespace) {
+  define(['backbone', 'underscore', 'jquery', 'mousetrap', 'ns', 'views/profile-palette', 'views/task-timeline', 'views/graph-timeline', 'views/date-guides', 'views/edit-modal', 'models/edit-modal', 'models/task', 'views/scale-controller', 'models/scale-controller', 'views/graph-filters', 'models/graph-filters', 'views/view-selector', 'models/view-selector', 'views/calendar'], function(Backbone, _, $, Mousetrap, namespace) {
     namespace('BU.EventBus');
     BU.EventBus = _.extend({}, Backbone.Events);
     namespace('BU.Views.App');
     return BU.Views.App = (function(_super) {
+      var MODAL_OPEN;
 
       __extends(App, _super);
 
       function App() {
+        this.openModal = __bind(this.openModal, this);
+
         this.createNewTask = __bind(this.createNewTask, this);
 
         this.adjust = __bind(this.adjust, this);
@@ -23,14 +26,21 @@
 
       App.prototype.el = '#schedule-viewport';
 
+      MODAL_OPEN = false;
+
       App.prototype.events = {
         'selectstart': 'disableSelection',
         'click #new-task-toggle': 'createNewTask'
       };
 
       App.prototype.initialize = function() {
+        var _this = this;
+        BU.EventBus.on('modal-closed', this.modalClosed, this);
         this.model.get('session').on('change:id', this.authed, this);
-        return this.model.get('session').fetch();
+        this.model.get('session').fetch();
+        return Mousetrap.bind(['ctrl+shift+command+n', 'ctrl+shift+alt+n'], function() {
+          return _this.openModal();
+        });
       };
 
       App.prototype.authed = function(model, value, changes) {
@@ -107,6 +117,10 @@
         if (task == null) {
           task = null;
         }
+        if (MODAL_OPEN) {
+          return false;
+        }
+        MODAL_OPEN = true;
         if (!BU.Session.isAdmin()) {
           return false;
         }
@@ -118,7 +132,12 @@
         this.modal = new BU.Views.EditModal({
           model: new BU.Models.EditModal(params)
         });
-        return this.$el.append(this.modal.render().$el);
+        this.$el.append(this.modal.render().$el);
+        return false;
+      };
+
+      App.prototype.modalClosed = function() {
+        return MODAL_OPEN = false;
       };
 
       App.prototype.setView = function(type) {

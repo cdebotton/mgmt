@@ -2,6 +2,7 @@ define [
 	'backbone'
 	'underscore'
 	'jquery'
+	'mousetrap'
 	'ns'
 	'views/profile-palette'
 	'views/task-timeline'
@@ -17,7 +18,7 @@ define [
 	'views/view-selector'
 	'models/view-selector'
 	'views/calendar'
-], (Backbone, _, $, namespace) ->
+], (Backbone, _, $, Mousetrap, namespace) ->
 	
 	namespace 'BU.EventBus'
 	BU.EventBus = _.extend {}, Backbone.Events
@@ -27,13 +28,17 @@ define [
 
 		el: '#schedule-viewport'
 
+		MODAL_OPEN = false
+
 		events:
 			'selectstart': 'disableSelection'
 			'click #new-task-toggle': 'createNewTask'
 
 		initialize: ->
+			BU.EventBus.on 'modal-closed', @modalClosed, @
 			@model.get('session').on 'change:id', @authed, @
 			@model.get('session').fetch()
+			Mousetrap.bind ['ctrl+shift+command+n', 'ctrl+shift+alt+n'], => @openModal()
 
 		authed: (model, value, changes) ->
 			BU.EventBus.on 'open-modal', @openModal, @
@@ -89,7 +94,10 @@ define [
 			@openModal()
 			e.preventDefault()
 
-		openModal: (task = null) ->
+		openModal: (task = null) =>
+			if MODAL_OPEN
+				return false
+			MODAL_OPEN = true
 			if not BU.Session.isAdmin() then return false
 			params = {}
 			params['users'] = @model.get('users')
@@ -97,6 +105,9 @@ define [
 			@modal = new BU.Views.EditModal
 				model: new BU.Models.EditModal params
 			@$el.append @modal.render().$el
+			return false
+
+		modalClosed: -> MODAL_OPEN = false
 
 		setView: (type) ->
 			switch type

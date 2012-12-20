@@ -9,6 +9,7 @@ requirejs.config
 		'underscore':	'vendors/underscore/underscore'
 		'handlebars':	'vendors/handlebars/handlebars'
 		'modernizr':	'vendors/modernizr/modernizr'
+		'mousetrap':	'vendors/mousetrap/mousetrap'
 		'text':			'vendors/requirejs/text'
 		'templates':	'../handlebars'
 		'ns':			'lib/ns'
@@ -26,6 +27,7 @@ requirejs.config
 		'tooltip':		'vendors/bootstrap/bootstrap-tooltip'
 		'transition':	'vendors/bootstrap/bootstrap-transition'
 		'typeahead':	'vendors/bootstrap/bootstrap-typeahead'
+		'mousetrap':	'vendors/mousetrap/mousetrap'
 	shim:
 		'backbone':
 			deps: ['jquery', 'underscore']
@@ -46,6 +48,8 @@ requirejs.config
 		'animate':
 			deps: ['jquery']
 			exports: '$.fn.animate'
+		'mousetrap':
+			exports: 'Mousetrap'
 		'affix':
 			deps: ['jquery']
 		'alert':

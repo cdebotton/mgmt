@@ -99,6 +99,7 @@
           });
         });
         this.body.unbind('keyup', this.bindEscape);
+        BU.EventBus.trigger('modal-closed');
         return e.preventDefault();
       };
 

@@ -70,6 +70,7 @@ define [
 				marginTop: -($(window).height()+250)
 			}, => @$el.animate { opacity: 0 }, => @$el.remove()
 			@body.unbind 'keyup', @bindEscape
+			BU.EventBus.trigger 'modal-closed'
 			e.preventDefault()
 
 		bindEscape: (e) => if e.keyCode is 27 then @closeModal e
