@@ -21,7 +21,7 @@
       };
 
       ViewSelector.prototype.announce = function(model, view) {
-        return BU.EventBus.trigger('set-view', view);
+        return United.EventBus.trigger('set-view', view);
       };
 
       return ViewSelector;

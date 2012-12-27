@@ -3,11 +3,21 @@ define [
 	'underscore'
 	'ns'
 	'relational'
-], (Backbone, _, namespace) ->
+	'models/projects/project'
+], (Backbone, _, ns) ->
 	
-	namespace 'United.Models.Tasks.Task'
+	ns 'United.Models.Tasks.Task'
 
 	class United.Models.Tasks.Task extends Backbone.RelationalModel
+		relations: [{
+			type:				Backbone.HasOne
+			relatedModel:		United.Models.Projects.Project
+			key:				'project'
+			reverseRelation:
+				type:			Backbone.HasMany
+				key:			'task'
+				includeInJSON:	'id'
+		}]
 
 		url: -> "/api/v1/schedules" + if not @isNew() then "/update/#{@get 'id'}" else ''
 

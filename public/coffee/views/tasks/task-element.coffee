@@ -2,9 +2,9 @@ define [
 	'backbone'
 	'ns'
 	'jst'
-], (Backbone, namespace) ->
+], (Backbone, ns) ->
 
-	namespace 'United.Views.Tasks.TaskElement'
+	ns 'United.Views.Tasks.TaskElement'
 	class United.Views.Tasks.TaskElement extends Backbone.View
 
 		DAY_TO_MILLISECONDS = 86400000
@@ -22,9 +22,9 @@ define [
 
 		initialize: ->
 			@body = $ 'body'
-			if BU.Session.isAdmin()
-				BU.EventBus.on 'start-drag', @setOpacity, @
-				BU.EventBus.on 'stop-drag', @unsetOpacity, @
+			if United.Models.Users.Session.isAdmin()
+				United.EventBus.on 'start-drag', @setOpacity, @
+				United.EventBus.on 'stop-drag', @unsetOpacity, @
 				@body.on 'mousemove', @scrubMove
 				@body.on 'mouseup', @scrubStop
 				@model.on 'change:end_date', @updatePositions, @
@@ -35,28 +35,28 @@ define [
 				@model.on 'change:percentage', @render, @
 			else @$el.addClass 'no-drag'
 
-			BU.EventBus.on 'zoom-grid-updated', @updateZoom, @
-			BU.EventBus.on 'offset-timeline', @offsetTimeline, @
-			BU.JST.Hb.registerHelper 'formatDate', @formatDate	
+			United.EventBus.on 'zoom-grid-updated', @updateZoom, @
+			United.EventBus.on 'offset-timeline', @offsetTimeline, @
+			United.JST.Hb.registerHelper 'formatDate', @formatDate	
 			@start = @model.get 'start_date'
 			@end = @model.get 'end_date'
 			
 			if @model.get('color') isnt null then @$el.addClass @model.get 'color'
-			BU.EventBus.on 'gridpoint-dispatch', @gridPointsReceived, @
+			United.EventBus.on 'gridpoint-dispatch', @gridPointsReceived, @
 
 		render: ->
-			BU.EventBus.trigger 'where-am-i', @cid, @start, @end
-			BU.EventBus.trigger 'percentage-changed'
+			United.EventBus.trigger 'where-am-i', @cid, @start, @end
+			United.EventBus.trigger 'percentage-changed'
 			ctx = @model.toJSON()
-			ctx.isAdmin = BU.Session.isAdmin()
-			html = BU.JST['TaskElement'] ctx
+			ctx.isAdmin = United.Models.Users.Session.isAdmin()
+			html = United.JST['TaskElement'] ctx
 			@$el.html html
 			@
 
 		updatePositions: (model) ->
 			@start = @model.get 'start_date'
 			@end = @model.get 'end_date'
-			BU.EventBus.trigger 'where-am-i', @cid, @start, @end
+			United.EventBus.trigger 'where-am-i', @cid, @start, @end
 			@render()
 
 		gridPointsReceived: (cid, p1, p2, offset) ->
@@ -70,9 +70,9 @@ define [
 				'-webkit-transform':	"translate3d(#{offset}px, 0, 0)"
 				
 		scrubStart: (e) =>
-			if not BU.Session.isAdmin() then return false
+			if not United.Models.Users.Session.isAdmin() then return false
 			if e.which isnt 1 then return false
-			BU.EventBus.trigger 'start-drag', @model.get 'id'
+			United.EventBus.trigger 'start-drag', @model.get 'id'
 			@dragging = true
 			obj = $ e.currentTarget
 			@property = switch 1 is 1
@@ -84,7 +84,7 @@ define [
 			e.preventDefault()
 
 		scrubMove: (e) =>
-			if not BU.Session.isAdmin() then return false
+			if not United.Models.Users.Session.isAdmin() then return false
 			if not @dragging then return false
 			updateObject = {
 				start_date: @model.get 'start_date'
@@ -108,12 +108,12 @@ define [
 			@model.set updateObject
 			left = @$el.offset().left
 			right = left + @$el.outerWidth()
-			BU.EventBus.trigger 'update-timeline-transform', e.pageX, left, right, dx
+			United.EventBus.trigger 'update-timeline-transform', e.pageX, left, right, dx
 
 		scrubStop: (e) =>
-			if not BU.Session.isAdmin() then return false
+			if not United.Models.Users.Session.isAdmin() then return false
 			if @dragging
-				BU.EventBus.trigger 'stop-drag', @model.get 'id'
+				United.EventBus.trigger 'stop-drag', @model.get 'id'
 				@dragging = false
 				@property = undefined
 				@initX = 0
@@ -137,13 +137,13 @@ define [
 				'-webkit-transform':	"translate3d(#{dx})"
 
 		editModal: (e) =>
-			if not BU.Session.isAdmin() then return false
-			BU.EventBus.trigger 'open-modal', @model
+			if not United.Models.Users.Session.isAdmin() then return false
+			United.EventBus.trigger 'open-modal', @model
 			e.preventDefault()
 
 		updateColor: =>
-			if not BU.Session.isAdmin() then return false
+			if not United.Models.Users.Session.isAdmin() then return false
 			@$el[0].className = "task-element #{@model.get 'color'}"
 
 		updateZoom: (zoom) ->
-			BU.EventBus.trigger 'where-am-i', @cid, @model.get('start_date'), @model.get 'end_date'
+			United.EventBus.trigger 'where-am-i', @cid, @model.get('start_date'), @model.get 'end_date'

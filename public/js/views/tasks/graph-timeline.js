@@ -4,8 +4,8 @@
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['backbone', 'mousetrap', 'ns', 'jst'], function(Backbone, Mousetrap, namespace) {
-    namespace('United.Views.Tasks.GraphTimeline');
+  define(['backbone', 'mousetrap', 'ns', 'jst'], function(Backbone, Mousetrap, ns) {
+    ns('United.Views.Tasks.GraphTimeline');
     return United.Views.Tasks.GraphTimeline = (function(_super) {
       var DAY_TO_MILLISECONDS, DRAGGING, PX_PER_DAY, RANGE;
 
@@ -59,7 +59,7 @@
       GraphTimeline.prototype.initialize = function() {
         var lim, min, num, range, _i, _j, _len, _results, _results1, _step;
         this.startListening();
-        BU.JST.Hb.registerHelper('outputGraph', this.outputGraph);
+        United.JST.Hb.registerHelper('outputGraph', this.outputGraph);
         this.body = $('body');
         this.parent = this.$el.parent();
         this.dy = this.$el.offset().top;
@@ -84,26 +84,26 @@
       GraphTimeline.prototype.startListening = function() {
         Mousetrap.bind('ctrl+shift+left', this.shiftBackMonth);
         Mousetrap.bind('ctrl+shift+right', this.shiftRightMonth);
-        BU.EventBus.on('update-zoom', this.updateZoom, this);
-        BU.EventBus.on('on-scroll', this.affix, this);
-        BU.EventBus.on('adjust', this.adjust, this);
-        BU.EventBus.on('update-timeline-transform', this.updateTransform, this);
-        BU.EventBus.on('plot-ranges', this.plotRanges, this);
-        BU.EventBus.on('where-am-i', this.locateTimelineObject, this);
-        BU.EventBus.on('offset-timeline-from-user-timeline', this.offsetTimelineFromUserTimeline, this);
+        United.EventBus.on('update-zoom', this.updateZoom, this);
+        United.EventBus.on('on-scroll', this.affix, this);
+        United.EventBus.on('adjust', this.adjust, this);
+        United.EventBus.on('update-timeline-transform', this.updateTransform, this);
+        United.EventBus.on('plot-ranges', this.plotRanges, this);
+        United.EventBus.on('where-am-i', this.locateTimelineObject, this);
+        United.EventBus.on('offset-timeline-from-user-timeline', this.offsetTimelineFromUserTimeline, this);
         return this.$el.parent().show();
       };
 
       GraphTimeline.prototype.stopListening = function() {
         Mousetrap.unbind('ctrl+left', this.shiftBackMonth);
         Mousetrap.unbind('ctrl+right', this.shiftRightMonth);
-        BU.EventBus.off('update-zoom', this.updateZoom, this);
-        BU.EventBus.off('on-scroll', this.affix, this);
-        BU.EventBus.off('adjust', this.adjust, this);
-        BU.EventBus.off('update-timeline-transform', this.updateTransform, this);
-        BU.EventBus.off('plot-ranges', this.plotRanges, this);
-        BU.EventBus.off('where-am-i', this.locateTimelineObject, this);
-        BU.EventBus.off('offset-timeline-from-user-timeline', this.offsetTimelineFromUserTimeline, this);
+        United.EventBus.off('update-zoom', this.updateZoom, this);
+        United.EventBus.off('on-scroll', this.affix, this);
+        United.EventBus.off('adjust', this.adjust, this);
+        United.EventBus.off('update-timeline-transform', this.updateTransform, this);
+        United.EventBus.off('plot-ranges', this.plotRanges, this);
+        United.EventBus.off('where-am-i', this.locateTimelineObject, this);
+        United.EventBus.off('offset-timeline-from-user-timeline', this.offsetTimelineFromUserTimeline, this);
         return this.$el.parent().hide();
       };
 
@@ -161,7 +161,7 @@
         x = this.grid[this.currentTime];
         dx = this.grid[p1] - x + 50;
         dx2 = this.grid[p2] - x + 50;
-        return BU.EventBus.trigger('gridpoint-dispatch', cid, dx, dx2, this.OFFSET);
+        return United.EventBus.trigger('gridpoint-dispatch', cid, dx, dx2, this.OFFSET);
       };
 
       GraphTimeline.prototype.render = function(redraw) {
@@ -171,7 +171,7 @@
         }
         if (redraw === true) {
           ctx = this.ticks;
-          html = BU.JST['GraphTimeline'](ctx);
+          html = United.JST['GraphTimeline'](ctx);
           this.$el.html(html);
         }
         dx = -this.calculateOffset();
@@ -202,7 +202,7 @@
         this.$el.css({
           '-webkit-transform': "translate3d(" + values + ")"
         });
-        BU.EventBus.trigger('offset-timeline', values);
+        United.EventBus.trigger('offset-timeline', values);
         return e.preventDefault();
       };
 
@@ -310,14 +310,14 @@
         this.$el.css({
           '-webkit-transform': "translate3d(" + values + ")"
         });
-        return BU.EventBus.trigger('offset-timeline', values);
+        return United.EventBus.trigger('offset-timeline', values);
       };
 
       GraphTimeline.prototype.offsetTimelineFromUserTimeline = function(values) {
         this.$el.css({
           '-webkit-transform': "translate3d(" + values + ")"
         });
-        return BU.EventBus.trigger('offset-timeline', values);
+        return United.EventBus.trigger('offset-timeline', values);
       };
 
       GraphTimeline.prototype.plotRanges = function(ranges, caller) {
@@ -333,7 +333,7 @@
             value: range[2]
           });
         }
-        return BU.EventBus.trigger('percentage-points-calculated', response, caller);
+        return United.EventBus.trigger('percentage-points-calculated', response, caller);
       };
 
       GraphTimeline.prototype.updateZoom = function(zoom) {
@@ -346,7 +346,7 @@
           this.$('.tick-mark+.tick-mark').css({
             marginLeft: px - 1
           });
-          return BU.EventBus.trigger('zoom-grid-updated');
+          return United.EventBus.trigger('zoom-grid-updated');
         }
       };
 

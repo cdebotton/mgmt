@@ -4,9 +4,9 @@ define [
 	'relational'
 	'collections/users/users'
 	'models/users/user'
-], (Backbone, namespace) ->
+], (Backbone, ns) ->
 
-	namespace 'United.Models.Users.Role'
+	ns 'United.Models.Users.Role'
 	class United.Models.Users.Role extends Backbone.RelationalModel
 
 	United.Models.Users.Role.setup()

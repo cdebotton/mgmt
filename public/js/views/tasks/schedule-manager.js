@@ -36,10 +36,10 @@
         Mousetrap.bind(['ctrl+shift+n', 'ctrl+shift+alt+n'], function() {
           return _this.openModal();
         });
-        BU.EventBus.on('modal-closed', this.modalClosed, this);
-        BU.EventBus.on('open-modal', this.openModal, this);
-        BU.EventBus.on('set-view', this.setView, this);
-        BU.Session = this.model.get('session');
+        United.EventBus.on('modal-closed', this.modalClosed, this);
+        United.EventBus.on('open-modal', this.openModal, this);
+        United.EventBus.on('set-view', this.setView, this);
+        United.Models.Users.Session = this.model.get('session');
         this.window = $(window);
         this.header = this.$('.navbar');
         this.dy = this.$el.offset().top;
@@ -83,13 +83,13 @@
       ScheduleManager.prototype.affix = function(e) {
         var scrollTop;
         scrollTop = this.window.scrollTop();
-        BU.EventBus.trigger('on-scroll', scrollTop);
+        United.EventBus.trigger('on-scroll', scrollTop);
         if (scrollTop > this.dy) {
           this.header.addClass('affix');
-          return BU.EventBus.trigger('nav-affix', true);
+          return United.EventBus.trigger('nav-affix', true);
         } else {
           this.header.removeClass('affix');
-          return BU.EventBus.trigger('nav-affix', false);
+          return United.EventBus.trigger('nav-affix', false);
         }
       };
 
@@ -97,7 +97,7 @@
         var h, w;
         w = this.window.width();
         h = this.window.height();
-        return BU.EventBus.trigger('adjust', w, h);
+        return United.EventBus.trigger('adjust', w, h);
       };
 
       ScheduleManager.prototype.createNewTask = function(e) {
@@ -114,7 +114,7 @@
           return false;
         }
         MODAL_OPEN = true;
-        if (!BU.Session.isAdmin()) {
+        if (!United.Models.Users.Session.isAdmin()) {
           return false;
         }
         params = {};

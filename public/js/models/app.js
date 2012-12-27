@@ -4,8 +4,8 @@
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['backbone', 'ns', 'relational', 'models/users/user', 'collections/users/users', 'models/users/session'], function(Backbone, namespace) {
-    namespace('United.Models.App');
+  define(['backbone', 'ns', 'relational', 'models/users/user', 'collections/users/users', 'models/users/session', 'models/projects/project', 'collections/projects/projects'], function(Backbone, ns) {
+    ns('United.Models.App');
     United.Models.App = (function(_super) {
 
       __extends(App, _super);
@@ -26,12 +26,22 @@
           reverseRelation: {
             type: Backbone.HasOne,
             key: 'app',
-            includeInJson: 'id'
+            includeInJson: false
           }
         }, {
           type: Backbone.HasOne,
           key: 'session',
           relatedModel: United.Models.Users.Session,
+          reverseRelation: {
+            type: Backbone.HasOne,
+            key: 'app',
+            includeInJSON: false
+          }
+        }, {
+          type: Backbone.HasMany,
+          key: 'projects',
+          relatedModel: United.Models.Projects.Project,
+          collectionType: United.Collections.Projects.Projects,
           reverseRelation: {
             type: Backbone.HasOne,
             key: 'app',

@@ -32,10 +32,10 @@ define [
 
 		initialize: ->
 			Mousetrap.bind ['ctrl+shift+n', 'ctrl+shift+alt+n'], => @openModal()
-			BU.EventBus.on 'modal-closed', @modalClosed, @
-			BU.EventBus.on 'open-modal', @openModal, @
-			BU.EventBus.on 'set-view', @setView, @
-			BU.Session = @model.get 'session'
+			United.EventBus.on 'modal-closed', @modalClosed, @
+			United.EventBus.on 'open-modal', @openModal, @
+			United.EventBus.on 'set-view', @setView, @
+			United.Models.Users.Session = @model.get 'session'
 			@window = $(window)
 			@header = @$ '.navbar'
 			@dy = @$el.offset().top
@@ -69,18 +69,18 @@ define [
 
 		affix: (e) =>
 			scrollTop = @window.scrollTop()
-			BU.EventBus.trigger 'on-scroll', scrollTop
+			United.EventBus.trigger 'on-scroll', scrollTop
 			if scrollTop > @dy
 				@header.addClass 'affix'
-				BU.EventBus.trigger 'nav-affix', true
+				United.EventBus.trigger 'nav-affix', true
 			else
 				@header.removeClass 'affix'
-				BU.EventBus.trigger 'nav-affix', false
+				United.EventBus.trigger 'nav-affix', false
 
 		adjust: (e) =>
 			w = @window.width()
 			h = @window.height()
-			BU.EventBus.trigger 'adjust', w, h
+			United.EventBus.trigger 'adjust', w, h
 
 		createNewTask: (e) =>
 			@openModal()
@@ -90,7 +90,7 @@ define [
 			if MODAL_OPEN
 				return false
 			MODAL_OPEN = true
-			if not BU.Session.isAdmin() then return false
+			if not United.Models.Users.Session.isAdmin() then return false
 			params = {}
 			params['users'] = @model.get('users')
 			if task isnt null then params['task'] = task

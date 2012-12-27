@@ -53,7 +53,7 @@
       };
 
       GraphFilters.prototype.alertFilterChange = function() {
-        return BU.EventBus.trigger('set-filter', this.model.get('filterType'), this.model.get('filter'));
+        return United.EventBus.trigger('set-filter', this.model.get('filterType'), this.model.get('filter'));
       };
 
       return GraphFilters;

@@ -3,9 +3,9 @@ define [
 	'mousetrap'
 	'ns'
 	'jst'
-], (Backbone,  Mousetrap, namespace) ->
+], (Backbone,  Mousetrap, ns) ->
 
-	namespace 'United.Views.Tasks.GraphTimeline'
+	ns 'United.Views.Tasks.GraphTimeline'
 	class United.Views.Tasks.GraphTimeline extends Backbone.View
 
 		el: '#graph-timeline-wrapper'
@@ -26,7 +26,7 @@ define [
 
 		initialize: ->
 			@startListening()
-			BU.JST.Hb.registerHelper 'outputGraph', @outputGraph
+			United.JST.Hb.registerHelper 'outputGraph', @outputGraph
 			@body = $ 'body'
 			@parent = @$el.parent()
 			@dy = @$el.offset().top
@@ -41,25 +41,25 @@ define [
 		startListening: ->
 			Mousetrap.bind 'ctrl+shift+left', @shiftBackMonth
 			Mousetrap.bind 'ctrl+shift+right', @shiftRightMonth
-			BU.EventBus.on 'update-zoom', @updateZoom, @
-			BU.EventBus.on 'on-scroll', @affix, @
-			BU.EventBus.on 'adjust', @adjust, @
-			BU.EventBus.on 'update-timeline-transform', @updateTransform, @
-			BU.EventBus.on 'plot-ranges', @plotRanges, @
-			BU.EventBus.on 'where-am-i', @locateTimelineObject, @
-			BU.EventBus.on 'offset-timeline-from-user-timeline', @offsetTimelineFromUserTimeline, @
+			United.EventBus.on 'update-zoom', @updateZoom, @
+			United.EventBus.on 'on-scroll', @affix, @
+			United.EventBus.on 'adjust', @adjust, @
+			United.EventBus.on 'update-timeline-transform', @updateTransform, @
+			United.EventBus.on 'plot-ranges', @plotRanges, @
+			United.EventBus.on 'where-am-i', @locateTimelineObject, @
+			United.EventBus.on 'offset-timeline-from-user-timeline', @offsetTimelineFromUserTimeline, @
 			@$el.parent().show()
 
 		stopListening: ->
 			Mousetrap.unbind 'ctrl+left', @shiftBackMonth
 			Mousetrap.unbind 'ctrl+right', @shiftRightMonth
-			BU.EventBus.off 'update-zoom', @updateZoom, @
-			BU.EventBus.off 'on-scroll', @affix, @
-			BU.EventBus.off 'adjust', @adjust, @
-			BU.EventBus.off 'update-timeline-transform', @updateTransform, @
-			BU.EventBus.off 'plot-ranges', @plotRanges, @
-			BU.EventBus.off 'where-am-i', @locateTimelineObject, @
-			BU.EventBus.off 'offset-timeline-from-user-timeline', @offsetTimelineFromUserTimeline, @
+			United.EventBus.off 'update-zoom', @updateZoom, @
+			United.EventBus.off 'on-scroll', @affix, @
+			United.EventBus.off 'adjust', @adjust, @
+			United.EventBus.off 'update-timeline-transform', @updateTransform, @
+			United.EventBus.off 'plot-ranges', @plotRanges, @
+			United.EventBus.off 'where-am-i', @locateTimelineObject, @
+			United.EventBus.off 'offset-timeline-from-user-timeline', @offsetTimelineFromUserTimeline, @
 			@$el.parent().hide()
 
 		generateDateRanges: () ->
@@ -106,12 +106,12 @@ define [
 			x = @grid[@currentTime]
 			dx = @grid[p1] - x + 50
 			dx2 = @grid[p2] - x + 50
-			BU.EventBus.trigger 'gridpoint-dispatch', cid, dx, dx2, @OFFSET
+			United.EventBus.trigger 'gridpoint-dispatch', cid, dx, dx2, @OFFSET
 
 		render: (redraw = true) ->
 			if redraw is true
 				ctx = @ticks
-				html = BU.JST['GraphTimeline'] ctx
+				html = United.JST['GraphTimeline'] ctx
 				@$el.html html
 			dx = -@calculateOffset()
 			@$el.css
@@ -134,7 +134,7 @@ define [
 			values = ["#{@OFFSET}px", 0, 0].join ', '
 
 			@$el.css '-webkit-transform': "translate3d(#{values})"
-			BU.EventBus.trigger 'offset-timeline', values
+			United.EventBus.trigger 'offset-timeline', values
 			e.preventDefault()
 
 		stopDrag: (e) =>
@@ -152,7 +152,7 @@ define [
 			time.setMilliseconds 0
 			px = @grid[time.getTime()]
 			#@$el.css '-webkit-transform': "translate3d(#{values.join ', '})"
-			#BU.EventBus.trigger 'offset-timeline', values
+			#United.EventBus.trigger 'offset-timeline', values
 
 		shiftRightMonth: (e) =>
 			console.log 'right'
@@ -204,11 +204,11 @@ define [
 				@OFFSET -= - (left + 50)
 			values = ["#{@OFFSET}px", 0, 0].join ', '
 			@$el.css '-webkit-transform': "translate3d(#{values})"
-			BU.EventBus.trigger 'offset-timeline', values
+			United.EventBus.trigger 'offset-timeline', values
 
 		offsetTimelineFromUserTimeline: (values) ->
 			@$el.css '-webkit-transform': "translate3d(#{values})"
-			BU.EventBus.trigger 'offset-timeline', values
+			United.EventBus.trigger 'offset-timeline', values
 
 		plotRanges: (ranges, caller) ->
 			response = []
@@ -220,7 +220,7 @@ define [
 					width: width
 					value: range[2]
 				}
-			BU.EventBus.trigger 'percentage-points-calculated', response, caller
+			United.EventBus.trigger 'percentage-points-calculated', response, caller
 
 		updateZoom: (zoom) ->
 			if PX_PER_DAY isnt (px = @zoomLevels[zoom])
@@ -231,4 +231,4 @@ define [
 				@$('.tick-mark+.tick-mark').css {
 					marginLeft: px-1
 				}
-				BU.EventBus.trigger 'zoom-grid-updated'
+				United.EventBus.trigger 'zoom-grid-updated'

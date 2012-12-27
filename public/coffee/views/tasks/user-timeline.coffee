@@ -6,9 +6,9 @@ define [
 	'jst'
 	'views/tasks/task-element'
 	'views/tasks/overage'
-], (Backbone, _, $, namespace) ->
+], (Backbone, _, $, ns) ->
 
-	namespace 'United.Views.Tasks.UserTimeline'
+	ns 'United.Views.Tasks.UserTimeline'
 	class United.Views.Tasks.UserTimeline extends Backbone.View
 
 		tagName: 'article'
@@ -29,35 +29,35 @@ define [
 			@startListening()
 
 		startListening: ->
-			if BU.Session.isAdmin()
-				BU.EventBus.on 'percentage-points-calculated', @drawRanges, @
-				BU.EventBus.on 'percentage-changed', @calculateOverages, @
+			if United.Models.Users.Session.isAdmin()
+				United.EventBus.on 'percentage-points-calculated', @drawRanges, @
+				United.EventBus.on 'percentage-changed', @calculateOverages, @
 				@model.get('tasks').on 'change:start_date change:end_date change:user change:percentage', @calculateOverages, @
-				BU.EventBus.on 'zoom-grid-updated', @calculateOverages, @			
+				United.EventBus.on 'zoom-grid-updated', @calculateOverages, @			
 
-			BU.EventBus.on 'task-added', @taskCreated, @
+			United.EventBus.on 'task-added', @taskCreated, @
 			@model.on 'add:tasks', @addOne, @
 			@model.on 'reset:tasks remove:tasks', @addAll, @
 			@model.get('tasks').on 'change:track', @adjustHeight, @
 
 		stopListening: ->
-			if BU.Session.isAdmin()
-				BU.EventBus.off 'percentage-points-calculated', @drawRanges, @
-				BU.EventBus.off 'zoom-grid-updated', @calculateOverages, @
-				BU.EventBus.off 'percentage-changed', @calculateOverages, @
+			if United.Models.Users.Session.isAdmin()
+				United.EventBus.off 'percentage-points-calculated', @drawRanges, @
+				United.EventBus.off 'zoom-grid-updated', @calculateOverages, @
+				United.EventBus.off 'percentage-changed', @calculateOverages, @
 				@model.get('tasks').off 'change:start_date change:end_date change:user change:percentage', @calculateOverages, @
 
-			BU.EventBus.off 'task-added', @taskCreated, @
+			United.EventBus.off 'task-added', @taskCreated, @
 			@model.off 'add:tasks', @addOne, @
 			@model.off 'reset:tasks remove:tasks', @addAll, @
 			@model.get('tasks').off 'change:track', @adjustHeight, @
 		render: ->
 			ctx = @model.toJSON()
-			html = BU.JST['UserTimeline'] ctx
+			html = United.JST['UserTimeline'] ctx
 			@$el.html html
 			@addAll()
 			@adjustHeight()
-			if BU.Session.isAdmin()
+			if United.Models.Users.Session.isAdmin()
 				@calculateOverages()
 			@
 
@@ -81,7 +81,7 @@ define [
 					if (startpoint < taskend) and (endpoint > taskstart)
 						totalPercentage += +task.get 'percentage'
 				range.push totalPercentage
-			BU.EventBus.trigger 'plot-ranges', ranges, @cid
+			United.EventBus.trigger 'plot-ranges', ranges, @cid
 
 		drawRanges: (response, caller) ->
 			if caller isnt @cid then return
@@ -129,7 +129,7 @@ define [
 			@OFFSET += parseInt nextDx * 1.75
 			@XHOME = e.originalEvent.clientX
 			values = ["#{@OFFSET}px", 0, 0].join ', '
-			BU.EventBus.trigger 'offset-timeline-from-user-timeline', values
+			United.EventBus.trigger 'offset-timeline-from-user-timeline', values
 			e.preventDefault()
 
 		stopDrag: (e) =>

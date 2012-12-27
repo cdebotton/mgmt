@@ -3,9 +3,9 @@ define [
 	'underscore'
 	'ns'
 	'views/tasks/user-badge'
-], (Backbone, _, namespace) ->
+], (Backbone, _, ns) ->
 
-	namespace 'United.Views.Tasks.ProfilePalette'
+	ns 'United.Views.Tasks.ProfilePalette'
 	class United.Views.Tasks.ProfilePalette extends Backbone.View
 
 		el: '#profile-palette'
@@ -15,16 +15,16 @@ define [
 			@addAll()
 
 		startListening: ->
-			BU.EventBus.on 'set-filter', @setFilter, @
-			BU.EventBus.on 'nav-affix', @affix, @
-			BU.EventBus.on 'nav-affix', @affix, @
+			United.EventBus.on 'set-filter', @setFilter, @
+			United.EventBus.on 'nav-affix', @affix, @
+			United.EventBus.on 'nav-affix', @affix, @
 			@model.on 'add:user', @addOne, @
 			@model.on 'reset:user', @addAll, @
 
 		stopLisening: ->
-			BU.EventBus.off 'set-filter', @setFilter, @
-			BU.EventBus.off 'nav-affix', @affix, @
-			BU.EventBus.off 'nav-affix', @affix, @
+			United.EventBus.off 'set-filter', @setFilter, @
+			United.EventBus.off 'nav-affix', @affix, @
+			United.EventBus.off 'nav-affix', @affix, @
 			@model.off 'add:user', @addOne, @
 			@model.off 'reset:user', @addAll, @
 

@@ -2,9 +2,9 @@ define [
 	'backbone',
 	'ns',
 	'models/users/user'
-], (Backbone, namespace) ->
+], (Backbone, ns) ->
 
-	namespace 'United.Collections.Users.Users'
+	ns 'United.Collections.Users.Users'
 	class United.Collections.Users.Users extends Backbone.Collection
 
 		model: United.Models.Users.User

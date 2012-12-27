@@ -19,8 +19,8 @@ define [
 			'click button[type="submit"]':	'saveTask'
 
 		initialize: ->
-			BU.JST.Hb.registerHelper 'printUsers', @printUsers
-			BU.JST.Hb.registerHelper 'printColors', @printColors
+			United.JST.Hb.registerHelper 'printUsers', @printUsers
+			United.JST.Hb.registerHelper 'printColors', @printColors
 
 		render: ->
 			@body = $ 'body'
@@ -45,7 +45,7 @@ define [
 					end_year: today.getFullYear()
 					user_list: window.users
 				}
-			html = BU.JST.EditModal ctx
+			html = United.JST.EditModal ctx
 			@$el.html html
 			@expose()
 			@
@@ -70,7 +70,7 @@ define [
 				marginTop: -($(window).height()+250)
 			}, => @$el.animate { opacity: 0 }, => @$el.remove()
 			@body.unbind 'keyup', @bindEscape
-			BU.EventBus.trigger 'modal-closed'
+			United.EventBus.trigger 'modal-closed'
 			e.preventDefault()
 
 		bindEscape: (e) => if e.keyCode is 27 then @closeModal e

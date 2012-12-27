@@ -3,10 +3,10 @@
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['backbone', 'underscore', 'ns', 'views/tasks/schedule-manager'], function(Backbone, _, namespace) {
-    namespace('BU.EventBus');
-    BU.EventBus = _.extend({}, Backbone.Events);
-    namespace('United.Views.App');
+  define(['backbone', 'underscore', 'ns', 'views/tasks/schedule-manager', 'views/projects/project-list'], function(Backbone, _, ns) {
+    ns('United.EventBus');
+    United.EventBus = _.extend({}, Backbone.Events);
+    ns('United.Views.App');
     return United.Views.App = (function(_super) {
 
       __extends(App, _super);
@@ -27,6 +27,9 @@
               model: this.model
             });
           case 'projects':
+            return new United.Views.Projects.ProjectList({
+              model: this.model
+            });
         }
       };
 

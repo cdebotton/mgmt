@@ -4,8 +4,8 @@
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['backbone', 'ns', 'jst'], function(Backbone, namespace) {
-    namespace('United.Views.Tasks.TaskElement');
+  define(['backbone', 'ns', 'jst'], function(Backbone, ns) {
+    ns('United.Views.Tasks.TaskElement');
     return United.Views.Tasks.TaskElement = (function(_super) {
       var DAY_TO_MILLISECONDS, PX_PER_DAY;
 
@@ -40,9 +40,9 @@
 
       TaskElement.prototype.initialize = function() {
         this.body = $('body');
-        if (BU.Session.isAdmin()) {
-          BU.EventBus.on('start-drag', this.setOpacity, this);
-          BU.EventBus.on('stop-drag', this.unsetOpacity, this);
+        if (United.Models.Users.Session.isAdmin()) {
+          United.EventBus.on('start-drag', this.setOpacity, this);
+          United.EventBus.on('stop-drag', this.unsetOpacity, this);
           this.body.on('mousemove', this.scrubMove);
           this.body.on('mouseup', this.scrubStop);
           this.model.on('change:end_date', this.updatePositions, this);
@@ -54,24 +54,24 @@
         } else {
           this.$el.addClass('no-drag');
         }
-        BU.EventBus.on('zoom-grid-updated', this.updateZoom, this);
-        BU.EventBus.on('offset-timeline', this.offsetTimeline, this);
-        BU.JST.Hb.registerHelper('formatDate', this.formatDate);
+        United.EventBus.on('zoom-grid-updated', this.updateZoom, this);
+        United.EventBus.on('offset-timeline', this.offsetTimeline, this);
+        United.JST.Hb.registerHelper('formatDate', this.formatDate);
         this.start = this.model.get('start_date');
         this.end = this.model.get('end_date');
         if (this.model.get('color') !== null) {
           this.$el.addClass(this.model.get('color'));
         }
-        return BU.EventBus.on('gridpoint-dispatch', this.gridPointsReceived, this);
+        return United.EventBus.on('gridpoint-dispatch', this.gridPointsReceived, this);
       };
 
       TaskElement.prototype.render = function() {
         var ctx, html;
-        BU.EventBus.trigger('where-am-i', this.cid, this.start, this.end);
-        BU.EventBus.trigger('percentage-changed');
+        United.EventBus.trigger('where-am-i', this.cid, this.start, this.end);
+        United.EventBus.trigger('percentage-changed');
         ctx = this.model.toJSON();
-        ctx.isAdmin = BU.Session.isAdmin();
-        html = BU.JST['TaskElement'](ctx);
+        ctx.isAdmin = United.Models.Users.Session.isAdmin();
+        html = United.JST['TaskElement'](ctx);
         this.$el.html(html);
         return this;
       };
@@ -79,7 +79,7 @@
       TaskElement.prototype.updatePositions = function(model) {
         this.start = this.model.get('start_date');
         this.end = this.model.get('end_date');
-        BU.EventBus.trigger('where-am-i', this.cid, this.start, this.end);
+        United.EventBus.trigger('where-am-i', this.cid, this.start, this.end);
         return this.render();
       };
 
@@ -100,13 +100,13 @@
 
       TaskElement.prototype.scrubStart = function(e) {
         var obj;
-        if (!BU.Session.isAdmin()) {
+        if (!United.Models.Users.Session.isAdmin()) {
           return false;
         }
         if (e.which !== 1) {
           return false;
         }
-        BU.EventBus.trigger('start-drag', this.model.get('id'));
+        United.EventBus.trigger('start-drag', this.model.get('id'));
         this.dragging = true;
         obj = $(e.currentTarget);
         this.property = (function() {
@@ -126,7 +126,7 @@
 
       TaskElement.prototype.scrubMove = function(e) {
         var date, days, dx, epoch, key, left, property, right, targetTrack, units, updateObject, _i, _len, _ref;
-        if (!BU.Session.isAdmin()) {
+        if (!United.Models.Users.Session.isAdmin()) {
           return false;
         }
         if (!this.dragging) {
@@ -163,15 +163,15 @@
         this.model.set(updateObject);
         left = this.$el.offset().left;
         right = left + this.$el.outerWidth();
-        return BU.EventBus.trigger('update-timeline-transform', e.pageX, left, right, dx);
+        return United.EventBus.trigger('update-timeline-transform', e.pageX, left, right, dx);
       };
 
       TaskElement.prototype.scrubStop = function(e) {
-        if (!BU.Session.isAdmin()) {
+        if (!United.Models.Users.Session.isAdmin()) {
           return false;
         }
         if (this.dragging) {
-          BU.EventBus.trigger('stop-drag', this.model.get('id'));
+          United.EventBus.trigger('stop-drag', this.model.get('id'));
           this.dragging = false;
           this.property = void 0;
           this.initX = 0;
@@ -204,22 +204,22 @@
       };
 
       TaskElement.prototype.editModal = function(e) {
-        if (!BU.Session.isAdmin()) {
+        if (!United.Models.Users.Session.isAdmin()) {
           return false;
         }
-        BU.EventBus.trigger('open-modal', this.model);
+        United.EventBus.trigger('open-modal', this.model);
         return e.preventDefault();
       };
 
       TaskElement.prototype.updateColor = function() {
-        if (!BU.Session.isAdmin()) {
+        if (!United.Models.Users.Session.isAdmin()) {
           return false;
         }
         return this.$el[0].className = "task-element " + (this.model.get('color'));
       };
 
       TaskElement.prototype.updateZoom = function(zoom) {
-        return BU.EventBus.trigger('where-am-i', this.cid, this.model.get('start_date'), this.model.get('end_date'));
+        return United.EventBus.trigger('where-am-i', this.cid, this.model.get('start_date'), this.model.get('end_date'));
       };
 
       return TaskElement;

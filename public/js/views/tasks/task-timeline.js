@@ -4,8 +4,8 @@
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['backbone', 'underscore', 'ns', 'views/tasks/user-timeline'], function(Backbone, _, namespace) {
-    namespace('United.Views.Tasks.TaskTimeline');
+  define(['backbone', 'underscore', 'ns', 'views/tasks/user-timeline'], function(Backbone, _, ns) {
+    ns('United.Views.Tasks.TaskTimeline');
     return United.Views.Tasks.TaskTimeline = (function(_super) {
 
       __extends(TaskTimeline, _super);
@@ -29,12 +29,12 @@
       };
 
       TaskTimeline.prototype.startListening = function() {
-        BU.EventBus.on('set-filter', this.setFilter, this);
+        United.EventBus.on('set-filter', this.setFilter, this);
         return this.$el.parent().show();
       };
 
       TaskTimeline.prototype.stopListening = function() {
-        BU.EventBus.off('set-filter', this.setFilter, this);
+        United.EventBus.off('set-filter', this.setFilter, this);
         return this.$el.parent().hide();
       };
 

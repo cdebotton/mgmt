@@ -31,17 +31,17 @@
       };
 
       Overage.prototype.startListening = function() {
-        return BU.EventBus.on('offset-timeline', this.offsetTimeline, this);
+        return United.EventBus.on('offset-timeline', this.offsetTimeline, this);
       };
 
       Overage.prototype.stopListening = function() {
-        return BU.EventBus.off('offset-timeline', this.offsetTimeline, this);
+        return United.EventBus.off('offset-timeline', this.offsetTimeline, this);
       };
 
       Overage.prototype.render = function() {
         var ctx, html;
         ctx = this.model.toJSON();
-        html = BU.JST.Overage(ctx);
+        html = United.JST.Overage(ctx);
         this.$el.html(html);
         return this;
       };

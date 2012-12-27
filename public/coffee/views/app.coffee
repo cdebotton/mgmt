@@ -3,13 +3,14 @@ define [
 	'underscore'
 	'ns'
 	'views/tasks/schedule-manager'
+	'views/projects/project-list'
 	
-], (Backbone, _, namespace) ->
+], (Backbone, _, ns) ->
 	
-	namespace 'BU.EventBus'
-	BU.EventBus = _.extend {}, Backbone.Events
+	ns 'United.EventBus'
+	United.EventBus = _.extend {}, Backbone.Events
 
-	namespace 'United.Views.App'
+	ns 'United.Views.App'
 	class United.Views.App extends Backbone.View
 
 		initialize: ->
@@ -20,4 +21,5 @@ define [
 			switch @model.get 'controller'
 				when 'schedules' then new United.Views.Tasks.ScheduleManager
 					model: @model
-				when 'projects' then return
+				when 'projects' then new United.Views.Projects.ProjectList
+					model: @model

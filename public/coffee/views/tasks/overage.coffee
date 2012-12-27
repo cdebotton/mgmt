@@ -22,14 +22,14 @@ define [
 				@$el.hide()
 
 		startListening: ->
-			BU.EventBus.on 'offset-timeline', @offsetTimeline, @
+			United.EventBus.on 'offset-timeline', @offsetTimeline, @
 
 		stopListening: ->
-			BU.EventBus.off 'offset-timeline', @offsetTimeline, @
+			United.EventBus.off 'offset-timeline', @offsetTimeline, @
 
 		render: ->
 			ctx = @model.toJSON()
-			html = BU.JST.Overage ctx
+			html = United.JST.Overage ctx
 			@$el.html html
 			@
 

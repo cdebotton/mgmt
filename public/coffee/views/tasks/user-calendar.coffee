@@ -16,12 +16,12 @@ define [
 		days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 
 		initialize: ->
-			BU.JST.Hb.registerHelper 'printSchedule', @printSchedule
+			United.JST.Hb.registerHelper 'printSchedule', @printSchedule
 
 		render: ->
 			ctx = @model.toJSON()
 			ctx.events = @renderDates()
-			html = BU.JST.UserCalendar ctx
+			html = United.JST.UserCalendar ctx
 			@$el.html html
 			@
 

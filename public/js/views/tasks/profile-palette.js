@@ -4,8 +4,8 @@
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['backbone', 'underscore', 'ns', 'views/tasks/user-badge'], function(Backbone, _, namespace) {
-    namespace('United.Views.Tasks.ProfilePalette');
+  define(['backbone', 'underscore', 'ns', 'views/tasks/user-badge'], function(Backbone, _, ns) {
+    ns('United.Views.Tasks.ProfilePalette');
     return United.Views.Tasks.ProfilePalette = (function(_super) {
 
       __extends(ProfilePalette, _super);
@@ -23,17 +23,17 @@
       };
 
       ProfilePalette.prototype.startListening = function() {
-        BU.EventBus.on('set-filter', this.setFilter, this);
-        BU.EventBus.on('nav-affix', this.affix, this);
-        BU.EventBus.on('nav-affix', this.affix, this);
+        United.EventBus.on('set-filter', this.setFilter, this);
+        United.EventBus.on('nav-affix', this.affix, this);
+        United.EventBus.on('nav-affix', this.affix, this);
         this.model.on('add:user', this.addOne, this);
         return this.model.on('reset:user', this.addAll, this);
       };
 
       ProfilePalette.prototype.stopLisening = function() {
-        BU.EventBus.off('set-filter', this.setFilter, this);
-        BU.EventBus.off('nav-affix', this.affix, this);
-        BU.EventBus.off('nav-affix', this.affix, this);
+        United.EventBus.off('set-filter', this.setFilter, this);
+        United.EventBus.off('nav-affix', this.affix, this);
+        United.EventBus.off('nav-affix', this.affix, this);
         this.model.off('add:user', this.addOne, this);
         return this.model.off('reset:user', this.addAll, this);
       };

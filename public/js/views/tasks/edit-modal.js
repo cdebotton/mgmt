@@ -35,8 +35,8 @@
       };
 
       EditModal.prototype.initialize = function() {
-        BU.JST.Hb.registerHelper('printUsers', this.printUsers);
-        return BU.JST.Hb.registerHelper('printColors', this.printColors);
+        United.JST.Hb.registerHelper('printUsers', this.printUsers);
+        return United.JST.Hb.registerHelper('printColors', this.printColors);
       };
 
       EditModal.prototype.render = function() {
@@ -64,7 +64,7 @@
             user_list: window.users
           };
         }
-        html = BU.JST.EditModal(ctx);
+        html = United.JST.EditModal(ctx);
         this.$el.html(html);
         this.expose();
         return this;
@@ -99,7 +99,7 @@
           });
         });
         this.body.unbind('keyup', this.bindEscape);
-        BU.EventBus.trigger('modal-closed');
+        United.EventBus.trigger('modal-closed');
         return e.preventDefault();
       };
 

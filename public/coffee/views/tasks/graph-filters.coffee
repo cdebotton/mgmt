@@ -37,4 +37,4 @@ define [
 			}
 
 		alertFilterChange: ->
-			BU.EventBus.trigger 'set-filter', @model.get('filterType'), @model.get('filter')
+			United.EventBus.trigger 'set-filter', @model.get('filterType'), @model.get('filter')

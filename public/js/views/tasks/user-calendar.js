@@ -23,14 +23,14 @@
       UserCalendar.prototype.days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
       UserCalendar.prototype.initialize = function() {
-        return BU.JST.Hb.registerHelper('printSchedule', this.printSchedule);
+        return United.JST.Hb.registerHelper('printSchedule', this.printSchedule);
       };
 
       UserCalendar.prototype.render = function() {
         var ctx, html;
         ctx = this.model.toJSON();
         ctx.events = this.renderDates();
-        html = BU.JST.UserCalendar(ctx);
+        html = United.JST.UserCalendar(ctx);
         this.$el.html(html);
         return this;
       };

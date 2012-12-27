@@ -3,8 +3,8 @@
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['backbone', 'ns', 'jst'], function(Backbone, namespace) {
-    namespace('United.Views.Tasks.UserBadge');
+  define(['backbone', 'ns', 'jst'], function(Backbone, ns) {
+    ns('United.Views.Tasks.UserBadge');
     return United.Views.Tasks.UserBadge = (function(_super) {
 
       __extends(UserBadge, _super);
@@ -24,7 +24,7 @@
       UserBadge.prototype.render = function() {
         var ctx, html;
         ctx = this.model.toJSON();
-        html = BU.JST['UserBadge'](ctx);
+        html = United.JST['UserBadge'](ctx);
         this.$el.html(html);
         this.adjustHeight();
         return this;

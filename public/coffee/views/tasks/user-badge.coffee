@@ -2,9 +2,9 @@ define [
 	'backbone',
 	'ns',
 	'jst'
-], (Backbone, namespace) ->
+], (Backbone, ns) ->
 
-	namespace 'United.Views.Tasks.UserBadge'
+	ns 'United.Views.Tasks.UserBadge'
 	class United.Views.Tasks.UserBadge extends Backbone.View
 
 		tagName: 'article'
@@ -16,7 +16,7 @@ define [
 
 		render: ->
 			ctx = @model.toJSON()
-			html = BU.JST['UserBadge'] ctx
+			html = United.JST['UserBadge'] ctx
 			@$el.html html
 			@adjustHeight()
 			@

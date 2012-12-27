@@ -4,8 +4,8 @@
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['backbone', 'underscore', 'ns', 'relational'], function(Backbone, _, namespace) {
-    namespace('United.Models.Tasks.Task');
+  define(['backbone', 'underscore', 'ns', 'relational', 'models/projects/project'], function(Backbone, _, ns) {
+    ns('United.Models.Tasks.Task');
     United.Models.Tasks.Task = (function(_super) {
 
       __extends(Task, _super);
@@ -14,6 +14,19 @@
         this.parse = __bind(this.parse, this);
         return Task.__super__.constructor.apply(this, arguments);
       }
+
+      Task.prototype.relations = [
+        {
+          type: Backbone.HasOne,
+          relatedModel: United.Models.Projects.Project,
+          key: 'project',
+          reverseRelation: {
+            type: Backbone.HasMany,
+            key: 'task',
+            includeInJSON: 'id'
+          }
+        }
+      ];
 
       Task.prototype.url = function() {
         return "/api/v1/schedules" + (!this.isNew() ? "/update/" + (this.get('id')) : '');

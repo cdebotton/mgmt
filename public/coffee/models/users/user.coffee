@@ -8,9 +8,9 @@ define [
 	'collections/tasks/tasks'
 	'models/users/discipline'
 	'collections/users/disciplines'
-	], (Backbone, namespace) ->
+	], (Backbone, ns) ->
 		
-	namespace 'United.Models.Users.User'
+	ns 'United.Models.Users.User'
 	class United.Models.Users.User extends Backbone.RelationalModel
 
 		url: -> "/api/v1/users" + if not @isNew() then "/update/#{@get 'id'}" else ''

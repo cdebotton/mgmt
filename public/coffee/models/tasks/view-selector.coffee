@@ -10,4 +10,4 @@ define [
 
 		initialize: ->  @on 'change:currentView', @announce, @
 
-		announce: (model, view) -> BU.EventBus.trigger 'set-view',view
+		announce: (model, view) -> United.EventBus.trigger 'set-view',view

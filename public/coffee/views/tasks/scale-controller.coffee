@@ -32,14 +32,14 @@ define [
 		startListening: ->
 			Mousetrap.bind ['ctrl+shift+pageup'], @zoomIn
 			Mousetrap.bind ['ctrl+shift+pagedown'], @zoomOut
-			BU.EventBus.on 'set-view', @setView, @
+			United.EventBus.on 'set-view', @setView, @
 			@model.on 'change:zoom', @render, @
 
 		stopListening: ->
 			Mousetrap.unbind ['ctrl+shift+pageup'], @zoomIn
 			Mousetrap.unbind ['ctrl+shift+pagedown'], @zoomOut
 			@model.off 'change:zoom', @render, @
-			BU.EventBus.off 'set-view', @setView, @
+			United.EventBus.off 'set-view', @setView, @
 
 		startDrag: (e) =>
 			@body.on 'mousemove', @onDrag
@@ -57,7 +57,7 @@ define [
 			zoom = @zoomToOffset @offset, @total
 			@model.set 'zoom', zoom
 			@knob.css 'left', @offset
-			BU.EventBus.trigger 'update-zoom', @model.get 'zoom'
+			United.EventBus.trigger 'update-zoom', @model.get 'zoom'
 
 		zoomIn: (e) =>
 			zoom = @model.get('zoom') + 10
@@ -86,7 +86,7 @@ define [
 			@initX = e.pageX
 			zoom = @zoomToOffset @offset, @total
 			@model.set 'zoom', zoom
-			BU.EventBus.trigger 'update-zoom', @model.get 'zoom'
+			United.EventBus.trigger 'update-zoom', @model.get 'zoom'
 
 		render: ->
 			@input.val @model.get 'zoom'
@@ -94,7 +94,7 @@ define [
 		stopDrag: (e) =>
 			@body.off 'mousemove', @onDrag
 			@body.off 'mouseup', @stopDrag
-			BU.EventBus.trigger 'percentage-changed'
+			United.EventBus.trigger 'percentage-changed'
 
 		updateZoomInput: (e) =>
 			zoom = e.currentTarget.value
@@ -102,7 +102,7 @@ define [
 			else if zoom < 0 then zoom = 0
 			@model.set 'zoom', zoom
 			@knob.animate { left: @offsetToZoom zoom }, 375, 'ease-in'
-			BU.EventBus.trigger 'update-zoom', @model.get 'zoom'
+			United.EventBus.trigger 'update-zoom', @model.get 'zoom'
 
 		zoomToOffset: (offset, total) ->
 			Math.ceil 100 * (offset / total)

@@ -55,7 +55,7 @@
       ScaleController.prototype.startListening = function() {
         Mousetrap.bind(['ctrl+shift+pageup'], this.zoomIn);
         Mousetrap.bind(['ctrl+shift+pagedown'], this.zoomOut);
-        BU.EventBus.on('set-view', this.setView, this);
+        United.EventBus.on('set-view', this.setView, this);
         return this.model.on('change:zoom', this.render, this);
       };
 
@@ -63,7 +63,7 @@
         Mousetrap.unbind(['ctrl+shift+pageup'], this.zoomIn);
         Mousetrap.unbind(['ctrl+shift+pagedown'], this.zoomOut);
         this.model.off('change:zoom', this.render, this);
-        return BU.EventBus.off('set-view', this.setView, this);
+        return United.EventBus.off('set-view', this.setView, this);
       };
 
       ScaleController.prototype.startDrag = function(e) {
@@ -85,7 +85,7 @@
         zoom = this.zoomToOffset(this.offset, this.total);
         this.model.set('zoom', zoom);
         this.knob.css('left', this.offset);
-        return BU.EventBus.trigger('update-zoom', this.model.get('zoom'));
+        return United.EventBus.trigger('update-zoom', this.model.get('zoom'));
       };
 
       ScaleController.prototype.zoomIn = function(e) {
@@ -135,7 +135,7 @@
         this.initX = e.pageX;
         zoom = this.zoomToOffset(this.offset, this.total);
         this.model.set('zoom', zoom);
-        return BU.EventBus.trigger('update-zoom', this.model.get('zoom'));
+        return United.EventBus.trigger('update-zoom', this.model.get('zoom'));
       };
 
       ScaleController.prototype.render = function() {
@@ -145,7 +145,7 @@
       ScaleController.prototype.stopDrag = function(e) {
         this.body.off('mousemove', this.onDrag);
         this.body.off('mouseup', this.stopDrag);
-        return BU.EventBus.trigger('percentage-changed');
+        return United.EventBus.trigger('percentage-changed');
       };
 
       ScaleController.prototype.updateZoomInput = function(e) {
@@ -160,7 +160,7 @@
         this.knob.animate({
           left: this.offsetToZoom(zoom)
         }, 375, 'ease-in');
-        return BU.EventBus.trigger('update-zoom', this.model.get('zoom'));
+        return United.EventBus.trigger('update-zoom', this.model.get('zoom'));
       };
 
       ScaleController.prototype.zoomToOffset = function(offset, total) {

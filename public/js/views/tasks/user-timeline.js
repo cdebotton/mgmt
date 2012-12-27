@@ -4,8 +4,8 @@
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['backbone', 'underscore', 'jquery', 'ns', 'jst', 'views/tasks/task-element', 'views/tasks/overage'], function(Backbone, _, $, namespace) {
-    namespace('United.Views.Tasks.UserTimeline');
+  define(['backbone', 'underscore', 'jquery', 'ns', 'jst', 'views/tasks/task-element', 'views/tasks/overage'], function(Backbone, _, $, ns) {
+    ns('United.Views.Tasks.UserTimeline');
     return United.Views.Tasks.UserTimeline = (function(_super) {
       var DRAGGING;
 
@@ -42,26 +42,26 @@
       };
 
       UserTimeline.prototype.startListening = function() {
-        if (BU.Session.isAdmin()) {
-          BU.EventBus.on('percentage-points-calculated', this.drawRanges, this);
-          BU.EventBus.on('percentage-changed', this.calculateOverages, this);
+        if (United.Models.Users.Session.isAdmin()) {
+          United.EventBus.on('percentage-points-calculated', this.drawRanges, this);
+          United.EventBus.on('percentage-changed', this.calculateOverages, this);
           this.model.get('tasks').on('change:start_date change:end_date change:user change:percentage', this.calculateOverages, this);
-          BU.EventBus.on('zoom-grid-updated', this.calculateOverages, this);
+          United.EventBus.on('zoom-grid-updated', this.calculateOverages, this);
         }
-        BU.EventBus.on('task-added', this.taskCreated, this);
+        United.EventBus.on('task-added', this.taskCreated, this);
         this.model.on('add:tasks', this.addOne, this);
         this.model.on('reset:tasks remove:tasks', this.addAll, this);
         return this.model.get('tasks').on('change:track', this.adjustHeight, this);
       };
 
       UserTimeline.prototype.stopListening = function() {
-        if (BU.Session.isAdmin()) {
-          BU.EventBus.off('percentage-points-calculated', this.drawRanges, this);
-          BU.EventBus.off('zoom-grid-updated', this.calculateOverages, this);
-          BU.EventBus.off('percentage-changed', this.calculateOverages, this);
+        if (United.Models.Users.Session.isAdmin()) {
+          United.EventBus.off('percentage-points-calculated', this.drawRanges, this);
+          United.EventBus.off('zoom-grid-updated', this.calculateOverages, this);
+          United.EventBus.off('percentage-changed', this.calculateOverages, this);
           this.model.get('tasks').off('change:start_date change:end_date change:user change:percentage', this.calculateOverages, this);
         }
-        BU.EventBus.off('task-added', this.taskCreated, this);
+        United.EventBus.off('task-added', this.taskCreated, this);
         this.model.off('add:tasks', this.addOne, this);
         this.model.off('reset:tasks remove:tasks', this.addAll, this);
         return this.model.get('tasks').off('change:track', this.adjustHeight, this);
@@ -70,11 +70,11 @@
       UserTimeline.prototype.render = function() {
         var ctx, html;
         ctx = this.model.toJSON();
-        html = BU.JST['UserTimeline'](ctx);
+        html = United.JST['UserTimeline'](ctx);
         this.$el.html(html);
         this.addAll();
         this.adjustHeight();
-        if (BU.Session.isAdmin()) {
+        if (United.Models.Users.Session.isAdmin()) {
           this.calculateOverages();
         }
         return this;
@@ -112,7 +112,7 @@
           }
           range.push(totalPercentage);
         }
-        return BU.EventBus.trigger('plot-ranges', ranges, this.cid);
+        return United.EventBus.trigger('plot-ranges', ranges, this.cid);
       };
 
       UserTimeline.prototype.drawRanges = function(response, caller) {
@@ -188,7 +188,7 @@
         this.OFFSET += parseInt(nextDx * 1.75);
         this.XHOME = e.originalEvent.clientX;
         values = ["" + this.OFFSET + "px", 0, 0].join(', ');
-        BU.EventBus.trigger('offset-timeline-from-user-timeline', values);
+        United.EventBus.trigger('offset-timeline-from-user-timeline', values);
         return e.preventDefault();
       };
 

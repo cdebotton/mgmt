@@ -3,9 +3,9 @@ define [
 	'underscore'
 	'ns'
 	'views/tasks/user-timeline'
-], (Backbone, _, namespace) ->
+], (Backbone, _, ns) ->
 
-	namespace 'United.Views.Tasks.TaskTimeline'
+	ns 'United.Views.Tasks.TaskTimeline'
 	class United.Views.Tasks.TaskTimeline extends Backbone.View
 
 		el: '#task-timeline-wrapper'
@@ -21,11 +21,11 @@ define [
 			@addAll()
 
 		startListening: ->
-			BU.EventBus.on 'set-filter', @setFilter, @
+			United.EventBus.on 'set-filter', @setFilter, @
 			@$el.parent().show()
 
 		stopListening: ->
-			BU.EventBus.off 'set-filter', @setFilter, @
+			United.EventBus.off 'set-filter', @setFilter, @
 			@$el.parent().hide()
 
 		addOne: (user) =>
