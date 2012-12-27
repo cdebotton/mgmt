@@ -147,4 +147,3 @@ define [
 
 		updateZoom: (zoom) ->
 			BU.EventBus.trigger 'where-am-i', @cid, @model.get('start_date'), @model.get 'end_date'
-			BU.EventBus.trigger 'percentage-changed'

@@ -219,8 +219,7 @@
       };
 
       TaskElement.prototype.updateZoom = function(zoom) {
-        BU.EventBus.trigger('where-am-i', this.cid, this.model.get('start_date'), this.model.get('end_date'));
-        return BU.EventBus.trigger('percentage-changed');
+        return BU.EventBus.trigger('where-am-i', this.cid, this.model.get('start_date'), this.model.get('end_date'));
       };
 
       return TaskElement;

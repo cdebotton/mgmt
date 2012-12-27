@@ -144,7 +144,8 @@
 
       ScaleController.prototype.stopDrag = function(e) {
         this.body.off('mousemove', this.onDrag);
-        return this.body.off('mouseup', this.stopDrag);
+        this.body.off('mouseup', this.stopDrag);
+        return BU.EventBus.trigger('percentage-changed');
       };
 
       ScaleController.prototype.updateZoomInput = function(e) {

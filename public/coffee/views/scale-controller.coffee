@@ -94,6 +94,7 @@ define [
 		stopDrag: (e) =>
 			@body.off 'mousemove', @onDrag
 			@body.off 'mouseup', @stopDrag
+			BU.EventBus.trigger 'percentage-changed'
 
 		updateZoomInput: (e) =>
 			zoom = e.currentTarget.value
