@@ -10,7 +10,7 @@ class Project extends Eloquent
 	 * A project belongs to a client.
 	 * @return Client
 	 */
-	public client()
+	public function client()
 	{
 		return $this->belongs_to('Client');
 	}

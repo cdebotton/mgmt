@@ -122,9 +122,10 @@
         task.end_date.setHours(0, 0, 0, 0);
       }
     }
-    return window.BUScheduler = new BU.Views.App({
-      model: new BU.Models.App({
-        users: window.users
+    return window.BUScheduler = new United.Views.App({
+      model: new United.Models.App({
+        users: window.users,
+        controller: window.controller
       })
     });
   });

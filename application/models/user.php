@@ -4,6 +4,11 @@ class User extends Eloquent {
 	
 	public static $hidden = array('password');
 
+	public function pdos ()
+	{
+		return $this->has_many('User\\Pdo');
+	}
+
 	public function disciplines()
 	{
 		return $this->has_many_and_belongs_to('User\\Discipline');

@@ -4,6 +4,10 @@
 	<meta charset="UTF-8">
 	<title>@yield('title')</title>
 	{{ Asset::styles() }}
+	<script>
+		var controller;
+		controller = '@yield('currentController')';
+	</script>
 	{{ HTML::script('js/vendors/requirejs/require.js', array('data-main' => '/js/main')) }}
 </head>
 <body id="bu-schedule">

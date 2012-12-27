@@ -4,6 +4,7 @@
  */
 Asset::add('styles', 'css/bu.sched.css');
 
+
 /**
  * Handle all non-standard routes once logged in.
  */
@@ -68,6 +69,7 @@ Route::filter('page-title', function ()
 	elseif ($len === 1) {
 		$title = ucwords($uri[0]) . ' | ' . $title;
 	}
+	Section::inject('currentController', $uri[0]);
 	Section::inject('title', $title);
 });
 

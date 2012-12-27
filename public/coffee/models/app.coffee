@@ -2,19 +2,19 @@ define [
 	'backbone'
 	'ns'
 	'relational'
-	'models/user'
-	'collections/users'
-	'models/session'
+	'models/users/user'
+	'collections/users/users'
+	'models/users/session'
 ], (Backbone, namespace) ->
 
-	namespace 'BU.Models.App'
-	class BU.Models.App extends Backbone.RelationalModel
+	namespace 'United.Models.App'
+	class United.Models.App extends Backbone.RelationalModel
 
 		relations: [{
 			type:				Backbone.HasMany
 			key:				'users'
-			relatedModel:		BU.Models.User
-			collectionType:		BU.Collections.Users
+			relatedModel:		United.Models.Users.User
+			collectionType:		United.Collections.Users.Users
 			reverseRelation:
 				type:			Backbone.HasOne
 				key:			'app'
@@ -22,7 +22,7 @@ define [
 		}, {
 			type:				Backbone.HasOne
 			key:				'session'
-			relatedModel:		BU.Models.Session
+			relatedModel:		United.Models.Users.Session
 			reverseRelation:
 				type:			Backbone.HasOne
 				key:			'app'
@@ -31,7 +31,7 @@ define [
 
 		initialize: ->
 			@get('users').each @sanitizeUsers
-			@set 'session', new BU.Models.Session
+			@set 'session', new United.Models.Users.Session
 
 		sanitizeUsers: (user, key) =>
 			user.get('tasks').each @sanitizeTasks
@@ -40,4 +40,4 @@ define [
 			task.attributes['percentage'] = task.get('pivot').percentage
 			delete task.attributes['pivot']
 
-	BU.Models.App.setup()
+	United.Models.App.setup()

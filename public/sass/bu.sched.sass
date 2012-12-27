@@ -598,3 +598,43 @@ $modal-width: 480px
 								border-top: 1px solid #eee
 						&+.event-group
 							border-top: 1px solid #eee
+
+#dashboard-head
+	background-color: #fefefe
+	padding: 40px 0
+	@include box-shadow(0 5px 15px rgba(0, 0, 0, 0.1), 0 1px 0 rgba(0, 0, 0, 0.1))
+	.container
+		position: relative
+	.profile
+		float: left
+		width: 300px
+		&.photo
+			img
+				height: 256px
+				width: 256px
+		&.header
+		&+.profile
+			margin-left: 20px
+	.current-tasks
+		padding: 0 0 20px
+		background: #fff
+		border: 1px solid #ccc
+		position: absolute
+		left: 640px
+		top: 0
+		background: #fff
+		@include border-radius(3px)
+		@include box-shadow(0 0 30px rgba(0, 0, 0, 0.1))
+		h3
+			padding: 0 40px
+		dl
+			padding: 0
+			margin: 0
+			dt
+				padding: 0 40px
+			dd
+				margin: 0
+				padding: 5px 50px
+				border-top: 1px solid #eee
+				&+dt
+					margin-top: 20px

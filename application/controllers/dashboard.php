@@ -8,19 +8,17 @@
 
 		public function get_index ()
 		{
-			$user = User::with(array('tasks', 'roles', 'disciplines'))
-				->find(Auth::user()->id);
-
 			$today = date('Y-m-d 00:00:00');
 
-			$currentTasks = Task::where('start_date', '<=', $today)
-				->where('end_date', '>=', $today)
-				->get();
-
+			$user = User::with(array('pdos', 'disciplines', 'roles', 'tasks' => function($query) use($today)
+			{
+				$query->where('start_date', '<=', $today)
+					->where('end_date', '>=', $today);
+			}))->where_id(Auth::user()->id)
+				->first();
 
 			return View::make('dashboard.index')
-				->with('user', $user)
-				->with('currentTasks', $currentTasks);
+				->with('user', $user);
 		}
 
 	}
