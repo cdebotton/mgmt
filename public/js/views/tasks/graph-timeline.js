@@ -21,6 +21,8 @@
         this.onDrag = __bind(this.onDrag, this);
 
         this.startDrag = __bind(this.startDrag, this);
+
+        this.mouseout = __bind(this.mouseout, this);
         return GraphTimeline.__super__.constructor.apply(this, arguments);
       }
 
@@ -91,6 +93,7 @@
         United.EventBus.on('plot-ranges', this.plotRanges, this);
         United.EventBus.on('where-am-i', this.locateTimelineObject, this);
         United.EventBus.on('offset-timeline-from-user-timeline', this.offsetTimelineFromUserTimeline, this);
+        document.addEventListener('mouseout', this.mouseout, false);
         return this.$el.parent().show();
       };
 
@@ -104,7 +107,18 @@
         United.EventBus.off('plot-ranges', this.plotRanges, this);
         United.EventBus.off('where-am-i', this.locateTimelineObject, this);
         United.EventBus.off('offset-timeline-from-user-timeline', this.offsetTimelineFromUserTimeline, this);
+        document.removeEventListener('mouseout', this.mouseout, false);
         return this.$el.parent().hide();
+      };
+
+      GraphTimeline.prototype.mouseout = function(e) {
+        var from;
+        if (DRAGGING) {
+          from = e.relatedTarget || e.toElement;
+          if (!from || from.nodeName === 'HTML') {
+            return this.stopDrag(e);
+          }
+        }
       };
 
       GraphTimeline.prototype.generateDateRanges = function() {

@@ -19,6 +19,8 @@
         this.startDrag = __bind(this.startDrag, this);
 
         this.addOne = __bind(this.addOne, this);
+
+        this.mouseout = __bind(this.mouseout, this);
         return UserTimeline.__super__.constructor.apply(this, arguments);
       }
 
@@ -48,6 +50,7 @@
           this.model.get('tasks').on('change:start_date change:end_date change:user change:percentage', this.calculateOverages, this);
           United.EventBus.on('zoom-grid-updated', this.calculateOverages, this);
         }
+        document.addEventListener('mouseout', this.mouseout, false);
         United.EventBus.on('task-added', this.taskCreated, this);
         this.model.on('add:tasks', this.addOne, this);
         this.model.on('reset:tasks remove:tasks', this.addAll, this);
@@ -61,10 +64,21 @@
           United.EventBus.off('percentage-changed', this.calculateOverages, this);
           this.model.get('tasks').off('change:start_date change:end_date change:user change:percentage', this.calculateOverages, this);
         }
+        document.removeEventListener('mouseout', this.mouseout, false);
         United.EventBus.off('task-added', this.taskCreated, this);
         this.model.off('add:tasks', this.addOne, this);
         this.model.off('reset:tasks remove:tasks', this.addAll, this);
         return this.model.get('tasks').off('change:track', this.adjustHeight, this);
+      };
+
+      UserTimeline.prototype.mouseout = function(e) {
+        var from;
+        if (DRAGGING) {
+          from = e.relatedTarget || e.toElement;
+          if (!from || from.nodeName === 'HTML') {
+            return this.stopDrag(e);
+          }
+        }
       };
 
       UserTimeline.prototype.render = function() {

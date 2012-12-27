@@ -48,6 +48,7 @@ define [
 			United.EventBus.on 'plot-ranges', @plotRanges, @
 			United.EventBus.on 'where-am-i', @locateTimelineObject, @
 			United.EventBus.on 'offset-timeline-from-user-timeline', @offsetTimelineFromUserTimeline, @
+			document.addEventListener 'mouseout', @mouseout, false
 			@$el.parent().show()
 
 		stopListening: ->
@@ -60,7 +61,14 @@ define [
 			United.EventBus.off 'plot-ranges', @plotRanges, @
 			United.EventBus.off 'where-am-i', @locateTimelineObject, @
 			United.EventBus.off 'offset-timeline-from-user-timeline', @offsetTimelineFromUserTimeline, @
+			document.removeEventListener 'mouseout', @mouseout, false
 			@$el.parent().hide()
+
+		mouseout: (e) =>
+			if DRAGGING
+				from = e.relatedTarget or e.toElement
+				if not from or from.nodeName is 'HTML'
+					return @stopDrag e
 
 		generateDateRanges: () ->
 			@today = new Date()
@@ -132,7 +140,6 @@ define [
 			@OFFSET += parseInt nextDx * 1.75
 			@XHOME = e.originalEvent.clientX
 			values = ["#{@OFFSET}px", 0, 0].join ', '
-
 			@$el.css '-webkit-transform': "translate3d(#{values})"
 			United.EventBus.trigger 'offset-timeline', values
 			e.preventDefault()

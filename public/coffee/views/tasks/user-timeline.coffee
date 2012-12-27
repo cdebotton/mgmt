@@ -35,6 +35,7 @@ define [
 				@model.get('tasks').on 'change:start_date change:end_date change:user change:percentage', @calculateOverages, @
 				United.EventBus.on 'zoom-grid-updated', @calculateOverages, @			
 
+			document.addEventListener 'mouseout', @mouseout, false
 			United.EventBus.on 'task-added', @taskCreated, @
 			@model.on 'add:tasks', @addOne, @
 			@model.on 'reset:tasks remove:tasks', @addAll, @
@@ -47,10 +48,18 @@ define [
 				United.EventBus.off 'percentage-changed', @calculateOverages, @
 				@model.get('tasks').off 'change:start_date change:end_date change:user change:percentage', @calculateOverages, @
 
+			document.removeEventListener 'mouseout', @mouseout, false
 			United.EventBus.off 'task-added', @taskCreated, @
 			@model.off 'add:tasks', @addOne, @
 			@model.off 'reset:tasks remove:tasks', @addAll, @
 			@model.get('tasks').off 'change:track', @adjustHeight, @
+
+		mouseout: (e) =>
+			if DRAGGING
+				from = e.relatedTarget or e.toElement
+				if not from or from.nodeName is 'HTML'
+					return @stopDrag e
+					
 		render: ->
 			ctx = @model.toJSON()
 			html = United.JST['UserTimeline'] ctx
