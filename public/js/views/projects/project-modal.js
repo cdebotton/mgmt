@@ -36,14 +36,14 @@
         ctx = {};
         html = United.JST.EditProjectModal(ctx);
         this.$el.html(html);
+        this.tasks = new United.Views.Projects.TaskEditor({
+          model: this.model
+        });
         this.expose();
         return this;
       };
 
       ProjectModal.prototype.expose = function() {
-        this.tasks = new United.Views.Projects.TaskEditor({
-          model: this.model
-        });
         this.body.bind('keyup', this.bindEscape);
         return this.$el.css('opacity', 0).animate({
           opacity: 1

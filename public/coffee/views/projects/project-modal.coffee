@@ -22,12 +22,12 @@ define [
 			ctx = {}
 			html = United.JST.EditProjectModal ctx
 			@$el.html html
+			@tasks = new United.Views.Projects.TaskEditor
+				model: @model
 			@expose()
 			@
 
 		expose: () ->
-			@tasks = new United.Views.Projects.TaskEditor
-				model: @model
 			@body.bind 'keyup', @bindEscape
 			@$el.css('opacity', 0).animate {
 				opacity: 1

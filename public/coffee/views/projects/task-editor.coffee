@@ -9,3 +9,12 @@ define [
 		el: '#project-editing-viewport'
 
 		initialize: ->
+			@addAll()
+
+		addOne: (task) =>
+			console.log task
+
+		addAll: (tasks) ->
+			if @model.get('project').get('tasks').length is 0
+				@model.get('project').get('tasks').add()
+			@model.get('project').get('tasks').each @addOne
