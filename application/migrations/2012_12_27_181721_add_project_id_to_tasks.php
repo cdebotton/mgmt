@@ -11,7 +11,7 @@ class Add_Project_Id_To_Tasks {
 	{
 		Schema::table('tasks', function($table)
 		{
-			$table->integer('project_id');
+			$table->integer('project_id')->nullable();
 		});
 	}
 

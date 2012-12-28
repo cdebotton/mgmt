@@ -15,6 +15,10 @@
 
       Tasks.prototype.model = United.Models.Tasks.Task;
 
+      Tasks.prototype.comparator = function(task) {
+        return task.get('start_date');
+      };
+
       return Tasks;
 
     })(Backbone.Collection);

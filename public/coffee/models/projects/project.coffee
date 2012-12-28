@@ -17,8 +17,11 @@ define [
 			reverseRelation:
 				type:			Backbone.HasOne
 				key:			'project'
-				includeInJSON:	'id'
+				includeInJSON:	true
 		}]
+
+		defaults:
+			name: 'New Project'
 
 		initialize: ->
 

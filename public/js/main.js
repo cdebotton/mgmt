@@ -6,103 +6,112 @@
     urlArgs: "xcache=" + ((new Date()).getTime()),
     baseUrl: '/js',
     paths: {
-      'jquery': 'vendors/jquery/jquery',
-      'backbone': 'vendors/backbone/backbone',
-      'relational': 'vendors/backbone/backbone.relational',
-      'underscore': 'vendors/underscore/underscore',
-      'handlebars': 'vendors/handlebars/handlebars',
-      'modernizr': 'vendors/modernizr/modernizr',
-      'mousetrap': 'vendors/mousetrap/mousetrap',
-      'text': 'vendors/requirejs/text',
-      'templates': '../handlebars',
-      'ns': 'lib/ns',
-      'jst': 'lib/jst',
-      'animate': 'vendors/jquery/jquery.animate-enhanced',
-      'affix': 'vendors/bootstrap/bootstrap-affix',
-      'alert': 'vendors/bootstrap/bootstrap-alert',
-      'button': 'vendors/bootstrap/bootstrap-button',
-      'carousel': 'vendors/bootstrap/bootstrap-carousel',
-      'dropdown': 'vendors/bootstrap/bootstrap-dropdown',
-      'modal': 'vendors/bootstrap/bootstrap-modal',
-      'popover': 'vendors/bootstrap/bootstrap-popover',
-      'scrollspy': 'vendors/bootstrap/bootstrap-scrollspy',
-      'tab': 'vendors/bootstrap/bootstrap-tab',
-      'tooltip': 'vendors/bootstrap/bootstrap-tooltip',
-      'transition': 'vendors/bootstrap/bootstrap-transition',
-      'typeahead': 'vendors/bootstrap/bootstrap-typeahead',
-      'mousetrap': 'vendors/mousetrap/mousetrap'
+      jquery: 'vendors/jquery/jquery',
+      backbone: 'vendors/backbone/backbone',
+      relational: 'vendors/backbone/backbone.relational',
+      underscore: 'vendors/underscore/underscore',
+      handlebars: 'vendors/handlebars/handlebars',
+      modernizr: 'vendors/modernizr/modernizr',
+      mousetrap: 'vendors/mousetrap/mousetrap',
+      text: 'vendors/requirejs/text',
+      raphael: 'vendors/raphael/raphael',
+      morris: 'vendors/morris/morris',
+      templates: '../handlebars',
+      ns: 'lib/ns',
+      jst: 'lib/jst',
+      animate: 'vendors/jquery/jquery.animate-enhanced',
+      affix: 'vendors/bootstrap/bootstrap-affix',
+      alert: 'vendors/bootstrap/bootstrap-alert',
+      button: 'vendors/bootstrap/bootstrap-button',
+      carousel: 'vendors/bootstrap/bootstrap-carousel',
+      dropdown: 'vendors/bootstrap/bootstrap-dropdown',
+      modal: 'vendors/bootstrap/bootstrap-modal',
+      popover: 'vendors/bootstrap/bootstrap-popover',
+      scrollspy: 'vendors/bootstrap/bootstrap-scrollspy',
+      tab: 'vendors/bootstrap/bootstrap-tab',
+      tooltip: 'vendors/bootstrap/bootstrap-tooltip',
+      transition: 'vendors/bootstrap/bootstrap-transition',
+      typeahead: 'vendors/bootstrap/bootstrap-typeahead',
+      mousetrap: 'vendors/mousetrap/mousetrap'
     },
     shim: {
-      'backbone': {
+      backbone: {
         deps: ['jquery', 'underscore'],
         exports: 'Backbone',
         init: function() {
           return Backbone.noConflict();
         }
       },
-      'relational': {
+      relational: {
         deps: ['backbone'],
         exports: 'Backbone.RelationalModel',
         init: function(Backbone) {
           return Backbone.noConflict();
         }
       },
-      'jquery': {
+      jquery: {
         exports: '$',
         init: function() {
           return $.noConflict();
         }
       },
-      'underscore': {
+      underscore: {
         exports: '_',
         init: function() {
           return _.noConflict();
         }
       },
-      'handlebars': {
+      handlebars: {
         exports: 'Handlebars'
       },
-      'animate': {
+      animate: {
         deps: ['jquery'],
         exports: '$.fn.animate'
       },
-      'mousetrap': {
+      mousetrap: {
         exports: 'Mousetrap'
       },
-      'affix': {
+      raphael: {
+        exports: 'Raphael'
+      },
+      morris: {
+        deps: ['raphael', 'jquery'],
+        exports: 'Morris'
+      },
+      affix: {
         deps: ['jquery']
       },
-      'alert': {
+      alert: {
         deps: ['jquery']
       },
-      'button': {
+      button: {
         deps: ['jquery']
       },
-      'carousel': {
+      carousel: {
         deps: ['jquery']
       },
-      'dropdown': {
+      dropdown: {
         deps: ['jquery']
       },
-      'modal': {
+      modal: {
         deps: ['jquery']
       },
-      'popover': {
+      popover: {
         deps: ['jquery']
       },
-      'scrollspy': {
+      scrollspy: {
         deps: ['jquery']
       },
-      'tab': {
+      tab: {
         deps: ['jquery']
       },
-      'tooltip': {
+      tooltip: {
         deps: ['jquery']
       },
-      'transition': {
+      transition: {
         deps: ['jquery']
       },
-      'typeahead': {
+      typeahead: {
         deps: ['jquery']
       }
     }
@@ -120,6 +129,9 @@
         task.start_date.setHours(0, 0, 0, 0);
         task.end_date = new Date(task.end_date);
         task.end_date.setHours(0, 0, 0, 0);
+        task.track = task.pivot.track;
+        task.percentage = task.pivot.percentage;
+        delete task.pivot;
       }
     }
     return window.BUScheduler = new United.Views.App({

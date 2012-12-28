@@ -4,7 +4,12 @@
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['backbone', 'underscore', 'ns', 'relational', 'models/projects/project'], function(Backbone, _, ns) {
+  define(['backbone', 'underscore', 'ns', 'relational'], function(Backbone, _, ns) {
+    var d, n, t;
+    d = new Date();
+    t = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+    n = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+    n.setDate(n.getDate() + 14);
     ns('United.Models.Tasks.Task');
     United.Models.Tasks.Task = (function(_super) {
 
@@ -15,18 +20,11 @@
         return Task.__super__.constructor.apply(this, arguments);
       }
 
-      Task.prototype.relations = [
-        {
-          type: Backbone.HasOne,
-          relatedModel: United.Models.Projects.Project,
-          key: 'project',
-          reverseRelation: {
-            type: Backbone.HasMany,
-            key: 'task',
-            includeInJSON: 'id'
-          }
-        }
-      ];
+      Task.prototype.defaults = {
+        name: 'New Task',
+        start_date: t,
+        end_date: n
+      };
 
       Task.prototype.url = function() {
         return "/api/v1/schedules" + (!this.isNew() ? "/update/" + (this.get('id')) : '');

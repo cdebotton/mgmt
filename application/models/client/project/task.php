@@ -33,12 +33,17 @@ class Task extends Eloquent
 
 	public function users()
 	{
-		return $this->has_many_and_belongs_to('User')->with('percentage');
+		return $this->has_many_and_belongs_to('User')->with(array('percentage', 'track'));
 	}
 
 	public function author()
 	{
 		return $this->belongs_to('User', 'author_id');
+	}
+
+	public function project()
+	{
+		return $this->belongs_to('Client\\Project');
 	}
 }
 

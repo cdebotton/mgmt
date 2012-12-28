@@ -3,21 +3,20 @@ define [
 	'underscore'
 	'ns'
 	'relational'
-	'models/projects/project'
 ], (Backbone, _, ns) ->
 	
-	ns 'United.Models.Tasks.Task'
+	d = new Date()	
+	t = new Date d.getFullYear(), d.getMonth(), d.getDate()
+	n = new Date d.getFullYear(), d.getMonth(), d.getDate()
+	n.setDate n.getDate() + 14
 
+	ns 'United.Models.Tasks.Task'
 	class United.Models.Tasks.Task extends Backbone.RelationalModel
-		relations: [{
-			type:				Backbone.HasOne
-			relatedModel:		United.Models.Projects.Project
-			key:				'project'
-			reverseRelation:
-				type:			Backbone.HasMany
-				key:			'task'
-				includeInJSON:	'id'
-		}]
+		defaults: {
+			name: 'New Task'
+			start_date: t
+			end_date: n
+		}
 
 		url: -> "/api/v1/schedules" + if not @isNew() then "/update/#{@get 'id'}" else ''
 

@@ -18,6 +18,8 @@
         this.closeModal = __bind(this.closeModal, this);
 
         this.dropModal = __bind(this.dropModal, this);
+
+        this.setName = __bind(this.setName, this);
         return ProjectModal.__super__.constructor.apply(this, arguments);
       }
 
@@ -27,7 +29,8 @@
 
       ProjectModal.prototype.events = {
         'click .icon-remove': 'closeModal',
-        'click button[type="submit"]': 'saveProject'
+        'click button[type="submit"]': 'saveProject',
+        'keypress input[name="name"]': 'setName'
       };
 
       ProjectModal.prototype.render = function() {
@@ -36,11 +39,12 @@
         ctx = {};
         html = United.JST.EditProjectModal(ctx);
         this.$el.html(html);
-        this.tasks = new United.Views.Projects.TaskEditor({
-          model: this.model
-        });
         this.expose();
         return this;
+      };
+
+      ProjectModal.prototype.setName = function(e) {
+        return this.model.get('project').set('name', e.currentTarget.value);
       };
 
       ProjectModal.prototype.expose = function() {
@@ -51,12 +55,15 @@
       };
 
       ProjectModal.prototype.dropModal = function() {
-        return this.$('.edit-modal').delay(150).css({
+        this.$('.edit-modal').delay(150).css({
           top: '50%',
           opacity: 1,
           marginTop: -($(window).height() + 250)
         }).animate({
           marginTop: -250
+        });
+        return this.tasks = new United.Views.Projects.TaskEditor({
+          model: this.model
         });
       };
 

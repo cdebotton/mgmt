@@ -4,7 +4,7 @@
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['backbone', 'jquery', 'ns', 'jst', 'animate', 'views/projects/project-modal', 'models/projects/edit-modal'], function(Backbone, $, ns) {
+  define(['backbone', 'jquery', 'ns', 'jst', 'animate', 'views/projects/project-modal', 'models/projects/edit-modal', 'models/projects/project', 'models/tasks/task'], function(Backbone, $, ns) {
     ns('United.Views.Projects.ProjectList');
     return United.Views.Projects.ProjectList = (function(_super) {
       var MODAL_OPEN;
@@ -13,6 +13,8 @@
 
       function ProjectList() {
         this.openModal = __bind(this.openModal, this);
+
+        this.createNewProject = __bind(this.createNewProject, this);
         return ProjectList.__super__.constructor.apply(this, arguments);
       }
 
@@ -21,12 +23,20 @@
       ProjectList.prototype.el = '#project-manager';
 
       ProjectList.prototype.events = {
-        'click #new-project': 'openModal'
+        'click #new-project': 'createNewProject'
       };
 
       ProjectList.prototype.initialize = function() {
         United.EventBus.on('modal-closed', this.modalClosed, this);
         return United.Models.Users.Session = this.model.get('session');
+      };
+
+      ProjectList.prototype.createNewProject = function(e) {
+        var project;
+        project = new United.Models.Projects.Project;
+        project.get('tasks').add(new United.Models.Tasks.Task);
+        this.openModal(project);
+        return e.preventDefault();
       };
 
       ProjectList.prototype.openModal = function(project) {

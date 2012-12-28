@@ -22,7 +22,7 @@
           type: Backbone.HasMany,
           key: 'roles',
           relatedModel: United.Models.Users.Role,
-          collectionType: United.Collections.Tasks.Roles
+          collectionType: United.Collections.Users.Roles
         }, {
           type: Backbone.HasMany,
           key: 'tasks',
@@ -38,7 +38,7 @@
           type: Backbone.HasMany,
           key: 'disciplines',
           relatedModel: United.Models.Users.Discipline,
-          collectionType: United.Collections.Tasks.Disciplines
+          collectionType: United.Collections.Users.Disciplines
         }
       ];
 

@@ -22,10 +22,14 @@
           reverseRelation: {
             type: Backbone.HasOne,
             key: 'project',
-            includeInJSON: 'id'
+            includeInJSON: true
           }
         }
       ];
+
+      Project.prototype.defaults = {
+        name: 'New Project'
+      };
 
       Project.prototype.initialize = function() {};
 

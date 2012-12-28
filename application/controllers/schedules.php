@@ -17,7 +17,7 @@ class Schedules_Controller extends Base_Controller {
 	public function get_index ()
 	{
 		if (Auth::user()->has_role('admin')) {
-			$developers = User::with(array('roles', 'tasks', 'disciplines'))
+			$developers = User::with(array('roles', 'tasks', 'tasks.project', 'tasks.project.client', 'disciplines'))
 				->get();
 			$roles = Role::all();
 			$disciplines = Discipline::all();
@@ -40,7 +40,7 @@ class Schedules_Controller extends Base_Controller {
 				->with('roles', $roles);
 		}
 		else {
-			$developers = User::with(array('roles', 'tasks', 'disciplines'))
+			$developers = User::with(array('roles', 'tasks', 'tasks.project', 'tasks.project.client', 'disciplines'))
 				->find(Auth::user()->id);
 			return View::make('tasks.index')
 				->with('dev_json', json_encode(array($developers->to_array())));

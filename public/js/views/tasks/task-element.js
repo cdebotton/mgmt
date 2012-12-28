@@ -40,7 +40,12 @@
 
       TaskElement.prototype.initialize = function() {
         this.body = $('body');
-        if (United.Models.Users.Session.isAdmin()) {
+        United.JST.Hb.registerHelper('formatDate', this.formatDate);
+        this.start = this.model.get('start_date');
+        this.end = this.model.get('end_date');
+        if ((this.options.demo != null) === true) {
+          return false;
+        } else if (United.Models.Users.Session.isAdmin()) {
           United.EventBus.on('start-drag', this.setOpacity, this);
           United.EventBus.on('stop-drag', this.unsetOpacity, this);
           this.body.on('mousemove', this.scrubMove);
@@ -56,9 +61,6 @@
         }
         United.EventBus.on('zoom-grid-updated', this.updateZoom, this);
         United.EventBus.on('offset-timeline', this.offsetTimeline, this);
-        United.JST.Hb.registerHelper('formatDate', this.formatDate);
-        this.start = this.model.get('start_date');
-        this.end = this.model.get('end_date');
         if (this.model.get('color') !== null) {
           this.$el.addClass(this.model.get('color'));
         }

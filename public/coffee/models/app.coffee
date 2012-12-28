@@ -5,7 +5,7 @@ define [
 	'models/users/user'
 	'collections/users/users'
 	'models/users/session'
-	'models/projects/project'
+	'models/projects/project' 
 	'collections/projects/projects'
 ], (Backbone, ns) ->
 
@@ -41,14 +41,7 @@ define [
 		}]
 
 		initialize: ->
-			@get('users').each @sanitizeUsers
 			@set 'session', new United.Models.Users.Session
-
-		sanitizeUsers: (user, key) =>
-			user.get('tasks').each @sanitizeTasks
-
-		sanitizeTasks: (task, key) =>
-			task.attributes['percentage'] = task.get('pivot').percentage
-			delete task.attributes['pivot']
+			console.log @
 
 	United.Models.App.setup()

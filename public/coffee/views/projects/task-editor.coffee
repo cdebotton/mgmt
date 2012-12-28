@@ -1,20 +1,33 @@
 define [
 	'backbone'
 	'ns'
-	'views/projects/project-task'
+	'views/tasks/task-element'
 ], (Backbone, ns) ->
-
 	ns 'United.Views.Projects.TaskEditor'
 	class United.Views.Projects.TaskEditor extends Backbone.View
 		el: '#project-editing-viewport'
 
+		tasks: []
+
 		initialize: ->
-			@addAll()
+			@model.get('project').on 'change:name', @render, @
+			@model.get('project').get('tasks').on 'change:start_date change:end_date change:name', @render, @
+			@render()
 
-		addOne: (task) =>
-			console.log task
+		render: ->
+			for task in @tasks
+				task.remove()
+			first = @model.get('project').get('tasks').first()
+			last = @model.get('project').get('tasks').last()
+			start = first.get('start_date').getTime()
+			end = last.get('end_date').getTime()
+			duration = end - start
 
-		addAll: (tasks) ->
-			if @model.get('project').get('tasks').length is 0
-				@model.get('project').get('tasks').add()
-			@model.get('project').get('tasks').each @addOne
+			@model.get('project').get('tasks').each (task) =>
+				view = new United.Views.Tasks.TaskElement
+					model: task
+					demo: true
+				@tasks.push view
+				el = view.render().$el
+
+				@$el.append el

@@ -16,16 +16,18 @@ define [
 		events:
 			'click .icon-remove':			'closeModal'
 			'click button[type="submit"]':	'saveProject'
+			'keypress input[name="name"]':	'setName'
 
 		render: ->
 			@body = $ 'body'
 			ctx = {}
 			html = United.JST.EditProjectModal ctx
 			@$el.html html
-			@tasks = new United.Views.Projects.TaskEditor
-				model: @model
 			@expose()
 			@
+
+		setName: (e) =>
+			@model.get('project').set 'name', e.currentTarget.value
 
 		expose: () ->
 			@body.bind 'keyup', @bindEscape
@@ -41,6 +43,8 @@ define [
 			}).animate {
 				marginTop: -250
 			}
+			@tasks = new United.Views.Projects.TaskEditor
+				model: @model
 
 		closeModal: (e) =>
 			@$('.edit-modal').animate {

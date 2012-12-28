@@ -30,12 +30,9 @@ class Api_V1_Schedules_Controller extends Controller {
 		$task = new Task();
 
 		$task->author_id			= $json->author_id;
-		$task->client				= $json->client;
 		$task->end_date				= $json->end_date;
 		$task->start_date			= $json->start_date;
 		$task->name					= $json->name;
-		$task->project_code			= $json->project_code;
-		$task->track				= $json->track;
 		$task->color 				= $json->color;
 		$task->save();
 
@@ -48,6 +45,7 @@ class Api_V1_Schedules_Controller extends Controller {
 
 		if ($user) {
 			$user->pivot->percentage = $json->percentage;
+			$user->pivot->track = $json->track;
 			$user->pivot->save();
 		}
 		
@@ -68,12 +66,9 @@ class Api_V1_Schedules_Controller extends Controller {
 		}
 
 		$task->author_id			= $json->author_id;
-		$task->client				= $json->client;
 		$task->end_date				= $json->end_date;
 		$task->start_date			= $json->start_date;
 		$task->name					= $json->name;
-		$task->project_code			= $json->project_code;
-		$task->track				= $json->track;
 		$task->color 				= $json->color;
 		$task->save();
 
@@ -86,6 +81,7 @@ class Api_V1_Schedules_Controller extends Controller {
 				->first();
 
 			if ($user) {
+				$user->pivot->track = $json->track;
 				$user->pivot->percentage = $json->percentage;
 				$user->pivot->save();
 			}

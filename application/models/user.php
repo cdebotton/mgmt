@@ -16,7 +16,7 @@ class User extends Eloquent {
 
 	public function tasks()
 	{
-		return $this->has_many_and_belongs_to('Client\\Project\\Task')->with('percentage');
+		return $this->has_many_and_belongs_to('Client\\Project\\Task')->with(array('percentage', 'track'));
 	}
 
 	/**

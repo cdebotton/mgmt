@@ -22,7 +22,13 @@ define [
 
 		initialize: ->
 			@body = $ 'body'
-			if United.Models.Users.Session.isAdmin()
+			United.JST.Hb.registerHelper 'formatDate', @formatDate	
+			@start = @model.get 'start_date'
+			@end = @model.get 'end_date'
+
+			if @options.demo? is true
+				return false
+			else if United.Models.Users.Session.isAdmin()
 				United.EventBus.on 'start-drag', @setOpacity, @
 				United.EventBus.on 'stop-drag', @unsetOpacity, @
 				@body.on 'mousemove', @scrubMove
@@ -37,9 +43,6 @@ define [
 
 			United.EventBus.on 'zoom-grid-updated', @updateZoom, @
 			United.EventBus.on 'offset-timeline', @offsetTimeline, @
-			United.JST.Hb.registerHelper 'formatDate', @formatDate	
-			@start = @model.get 'start_date'
-			@end = @model.get 'end_date'
 			
 			if @model.get('color') isnt null then @$el.addClass @model.get 'color'
 			United.EventBus.on 'gridpoint-dispatch', @gridPointsReceived, @
