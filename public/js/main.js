@@ -129,8 +129,8 @@
         task.start_date.setHours(0, 0, 0, 0);
         task.end_date = new Date(task.end_date);
         task.end_date.setHours(0, 0, 0, 0);
-        task.track = task.pivot.track;
-        task.percentage = task.pivot.percentage;
+        task.percentage = +task.pivot.percentage;
+        task.track = +task.pivot.track;
         delete task.pivot;
       }
     }

@@ -31,9 +31,9 @@ class Task extends Eloquent
 		return true;
 	}
 
-	public function users()
+	public function user()
 	{
-		return $this->has_many_and_belongs_to('User')->with(array('percentage', 'track'));
+		return $this->belongs_to('User');
 	}
 
 	public function author()

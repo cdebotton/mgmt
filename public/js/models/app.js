@@ -33,21 +33,18 @@
             key: 'app',
             includeInJSON: false
           }
+        }, {
+          type: Backbone.HasMany,
+          key: 'projects',
+          relatedModel: United.Models.Projects.Project,
+          collectionType: United.Collections.Projects.Projects,
+          reverseRelation: {
+            type: Backbone.HasOne,
+            key: 'app',
+            includeInJSON: false
+          }
         }
       ];
-
-      /*, {
-      			type:				Backbone.HasMany
-      			key:				'projects'
-      			relatedModel:		United.Models.Projects.Project
-      			collectionType:		United.Collections.Projects.Projects
-      			reverseRelation:
-      				type:			Backbone.HasOne
-      				key:			'app'
-      				includeInJSON:	false
-      		}]
-      */
-
 
       App.prototype.initialize = function() {
         return this.set('session', new United.Models.Users.Session);
