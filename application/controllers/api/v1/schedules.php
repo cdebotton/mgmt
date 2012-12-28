@@ -34,20 +34,10 @@ class Api_V1_Schedules_Controller extends Controller {
 		$task->start_date			= $json->start_date;
 		$task->name					= $json->name;
 		$task->color 				= $json->color;
+		$task->user_id 				= $json->user_id;
+		$task->percentage 			= $json->percentage;
+		$task->track 				= $json->track;
 		$task->save();
-
-		$task->users()->attach($json->user_id);
-
-		$user = Task::find($task->id)
-				->users()
-				->where_user_id($json->user_id)
-				->first();
-
-		if ($user) {
-			$user->pivot->percentage = $json->percentage;
-			$user->pivot->track = $json->track;
-			$user->pivot->save();
-		}
 		
 		$json->id = $task->id;
 		return Response::json($json, 200);
@@ -70,22 +60,10 @@ class Api_V1_Schedules_Controller extends Controller {
 		$task->start_date			= $json->start_date;
 		$task->name					= $json->name;
 		$task->color 				= $json->color;
+		$task->user_id 				= $json->user_id;
+		$task->percentage 			= $json->percentage;
+		$task->track 				= $json->track;
 		$task->save();
-
-		if (isset($json->user_id)) {
-			$task->users()->sync(array($json->user_id));
-
-			$user = Task::find($id)
-				->users()
-				->where_user_id($json->user_id)
-				->first();
-
-			if ($user) {
-				$user->pivot->track = $json->track;
-				$user->pivot->percentage = $json->percentage;
-				$user->pivot->save();
-			}
-		} 
 
 		return Response::json($task);
 	}

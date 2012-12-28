@@ -86,12 +86,7 @@ require ['views/app', 'models/app'], ->
 	for key, user of window.users
 		for key2, task of user.tasks
 			task.start_date = new Date task.start_date
-			task.start_date.setHours 0, 0, 0, 0
 			task.end_date = new Date task.end_date
-			task.end_date.setHours 0, 0, 0, 0
-			task.percentage = +task.pivot.percentage
-			task.track = +task.pivot.track
-			delete task.pivot
 
 	window.BUScheduler = new United.Views.App
 		model: new United.Models.App

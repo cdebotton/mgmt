@@ -25,7 +25,10 @@ define [
 			United.JST.Hb.registerHelper 'formatDate', @formatDate	
 			@start = @model.get 'start_date'
 			@end = @model.get 'end_date'
-
+			@model.get('project')?.on 'change:code', @render, @
+			@model.get('project')?.get('client')?.on 'change:name', @render, @
+			@model.on 'change:color', @updateColor, @
+			@model.on 'change:name change:percentage', @render, @
 			if @options.demo? is true
 				return false
 			else if United.Models.Users.Session.isAdmin()
@@ -36,9 +39,6 @@ define [
 				@model.on 'change:end_date', @updatePositions, @
 				@model.on 'change:start_date', @updatePositions, @
 				@model.on 'change:track', @updatePositions, @
-				@model.on 'change:color', @updateColor, @
-				@model.on 'change:name change:client change:project_code', @render, @
-				@model.on 'change:percentage', @render, @
 			else @$el.addClass 'no-drag'
 
 			United.EventBus.on 'zoom-grid-updated', @updateZoom, @
@@ -51,6 +51,7 @@ define [
 			United.EventBus.trigger 'where-am-i', @cid, @start, @end
 			United.EventBus.trigger 'percentage-changed'
 			ctx = @model.toJSON()
+			ctx.demo = @options.demo = true
 			ctx.isAdmin = United.Models.Users.Session.isAdmin()
 			html = United.JST['TaskElement'] ctx
 			@$el.html html

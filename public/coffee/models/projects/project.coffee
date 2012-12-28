@@ -22,6 +22,7 @@ define [
 
 		defaults:
 			name: 'New Project'
+			code: 'NEW'
 
 		initialize: ->
 

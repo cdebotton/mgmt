@@ -39,10 +39,21 @@
       };
 
       TaskElement.prototype.initialize = function() {
+        var _ref, _ref1, _ref2;
         this.body = $('body');
         United.JST.Hb.registerHelper('formatDate', this.formatDate);
         this.start = this.model.get('start_date');
         this.end = this.model.get('end_date');
+        if ((_ref = this.model.get('project')) != null) {
+          _ref.on('change:code', this.render, this);
+        }
+        if ((_ref1 = this.model.get('project')) != null) {
+          if ((_ref2 = _ref1.get('client')) != null) {
+            _ref2.on('change:name', this.render, this);
+          }
+        }
+        this.model.on('change:color', this.updateColor, this);
+        this.model.on('change:name change:percentage', this.render, this);
         if ((this.options.demo != null) === true) {
           return false;
         } else if (United.Models.Users.Session.isAdmin()) {
@@ -53,9 +64,6 @@
           this.model.on('change:end_date', this.updatePositions, this);
           this.model.on('change:start_date', this.updatePositions, this);
           this.model.on('change:track', this.updatePositions, this);
-          this.model.on('change:color', this.updateColor, this);
-          this.model.on('change:name change:client change:project_code', this.render, this);
-          this.model.on('change:percentage', this.render, this);
         } else {
           this.$el.addClass('no-drag');
         }
@@ -72,6 +80,7 @@
         United.EventBus.trigger('where-am-i', this.cid, this.start, this.end);
         United.EventBus.trigger('percentage-changed');
         ctx = this.model.toJSON();
+        ctx.demo = this.options.demo = true;
         ctx.isAdmin = United.Models.Users.Session.isAdmin();
         html = United.JST['TaskElement'](ctx);
         this.$el.html(html);

@@ -1,6 +1,6 @@
 <div class="stripes"></div>
 <div class="project-label-wrapper">
-	<span class="project-label">{{ project.code }} - {{ name }} ({{ project.client.name }}){{#if isAdmin}} <a href="#" class="icon icon-edit"></a>{{/if}}</span>
+	<span class="project-label">{{ project.code }} - {{ name }}{{#if project.client}} ({{ project.client.name }}){{/if}}{{#unless demo}}{{#if isAdmin}} <a href="#" class="icon icon-edit"></a>{{/if}}{{/unless}}</span>
 	{{#if isAdmin }}
 		{{#if percentage }}
 	<span class="percentage">{{ percentage }}%</span>

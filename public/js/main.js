@@ -126,12 +126,7 @@
       for (key2 in _ref1) {
         task = _ref1[key2];
         task.start_date = new Date(task.start_date);
-        task.start_date.setHours(0, 0, 0, 0);
         task.end_date = new Date(task.end_date);
-        task.end_date.setHours(0, 0, 0, 0);
-        task.percentage = +task.pivot.percentage;
-        task.track = +task.pivot.track;
-        delete task.pivot;
       }
     }
     return window.BUScheduler = new United.Views.App({

@@ -14,19 +14,28 @@ define [
 		className:	'striped-cheech'
 		
 		events:
-			'click .icon-remove':			'closeModal'
-			'click button[type="submit"]':	'saveProject'
-			'keypress input[name="name"]':	'setName'
+			'click .icon-remove':				'closeModal'
+			'click button[type="submit"]':		'saveProject'
+			'keyup input[name="name"]':			'setName'
+			'keyup input[name="code"]':			'setCode'
+			'keyup input[name="client"]':		'setClient'
 
 		render: ->
 			@body = $ 'body'
-			ctx = {}
+			ctx = @model.get('project').toJSON()
 			html = United.JST.EditProjectModal ctx
 			@$el.html html
 			@expose()
 			@
 
 		setName: (e) =>
+			@model.get('project').set 'name', e.currentTarget.value
+
+		setCode: (e) =>
+			@model.get('project').set 'code', e.currentTarget.value
+			console.log @model.toJSON()
+
+		setClient: (e) =>
 			@model.get('project').set 'name', e.currentTarget.value
 
 		expose: () ->

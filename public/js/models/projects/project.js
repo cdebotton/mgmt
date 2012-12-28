@@ -28,7 +28,8 @@
       ];
 
       Project.prototype.defaults = {
-        name: 'New Project'
+        name: 'New Project',
+        code: 'NEW'
       };
 
       Project.prototype.initialize = function() {};

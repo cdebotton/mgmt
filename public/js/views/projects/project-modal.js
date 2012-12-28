@@ -19,6 +19,10 @@
 
         this.dropModal = __bind(this.dropModal, this);
 
+        this.setClient = __bind(this.setClient, this);
+
+        this.setCode = __bind(this.setCode, this);
+
         this.setName = __bind(this.setName, this);
         return ProjectModal.__super__.constructor.apply(this, arguments);
       }
@@ -30,13 +34,15 @@
       ProjectModal.prototype.events = {
         'click .icon-remove': 'closeModal',
         'click button[type="submit"]': 'saveProject',
-        'keypress input[name="name"]': 'setName'
+        'keyup input[name="name"]': 'setName',
+        'keyup input[name="code"]': 'setCode',
+        'keyup input[name="client"]': 'setClient'
       };
 
       ProjectModal.prototype.render = function() {
         var ctx, html;
         this.body = $('body');
-        ctx = {};
+        ctx = this.model.get('project').toJSON();
         html = United.JST.EditProjectModal(ctx);
         this.$el.html(html);
         this.expose();
@@ -44,6 +50,15 @@
       };
 
       ProjectModal.prototype.setName = function(e) {
+        return this.model.get('project').set('name', e.currentTarget.value);
+      };
+
+      ProjectModal.prototype.setCode = function(e) {
+        this.model.get('project').set('code', e.currentTarget.value);
+        return console.log(this.model.toJSON());
+      };
+
+      ProjectModal.prototype.setClient = function(e) {
         return this.model.get('project').set('name', e.currentTarget.value);
       };
 
