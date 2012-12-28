@@ -29,7 +29,8 @@ define [
 				type:			Backbone.HasOne
 				key:			'app'
 				includeInJSON:	false
-		}, {
+		}]
+		###, {
 			type:				Backbone.HasMany
 			key:				'projects'
 			relatedModel:		United.Models.Projects.Project
@@ -38,10 +39,9 @@ define [
 				type:			Backbone.HasOne
 				key:			'app'
 				includeInJSON:	false
-		}]
+		}]###
 
 		initialize: ->
 			@set 'session', new United.Models.Users.Session
-			console.log @
 
 	United.Models.App.setup()

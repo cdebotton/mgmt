@@ -5,6 +5,10 @@ define [
 	'relational'
 ], (Backbone, _, ns) ->
 	
+	ns 'United.Models.Pivots.TaskUser'
+	class United.Models.Pivots.TaskUser extends Backbone.RelationalModel
+	United.Models.Pivots.TaskUser.setup()
+
 	d = new Date()	
 	t = new Date d.getFullYear(), d.getMonth(), d.getDate()
 	n = new Date d.getFullYear(), d.getMonth(), d.getDate()
@@ -12,6 +16,14 @@ define [
 
 	ns 'United.Models.Tasks.Task'
 	class United.Models.Tasks.Task extends Backbone.RelationalModel
+		relations: [{
+			type:				Backbone.HasMany
+			key:				'users'
+			relatedModel:		United.Models.Pivots.TaskUser
+			reverseRelation:
+				key:			'task'
+		}]
+
 		defaults: {
 			name: 'New Task'
 			start_date: t

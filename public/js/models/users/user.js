@@ -3,7 +3,7 @@
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['backbone', 'ns', 'relational', 'models/users/role', 'collections/users/roles', 'models/tasks/task', 'collections/tasks/tasks', 'models/users/discipline', 'collections/users/disciplines'], function(Backbone, ns) {
+  define(['backbone', 'ns', 'relational', 'models/tasks/task', 'models/users/role', 'collections/users/roles', 'models/users/discipline', 'collections/users/disciplines'], function(Backbone, ns) {
     ns('United.Models.Users.User');
     United.Models.Users.User = (function(_super) {
 
@@ -25,20 +25,16 @@
           collectionType: United.Collections.Users.Roles
         }, {
           type: Backbone.HasMany,
-          key: 'tasks',
-          relatedModel: United.Models.Tasks.Task,
-          collectionType: United.Collections.Tasks.Tasks,
-          reverseRelation: {
-            type: Backbone.HasOne,
-            key: 'user',
-            keySource: 'user_id',
-            includeInJSON: 'id'
-          }
-        }, {
-          type: Backbone.HasMany,
           key: 'disciplines',
           relatedModel: United.Models.Users.Discipline,
           collectionType: United.Collections.Users.Disciplines
+        }, {
+          type: Backbone.HasMany,
+          key: 'tasks',
+          relatedModel: United.Models.Pivots.TaskUser,
+          reverseRelaton: {
+            key: 'user'
+          }
         }
       ];
 
