@@ -5,8 +5,8 @@ define [
 	'models/projects/project'
 ], (Backbone, ns) ->
 
-	ns 'United.Models.Projects.EditModal'
-	class United.Models.Projects.EditModal extends Backbone.RelationalModel
+	ns 'United.Models.Projects.EditDrawer'
+	class United.Models.Projects.EditDrawer extends Backbone.RelationalModel
 	
 		relations: [{
 			type:				Backbone.HasOne
@@ -16,4 +16,6 @@ define [
 				type:			Backbone.HasOne
 				key:			'modal'
 				includeInJSON:	false
-		}]	
+		}]
+
+	United.Models.Projects.EditDrawer.setup()

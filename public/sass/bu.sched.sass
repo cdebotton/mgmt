@@ -15,6 +15,12 @@ $modal-width: 480px
 .container
 	@include grid-container
 
+.navbar
+	z-index: 100
+	position: relative
+	.navbar-inner
+		@include border-radius(0)
+
 =task-element($h: 50px, $bw: 20px, $bh: 20px, $color: #149bdf)
 	.task-element
 		overflow: hidden
@@ -129,6 +135,7 @@ $modal-width: 480px
 		@include opacity(0)
 		background-image: -webkit-linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent)
 		.edit-modal
+			overflow: hidden
 			color: #eee
 			position: fixed
 			width: $modal-width
@@ -149,6 +156,7 @@ $modal-width: 480px
 				right: 10px
 			.form-horizontal
 				margin-top: 15px
+				overflow: hidden
 				.form-row
 					width: $modal-width - 20
 					padding: 0 10px
@@ -195,13 +203,16 @@ $modal-width: 480px
 						@while $i < 13
 							&.slot-#{$i}
 								$unit-width: ((($modal-width - 20) / 12) * $i) - 20
+								height: 95px
 								width: $unit-width
 								input
 									width: $unit-width - 22
 								select
-									width: $unit-width - 2
+									width: $unit-width - 22
 								textarea
 									width: $unit-width - 32
+								&.flex
+									height: auto
 							$i: $i+1
 						input[type="number"].day-field, input[type="number"].month-field
 							text-align: center
@@ -370,7 +381,7 @@ $modal-width: 480px
 			#view-selector
 				padding-left: 20px
 				border-right: 1px solid #ccc
-	@include print-modal(500px)
+	@include print-modal(500px, 535px)
 
 	#task-create-palette
 		margin: 0
@@ -651,16 +662,119 @@ $modal-width: 480px
 					margin-top: 20px
 
 #project-manager
-	@include print-modal(960px, 400px)
-	#project-editing-viewport
-		height: 125px
-		width: 960px - 40px
-		@include background(linear-gradient(top, #fff, #ddd))
-		@include border-radius(5px)
-		margin-bottom: 15px
-		@include box-shadow(inset 2px 2px 15px rgba(0, 0, 0, 0.55))
-		@include task-element(75px)
-		.task-element
-			width: 880px
-			margin: 20px
-			cursor: col-resize
+	position: relative
+	z-index: 0
+	.project-drawer
+		padding: 20px 0
+		@include background(linear-gradient(top, #333, #111))
+		//@include box-shadow(0 0 30px rgba(0, 0, 0, 0.75), 0 1px 3px rgba(0, 0, 0, 0.85))
+		color: #eee
+		.project-drawer-header
+			overflow: hidden
+			display: block
+			h3
+				padding-top: 0
+				margin-top: 0
+			.icon-remove
+				margin: 10px 15px 0 0
+		.form-horizontal
+			@include grid-container
+			.form-element
+				label
+					font-size: 11px
+					color: #eee
+					margin: 5px 0
+				&.project-name
+					@include grid(5)
+					@include alpha
+					input[type="text"]
+						width: 366px
+				&.project-code
+					@include grid(2)
+					input[type="text"]
+						width: 126px
+				&.client-name
+					@include grid(5)
+					@include omega
+					input[type="text"]
+						width: 366px
+				&.task-viewport
+					@include grid(12)
+					@include alpha
+					@include omega
+					#project-overview
+						width: 910px
+						@include background(linear-gradient(top, #fff, #eee))
+						min-height: 25px
+						padding: 15px
+						@include border-radius(3px)
+						.no-tasks
+							color: #777
+							font-size: 12px
+	#project-task-holder
+		overflow: hidden
+		clear: both
+		@include clearfix
+		#task-drawer-contents
+			margin-top: 5px
+			padding-top: 5px
+			border-top: 1px solid #444
+			.task-name
+				@include grid(3)
+				@include alpha
+			.task-start-date, .task-end-date
+				@include grid(3)
+				.date-field
+					background-color: #fff
+					color: #bbb
+					padding: 4px 6px
+					@include border-radius(4px)
+					input[type="number"]
+						text-align: center
+						background-color: transparent
+						border: 0
+						padding: 0
+						margin: 0
+						&:focus
+							outline: none
+							@include box-shadow(none)
+						&.month-field
+							width: 30%
+						&.day-field
+							width: 25%
+						&.year-field
+							width: 30%
+			.task-assigned-to
+				@include omega
+				@include grid(3)
+			.task-meta
+				@include grid(6)
+				@include alpha
+				.task-percentage
+					@include grid(3)
+					@include alpha
+					.percentage-field
+						color: #bbb
+						background-color: #fff
+						@include border-radius(4px)
+						width: 70px
+						input[type="number"]
+							background-color: transparent
+							border: 0
+							width: 30px
+							&:focus
+								outline: none
+								@include box-shadow(none)
+				.task-color
+					@include grid(3)
+					@include omega
+				.task-controls
+					@include grid(6)
+					@include alpha
+			.task-notes
+				@include grid(6)
+				@include omega
+				textarea
+					resize: none
+					width: 450px
+					height: 75px

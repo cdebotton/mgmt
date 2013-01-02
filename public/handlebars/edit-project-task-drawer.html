@@ -1,0 +1,66 @@
+		<div id="task-drawer-contents">
+			<div class="form-element task-name">
+				<input type="text" name="taskName" value="{{ taskName }}">
+				<div class="meta">
+					<label class="form-label">Task Name</label>
+				</div>
+			</div>
+			<div class="form-element task-start-date">
+				<article class="date-field">
+					<input type="number" class="month-field" name="start_month" value="{{ start_month }}"> / <input type="number" class="day-field" name="start_day" value="{{ start_day }}"> / <input type="number" class="year-field" name="start_year" value="{{ start_year }}">
+				</article>
+				<div class="meta">
+					<label class="form-label">Start Date</label>
+				</div>
+			</div>
+			<div class="form-element task-end-date">
+				<article class="date-field">
+					<input type="number" class="month-field" name="end_month" value="{{ end_month }}"> / <input type="number" class="day-field" name="end_day" value="{{ end_day }}"> / <input type="number" class="year-field" name="end_year" value="{{ end_year }}">
+				</article>
+				<div class="meta">
+					<label class="form-label">End Date</label>
+				</div>
+			</div>
+			<div class="form-element task-assigned-to">
+				<select name="developer_id">
+					<option value="null">Unassigned</option>
+					{{#printUsers user_list}}
+						<option value="{{ id }}"{{ selected }}>{{ email }}</option>
+					{{/printUsers}}
+				</select>
+				<div class="meta">
+					<label class="form-label">Assign to</label>
+				</div>
+			</div>
+			<div class="form-element task-meta">
+				<div class="form-element task-percentage">
+					<article class="percentage-field">
+						<input type="number" value="{{ percentage }}" name="percentage"> %
+					</article>
+					<div class="meta">
+						<label class="form-label">Percentage</label>
+					</div>
+				</div>
+				<div class="form-element task-color">
+					<select name="color">
+						{{#printColors}}
+							<option value="{{ id }}"{{ selected }}>{{ color }}</option>
+						{{/printColors}}
+					</select>
+					<div class="meta">
+						<label class="form-label">Color</label>
+					</div>
+				</div>
+				<div class="form-element task-controls btn-group">
+					<a href="#" class="btn btn-mini btn-primary">Save Task</a>
+					<a href="#" class="btn btn-mini">Cancel</a>
+				</div>
+			</div>
+			<div class="form-element task-notes">
+				<textarea></textarea>
+				<div class="meta">
+					<label class="form-label">Notes</label>
+				</div>
+			</div>
+		</div>
+	</div>

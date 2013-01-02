@@ -29,9 +29,7 @@ define [
 			@model.get('project')?.get('client')?.on 'change:name', @render, @
 			@model.on 'change:color', @updateColor, @
 			@model.on 'change:name change:percentage', @render, @
-			if @options.demo? is true
-				return false
-			else if United.Models.Users.Session.isAdmin()
+			if United.Models.Users.Session.isAdmin() and @options.demo? isnt true
 				United.EventBus.on 'start-drag', @setOpacity, @
 				United.EventBus.on 'stop-drag', @unsetOpacity, @
 				@body.on 'mousemove', @scrubMove

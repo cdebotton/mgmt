@@ -54,9 +54,7 @@
         }
         this.model.on('change:color', this.updateColor, this);
         this.model.on('change:name change:percentage', this.render, this);
-        if ((this.options.demo != null) === true) {
-          return false;
-        } else if (United.Models.Users.Session.isAdmin()) {
+        if (United.Models.Users.Session.isAdmin() && (this.options.demo != null) !== true) {
           United.EventBus.on('start-drag', this.setOpacity, this);
           United.EventBus.on('stop-drag', this.unsetOpacity, this);
           this.body.on('mousemove', this.scrubMove);
