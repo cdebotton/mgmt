@@ -4,7 +4,7 @@
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['backbone', 'jquery', 'ns', 'jst', 'animate'], function(Backbone, $, ns) {
+  define(['backbone', 'jquery', 'ns', 'jst', 'animate', 'views/tasks/task-element'], function(Backbone, $, ns) {
     ns('United.Views.Projects.ProjectDrawer');
     return United.Views.Projects.ProjectDrawer = (function(_super) {
       var TASK_DRAWER_OPEN;
@@ -49,6 +49,7 @@
 
       ProjectDrawer.prototype.initialize = function() {
         this.model.get('project').get('tasks').on('add', this.selectNewTask, this);
+        this.model.get('project').get('tasks').on('add', this.updateTaskPreview, this);
         this.model.on('change:selected', this.editTask, this);
         United.EventBus.on('animate-drawer-in', this.animateIn, this);
         United.JST.Hb.registerHelper('printUsers', this.printUsers);
@@ -62,6 +63,7 @@
         html = United.JST.ProjectDrawer(ctx);
         this.$el.html(html);
         this.taskHolder = this.$el.find('#project-task-holder');
+        this.projectOverview = this.$el.find('#project-overview');
         return this;
       };
 
@@ -97,7 +99,7 @@
       };
 
       ProjectDrawer.prototype.editTask = function(model, task) {
-        var ctx, e, html, s;
+        var ctx, e, h, html, s;
         s = task.get('start_date');
         e = task.get('end_date');
         ctx = task.toJSON();
@@ -109,7 +111,50 @@
         ctx.end_year = e.getFullYear();
         html = United.JST.ProjectTaskDrawer(ctx);
         this.taskHolder.html(html);
+        h = this.taskHolder.innerHeight();
+        this.taskHolder.css({
+          height: 0,
+          opacity: 1
+        });
+        this.taskHolder.animate({
+          height: h
+        }, 175, 'ease-in');
         return this;
+      };
+
+      ProjectDrawer.prototype.updateTaskPreview = function(task) {
+        var end, start, tasks,
+          _this = this;
+        this.projectOverview.html('');
+        tasks = this.model.get('project').get('tasks');
+        start = tasks.first().get('start_date');
+        tasks.comparator = function(task) {
+          return task.get('end_date');
+        };
+        end = tasks.last().get('end_date');
+        start = start.getTime();
+        end = end.getTime();
+        this.projectOverview.css({
+          height: tasks.length * 50 + ((tasks.length - 1) * 10)
+        });
+        return tasks.each(function(task, key) {
+          var dx, e, el, s, view, width;
+          view = new United.Views.Tasks.TaskElement({
+            model: task,
+            demo: true
+          });
+          el = view.render().$el;
+          el.addClass('demo');
+          s = view.model.get('start_date').getTime();
+          e = view.model.get('end_date').getTime();
+          dx = 10 + (s - start) * 910;
+          width = 10 + ((e - start) / (end - start)) * 910;
+          el.css({
+            left: dx,
+            width: width
+          });
+          return _this.projectOverview.append(el);
+        });
       };
 
       ProjectDrawer.prototype.animateIn = function() {

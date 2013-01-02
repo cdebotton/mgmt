@@ -22,10 +22,13 @@
 				<label class="form-label">Client</label>
 			</div>
 		</div>
-
 		<div class="form-element task-viewport">
 			<article id="project-overview">
+				{{#if tasks.length}}
+					
+				{{else}}
 				<span class="no-tasks">There are currently no tasks for this project, <a class="add-task-to-project" href="#">create one?</a></span>
+				{{/if}}
 			</article>
 			<div class="meta">
 				<label class="form-label">Project Overview &mdash; <a href="#" class="btn btn-mini btn-primary add-task-to-project">Add task</a><a class="pull-right btn btn-primary btn-mini">Save Project</a></label>
@@ -33,7 +36,7 @@
 		</div>
 
 		<div id="project-task-holder">
-			
+
 		</div>
 	</form>
 </div>

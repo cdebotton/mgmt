@@ -120,6 +120,11 @@ $modal-width: 480px
 				&.right
 					right: 0
 					cursor: e-resize
+		&.demo
+			.project-duration
+				display: none
+			.grip
+				display: none
 
 =print-modal($modal-width: 500px, $modal-height: 500px)
 	.striped-cheech
@@ -704,16 +709,19 @@ $modal-width: 480px
 					@include omega
 					#project-overview
 						width: 910px
+						position: relative
 						@include background(linear-gradient(top, #fff, #eee))
 						min-height: 25px
 						padding: 15px
 						@include border-radius(3px)
+						@include task-element
 						.no-tasks
 							color: #777
 							font-size: 12px
 	#project-task-holder
 		overflow: hidden
 		clear: both
+		@include opacity(0)
 		@include clearfix
 		#task-drawer-contents
 			margin-top: 5px

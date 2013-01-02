@@ -4,6 +4,7 @@ define [
 	'ns'
 	'jst'
 	'animate'
+	'views/tasks/task-element'
 ], (Backbone, $, ns) ->
 
 	ns 'United.Views.Projects.ProjectDrawer'
@@ -24,6 +25,7 @@ define [
 
 		initialize: ->
 			@model.get('project').get('tasks').on 'add', @selectNewTask, @
+			@model.get('project').get('tasks').on 'add', @updateTaskPreview, @
 			@model.on 'change:selected', @editTask, @
 			United.EventBus.on 'animate-drawer-in', @animateIn, @
 			United.JST.Hb.registerHelper 'printUsers', @printUsers
@@ -35,6 +37,7 @@ define [
 			html = United.JST.ProjectDrawer ctx
 			@$el.html html
 			@taskHolder = @$el.find '#project-task-holder'
+			@projectOverview = @$el.find '#project-overview'
 			@
 
 		setName: (e) =>
@@ -72,10 +75,44 @@ define [
 			ctx.end_month = e.getMonth()+1
 			ctx.end_day = e.getDate()
 			ctx.end_year = e.getFullYear()
-			#console.log ctx
 			html = United.JST.ProjectTaskDrawer ctx
 			@taskHolder.html html
+			h = @taskHolder.innerHeight()
+			@taskHolder.css {
+				height: 0
+				opacity: 1
+			}
+			@taskHolder.animate {
+				height: h
+			}, 175, 'ease-in'
 			@
+
+		updateTaskPreview: (task) ->
+			@projectOverview.html ''
+			tasks = @model.get('project').get('tasks')
+			start = tasks.first().get 'start_date'
+			tasks.comparator = (task) -> task.get 'end_date'
+			end = tasks.last().get 'end_date'
+			start = start.getTime()
+			end = end.getTime()
+			@projectOverview.css {
+				height: tasks.length * 50 + ((tasks.length - 1) * 10)
+			}
+			tasks.each (task, key) =>
+				view = new United.Views.Tasks.TaskElement
+					model: task
+					demo: true
+				el = view.render().$el
+				el.addClass 'demo'
+				s = view.model.get('start_date').getTime()
+				e = view.model.get('end_date').getTime()
+				dx = 10 + (s - start) * 910
+				width = 10 + ((e - start) / (end - start)) * 910
+				el.css {
+					left: dx
+					width: width
+				}
+				@projectOverview.append el
 
 		animateIn: () ->
 			@$el.css 'margin-top', -@$el.innerHeight()
