@@ -19,9 +19,20 @@ define [
 			'click button[type="submit"]':		'saveProject'
 			'click .add-task-to-project':		'newTask'
 			'click .icon-remove':				'closeDrawer'
-			'keyup input[name="name"]':			'setName'
+			'click #save-task':					'saveTask'
+			'keyup input[name="project-name"]':	'setName'
 			'keyup input[name="code"]':			'setCode'
 			'keyup input[name="client"]':		'setClient'
+			'keyup input[name="task-name"]':	'updateTaskName'
+			'keyup input[name="start_year"]':	'updateStartYear'
+			'keyup input[name="start_month"]':	'updateStartMonth'
+			'keyup input[name="start_day"]':	'updateStartDay'
+			'keyup input[name="end_year"]':		'updateEndYear'
+			'keyup input[name="end_month"]':	'updateEndMonth'
+			'keyup input[name="end_day"]':		'updateEndDay'
+			'keyup input[name="percentage"]':	'updatePercentage'
+			'change select[name="color"]':		'updateColor'
+			'change select[name="user_id"]':	'updateUserId'
 
 		initialize: ->
 			@model.get('project').get('tasks').on 'add', @selectNewTask, @
@@ -50,6 +61,7 @@ define [
 			@model.get('project').set 'name', e.currentTarget.value
 
 		selectNewTask: (model) ->
+			model.on 'change', @updateTaskPreview, @
 			@model.set 'selected', model
 
 		newTask: (e) =>
@@ -69,12 +81,14 @@ define [
 			s = task.get 'start_date'
 			e = task.get 'end_date'
 			ctx = task.toJSON()
+			console.log ctx
 			ctx.start_month = s.getMonth()+1
 			ctx.start_day = s.getDate()
 			ctx.start_year = s.getFullYear()
 			ctx.end_month = e.getMonth()+1
 			ctx.end_day = e.getDate()
 			ctx.end_year = e.getFullYear()
+			ctx.users = @model.get('users').toJSON()
 			html = United.JST.ProjectTaskDrawer ctx
 			@taskHolder.html html
 			h = @taskHolder.innerHeight()
@@ -86,6 +100,9 @@ define [
 				height: h
 			}, 175, 'ease-in'
 			@
+
+		updateTaskName: (e) =>
+			@model.get('selected').set 'name', e.currentTarget.value
 
 		updateTaskPreview: (task) ->
 			@projectOverview.html ''
@@ -127,8 +144,73 @@ define [
 
 		bindEscape: (e) => if e.keyCode is 27 then @closeDrawer e
 
+		updateStartYear: (e) =>
+			selected = @model.get 'selected'
+			start_date = selected.get 'start_date'
+			target = parseInt(e.currentTarget.value)
+			new_date = new Date target, start_date.getMonth(), start_date.getDate(), 0, 0, 0
+			@model.get('selected').set 'start_date', new_date
+
+		updateStartMonth: (e) =>
+			selected = @model.get 'selected'
+			start_date = selected.get 'start_date'
+			target = parseInt(e.currentTarget.value) - 1
+			new_date = new Date start_date.getFullYear(), target, start_date.getDate(), 0, 0, 0
+			@model.get('selected').set 'start_date', new_date
+
+		updateStartDay: (e) =>
+			selected = @model.get 'selected'
+			start_date = selected.get 'start_date'
+			target = parseInt(e.currentTarget.value)
+			new_date = new Date start_date.getFullYear(), start_date.getMonth(), target, 0, 0, 0
+			@model.get('selected').set 'start_date', new_date
+
+		updateEndYear: (e) =>
+			selected = @model.get 'selected'
+			end_date = selected.get 'end_date'
+			target = parseInt(e.currentTarget.value)
+			new_date = new Date target, end_date.getMonth(), end_date.getDate(), 0, 0, 0
+			@model.get('selected').set 'end_date', new_date
+
+		updateEndMonth: (e) =>
+			selected = @model.get 'selected'
+			end_date = selected.get 'end_date'
+			target = parseInt(e.currentTarget.value) - 1
+			new_date = new Date end_date.getFullYear(), target, end_date.getDate(), 0, 0, 0
+			@model.get('selected').set 'end_date', new_date
+
+		updateEndDay: (e) =>
+			selected = @model.get 'selected'
+			end_date = selected.get 'end_date'
+			target = parseInt(e.currentTarget.value)
+			new_date = new Date end_date.getFullYear(), end_date.getMonth(), target, 0, 0, 0
+			@model.get('selected').set 'end_date', new_date
+
+		updateColor: (e) =>
+			@model.get('selected').set 'color', e.currentTarget.value
+
+		updateUserId: (e) =>
+			@model.get('selected').set 'user_id', e.currentTarget.value
+
+		updatePercentage: (e) =>
+			@model.get('selected').set 'percentage', parseInt e.currentTarget.value
+
 		saveProject: (e) =>
-			
+
+		saveTask: (e) =>
+			if @model.get('project').isNew()
+				@model.get('project').save null, {
+					wait: true
+					success: (project, attrs, status) =>
+						project.set 'id', attrs.id
+						@model.get('selected').set 'author_id', window.user_id
+						@model.get('selected').save null, {
+							wait: true
+							success: (task, attrs, status) =>
+								@model.get('selected').set 'id', attrs.id
+						}
+				}
+
 		printUsers: (array, opts) =>
 			if array?.length
 				buffer = ''

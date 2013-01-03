@@ -1,6 +1,6 @@
 		<div id="task-drawer-contents">
 			<div class="form-element task-name">
-				<input type="text" name="name" value="{{ name }}">
+				<input type="text" name="task-name" value="{{ name }}">
 				<div class="meta">
 					<label class="form-label">Task Name</label>
 				</div>
@@ -22,9 +22,9 @@
 				</div>
 			</div>
 			<div class="form-element task-assigned-to">
-				<select name="developer_id">
+				<select name="user_id">
 					<option value="null">Unassigned</option>
-					{{#printUsers user_list}}
+					{{#printUsers users}}
 						<option value="{{ id }}"{{ selected }}>{{ email }}</option>
 					{{/printUsers}}
 				</select>
@@ -52,8 +52,7 @@
 					</div>
 				</div>
 				<div class="form-element task-controls btn-group">
-					<a href="#" class="btn btn-mini btn-primary">Save Task</a>
-					<a href="#" class="btn btn-mini">Cancel</a>
+					<a href="#" id="save-task" class="btn btn-mini btn-primary">Save task</a>
 				</div>
 			</div>
 			<div class="form-element task-notes">

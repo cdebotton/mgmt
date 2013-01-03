@@ -16,11 +16,33 @@
 
         this.printUsers = __bind(this.printUsers, this);
 
+        this.saveTask = __bind(this.saveTask, this);
+
         this.saveProject = __bind(this.saveProject, this);
+
+        this.updatePercentage = __bind(this.updatePercentage, this);
+
+        this.updateUserId = __bind(this.updateUserId, this);
+
+        this.updateColor = __bind(this.updateColor, this);
+
+        this.updateEndDay = __bind(this.updateEndDay, this);
+
+        this.updateEndMonth = __bind(this.updateEndMonth, this);
+
+        this.updateEndYear = __bind(this.updateEndYear, this);
+
+        this.updateStartDay = __bind(this.updateStartDay, this);
+
+        this.updateStartMonth = __bind(this.updateStartMonth, this);
+
+        this.updateStartYear = __bind(this.updateStartYear, this);
 
         this.bindEscape = __bind(this.bindEscape, this);
 
         this.closeDrawer = __bind(this.closeDrawer, this);
+
+        this.updateTaskName = __bind(this.updateTaskName, this);
 
         this.newTask = __bind(this.newTask, this);
 
@@ -42,9 +64,20 @@
         'click button[type="submit"]': 'saveProject',
         'click .add-task-to-project': 'newTask',
         'click .icon-remove': 'closeDrawer',
-        'keyup input[name="name"]': 'setName',
+        'click #save-task': 'saveTask',
+        'keyup input[name="project-name"]': 'setName',
         'keyup input[name="code"]': 'setCode',
-        'keyup input[name="client"]': 'setClient'
+        'keyup input[name="client"]': 'setClient',
+        'keyup input[name="task-name"]': 'updateTaskName',
+        'keyup input[name="start_year"]': 'updateStartYear',
+        'keyup input[name="start_month"]': 'updateStartMonth',
+        'keyup input[name="start_day"]': 'updateStartDay',
+        'keyup input[name="end_year"]': 'updateEndYear',
+        'keyup input[name="end_month"]': 'updateEndMonth',
+        'keyup input[name="end_day"]': 'updateEndDay',
+        'keyup input[name="percentage"]': 'updatePercentage',
+        'change select[name="color"]': 'updateColor',
+        'change select[name="user_id"]': 'updateUserId'
       };
 
       ProjectDrawer.prototype.initialize = function() {
@@ -80,6 +113,7 @@
       };
 
       ProjectDrawer.prototype.selectNewTask = function(model) {
+        model.on('change', this.updateTaskPreview, this);
         return this.model.set('selected', model);
       };
 
@@ -103,12 +137,14 @@
         s = task.get('start_date');
         e = task.get('end_date');
         ctx = task.toJSON();
+        console.log(ctx);
         ctx.start_month = s.getMonth() + 1;
         ctx.start_day = s.getDate();
         ctx.start_year = s.getFullYear();
         ctx.end_month = e.getMonth() + 1;
         ctx.end_day = e.getDate();
         ctx.end_year = e.getFullYear();
+        ctx.users = this.model.get('users').toJSON();
         html = United.JST.ProjectTaskDrawer(ctx);
         this.taskHolder.html(html);
         h = this.taskHolder.innerHeight();
@@ -120,6 +156,10 @@
           height: h
         }, 175, 'ease-in');
         return this;
+      };
+
+      ProjectDrawer.prototype.updateTaskName = function(e) {
+        return this.model.get('selected').set('name', e.currentTarget.value);
       };
 
       ProjectDrawer.prototype.updateTaskPreview = function(task) {
@@ -182,7 +222,92 @@
         }
       };
 
+      ProjectDrawer.prototype.updateStartYear = function(e) {
+        var new_date, selected, start_date, target;
+        selected = this.model.get('selected');
+        start_date = selected.get('start_date');
+        target = parseInt(e.currentTarget.value);
+        new_date = new Date(target, start_date.getMonth(), start_date.getDate(), 0, 0, 0);
+        return this.model.get('selected').set('start_date', new_date);
+      };
+
+      ProjectDrawer.prototype.updateStartMonth = function(e) {
+        var new_date, selected, start_date, target;
+        selected = this.model.get('selected');
+        start_date = selected.get('start_date');
+        target = parseInt(e.currentTarget.value) - 1;
+        new_date = new Date(start_date.getFullYear(), target, start_date.getDate(), 0, 0, 0);
+        return this.model.get('selected').set('start_date', new_date);
+      };
+
+      ProjectDrawer.prototype.updateStartDay = function(e) {
+        var new_date, selected, start_date, target;
+        selected = this.model.get('selected');
+        start_date = selected.get('start_date');
+        target = parseInt(e.currentTarget.value);
+        new_date = new Date(start_date.getFullYear(), start_date.getMonth(), target, 0, 0, 0);
+        return this.model.get('selected').set('start_date', new_date);
+      };
+
+      ProjectDrawer.prototype.updateEndYear = function(e) {
+        var end_date, new_date, selected, target;
+        selected = this.model.get('selected');
+        end_date = selected.get('end_date');
+        target = parseInt(e.currentTarget.value);
+        new_date = new Date(target, end_date.getMonth(), end_date.getDate(), 0, 0, 0);
+        return this.model.get('selected').set('end_date', new_date);
+      };
+
+      ProjectDrawer.prototype.updateEndMonth = function(e) {
+        var end_date, new_date, selected, target;
+        selected = this.model.get('selected');
+        end_date = selected.get('end_date');
+        target = parseInt(e.currentTarget.value) - 1;
+        new_date = new Date(end_date.getFullYear(), target, end_date.getDate(), 0, 0, 0);
+        return this.model.get('selected').set('end_date', new_date);
+      };
+
+      ProjectDrawer.prototype.updateEndDay = function(e) {
+        var end_date, new_date, selected, target;
+        selected = this.model.get('selected');
+        end_date = selected.get('end_date');
+        target = parseInt(e.currentTarget.value);
+        new_date = new Date(end_date.getFullYear(), end_date.getMonth(), target, 0, 0, 0);
+        return this.model.get('selected').set('end_date', new_date);
+      };
+
+      ProjectDrawer.prototype.updateColor = function(e) {
+        return this.model.get('selected').set('color', e.currentTarget.value);
+      };
+
+      ProjectDrawer.prototype.updateUserId = function(e) {
+        return this.model.get('selected').set('user_id', e.currentTarget.value);
+      };
+
+      ProjectDrawer.prototype.updatePercentage = function(e) {
+        return this.model.get('selected').set('percentage', parseInt(e.currentTarget.value));
+      };
+
       ProjectDrawer.prototype.saveProject = function(e) {};
+
+      ProjectDrawer.prototype.saveTask = function(e) {
+        var _this = this;
+        if (this.model.get('project').isNew()) {
+          return this.model.get('project').save(null, {
+            wait: true,
+            success: function(project, attrs, status) {
+              project.set('id', attrs.id);
+              _this.model.get('selected').set('author_id', window.user_id);
+              return _this.model.get('selected').save(null, {
+                wait: true,
+                success: function(task, attrs, status) {
+                  return _this.model.get('selected').set('id', attrs.id);
+                }
+              });
+            }
+          });
+        }
+      };
 
       ProjectDrawer.prototype.printUsers = function(array, opts) {
         var buffer, item, key, user, _i, _len, _ref;

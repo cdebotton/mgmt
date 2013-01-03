@@ -9,6 +9,8 @@ define [
 	ns 'United.Models.Projects.Project'
 	class United.Models.Projects.Project extends Backbone.RelationalModel
 
+		url: -> "/api/v1/projects" + if not @isNew() then "/update/#{@get 'id'}" else ''
+
 		relations: [{
 			type:				Backbone.HasMany
 			relatedModel:		United.Models.Tasks.Task
@@ -25,5 +27,10 @@ define [
 			code: 'NEW'
 
 		initialize: ->
+
+		parse: ->
+			@get('tasks').each (task, key) ->
+				task.set 'start_date', new Date task.get 'start_date'
+				task.set 'end_date', new Date task.get 'end_date'
 
 	United.Models.Projects.Project.setup()

@@ -17,14 +17,14 @@ class Schedules_Controller extends Base_Controller {
 	public function get_index ()
 	{
 		if (Auth::user()->has_role('admin')) {
-			$developers = User::with(array('roles', 'tasks', 'tasks.project', 'tasks.project.client', 'disciplines'))
+			$users = User::with(array('roles', 'tasks', 'tasks.project', 'tasks.project.client', 'disciplines'))
 				->get();
 			$roles = Role::all();
 			$disciplines = Discipline::all();
 			$userArray = array('null' => 'User');
-			foreach($developers as $dev)
+			foreach($users as $u)
 			{
-				$userArray[$dev->id] = $dev->email;
+				$userArray[$u->id] = $u->email;
 			}
 			$colors = array(
 				'blue'		=> 'Blue', 
@@ -34,16 +34,16 @@ class Schedules_Controller extends Base_Controller {
 			);
 			return View::make('tasks.index')
 				->with('developers', $userArray)
-				->with('dev_json', eloquent_to_json($developers))
+				->with('dev_json', eloquent_to_json($users))
 				->with('colors', $colors)
 				->with('disciplines', $disciplines)
 				->with('roles', $roles);
 		}
 		else {
-			$developers = User::with(array('roles', 'tasks', 'tasks.project', 'tasks.project.client', 'disciplines'))
+			$users = User::with(array('roles', 'tasks', 'tasks.project', 'tasks.project.client', 'disciplines'))
 				->find(Auth::user()->id);
 			return View::make('tasks.index')
-				->with('dev_json', json_encode(array($developers->to_array())));
+				->with('dev_json', json_encode(array($users->to_array())));
 		}
 		
 	}

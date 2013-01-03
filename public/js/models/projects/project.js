@@ -13,6 +13,10 @@
         return Project.__super__.constructor.apply(this, arguments);
       }
 
+      Project.prototype.url = function() {
+        return "/api/v1/projects" + (!this.isNew() ? "/update/" + (this.get('id')) : '');
+      };
+
       Project.prototype.relations = [
         {
           type: Backbone.HasMany,
@@ -33,6 +37,13 @@
       };
 
       Project.prototype.initialize = function() {};
+
+      Project.prototype.parse = function() {
+        return this.get('tasks').each(function(task, key) {
+          task.set('start_date', new Date(task.get('start_date')));
+          return task.set('end_date', new Date(task.get('end_date')));
+        });
+      };
 
       return Project;
 
