@@ -228,7 +228,8 @@
         start_date = selected.get('start_date');
         target = parseInt(e.currentTarget.value);
         new_date = new Date(target, start_date.getMonth(), start_date.getDate(), 0, 0, 0);
-        return this.model.get('selected').set('start_date', new_date);
+        this.model.get('selected').set('start_date', new_date);
+        return this.validateDates();
       };
 
       ProjectDrawer.prototype.updateStartMonth = function(e) {
@@ -237,7 +238,8 @@
         start_date = selected.get('start_date');
         target = parseInt(e.currentTarget.value) - 1;
         new_date = new Date(start_date.getFullYear(), target, start_date.getDate(), 0, 0, 0);
-        return this.model.get('selected').set('start_date', new_date);
+        this.model.get('selected').set('start_date', new_date);
+        return this.validateDates();
       };
 
       ProjectDrawer.prototype.updateStartDay = function(e) {
@@ -246,7 +248,8 @@
         start_date = selected.get('start_date');
         target = parseInt(e.currentTarget.value);
         new_date = new Date(start_date.getFullYear(), start_date.getMonth(), target, 0, 0, 0);
-        return this.model.get('selected').set('start_date', new_date);
+        this.model.get('selected').set('start_date', new_date);
+        return this.validateDates();
       };
 
       ProjectDrawer.prototype.updateEndYear = function(e) {
@@ -255,7 +258,8 @@
         end_date = selected.get('end_date');
         target = parseInt(e.currentTarget.value);
         new_date = new Date(target, end_date.getMonth(), end_date.getDate(), 0, 0, 0);
-        return this.model.get('selected').set('end_date', new_date);
+        this.model.get('selected').set('end_date', new_date);
+        return this.validateDates();
       };
 
       ProjectDrawer.prototype.updateEndMonth = function(e) {
@@ -264,7 +268,8 @@
         end_date = selected.get('end_date');
         target = parseInt(e.currentTarget.value) - 1;
         new_date = new Date(end_date.getFullYear(), target, end_date.getDate(), 0, 0, 0);
-        return this.model.get('selected').set('end_date', new_date);
+        this.model.get('selected').set('end_date', new_date);
+        return this.validateDates();
       };
 
       ProjectDrawer.prototype.updateEndDay = function(e) {
@@ -273,7 +278,18 @@
         end_date = selected.get('end_date');
         target = parseInt(e.currentTarget.value);
         new_date = new Date(end_date.getFullYear(), end_date.getMonth(), target, 0, 0, 0);
-        return this.model.get('selected').set('end_date', new_date);
+        this.model.get('selected').set('end_date', new_date);
+        return this.validateDates();
+      };
+
+      ProjectDrawer.prototype.validateDates = function() {
+        var e, s;
+        s = this.model.get('selected').get('start_date');
+        e = this.model.get('selected').get('end_date');
+        console.log(s, e);
+        if (s > e) {
+          return this.model.get('selected').set('end_date', e.setDate(e.getDate + 1));
+        }
       };
 
       ProjectDrawer.prototype.updateColor = function(e) {
