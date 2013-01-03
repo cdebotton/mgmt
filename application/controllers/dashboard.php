@@ -1,24 +1,23 @@
 <?php
-	
-	use Client\Project\Task as Task;
+use Client\Project\Task as Task;
 
-	class Dashboard_Controller extends Base_Controller {
+class Dashboard_Controller extends Base_Controller {
 
-		public $restful = true;
+	public $restful = true;
 
-		public function get_index ()
+	public function get_index ()
+	{
+		$today = date('Y-m-d 00:00:00');
+
+		$user = User::with(array('pdos', 'disciplines', 'roles', 'tasks' => function($query) use($today)
 		{
-			$today = date('Y-m-d 00:00:00');
+			$query->where('start_date', '<=', $today)
+				->where('end_date', '>=', $today);
+		}))->where_id(Auth::user()->id)
+			->first();
 
-			$user = User::with(array('pdos', 'disciplines', 'roles', 'tasks' => function($query) use($today)
-			{
-				$query->where('start_date', '<=', $today)
-					->where('end_date', '>=', $today);
-			}))->where_id(Auth::user()->id)
-				->first();
-
-			return View::make('dashboard.index')
-				->with('user', $user);
-		}
-
+		return View::make('dashboard.index')
+			->with('user', $user);
 	}
+
+}
