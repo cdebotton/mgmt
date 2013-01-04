@@ -58,10 +58,10 @@
       ProjectTaskEdit.prototype.initialize = function() {
         United.JST.Hb.registerHelper('printUsers', this.printUsers);
         United.JST.Hb.registerHelper('printColors', this.printColors);
-        return United.EventBus.on('edit-task-element', this.editTask, this);
+        return United.EventBus.on('load-task-in-editor', this.editTask, this);
       };
 
-      ProjectTaskEdit.prototype.editTask = function(cid, task) {
+      ProjectTaskEdit.prototype.editTask = function(task) {
         var ctx, e, h, html, s;
         s = task.get('start_date');
         e = task.get('end_date');

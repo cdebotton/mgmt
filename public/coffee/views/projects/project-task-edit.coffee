@@ -25,9 +25,9 @@ define [
 		initialize: ->
 			United.JST.Hb.registerHelper 'printUsers', @printUsers
 			United.JST.Hb.registerHelper 'printColors', @printColors
-			United.EventBus.on 'edit-task-element', @editTask, @
+			United.EventBus.on 'load-task-in-editor', @editTask, @
 
-		editTask: (cid, task) ->
+		editTask: (task) ->
 			s = task.get 'start_date'
 			e = task.get 'end_date'
 			ctx = task.toJSON()

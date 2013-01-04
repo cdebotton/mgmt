@@ -4,7 +4,6 @@ define [
 	'ns'
 	'jst'
 	'animate'
-	'views/tasks/task-element'
 	'views/projects/project-task-edit'
 	'models/projects/project-task-edit'
 	'views/projects/project-overview'
@@ -35,9 +34,6 @@ define [
 			ctx = @model.get('project').toJSON()
 			html = United.JST.ProjectDrawer ctx
 			@$el.html html
-			@overview = new United.Views.Projects.ProjectOverview
-				model: new United.Models.Projects.ProjectOverview
-					project: @model.get 'project'
 			@
 
 		setName: (e) =>
@@ -50,41 +46,16 @@ define [
 			@model.get('project').set 'name', e.currentTarget.value
 
 		selectNewTask: (model) ->
-			#model.on 'change', @updateTaskPreview, @
-			#United.EventBus.trigger 'edit-task-element', model
+			United.EventBus.trigger 'load-task-in-editor', model
 
 		newTask: (e) =>
 			@model.get('project').get('tasks').add {}
 			e.preventDefault()
 
-		updateTaskPreview: (task) ->
-			@projectOverview.html ''
-			tasks = @model.get('project').get('tasks')
-			start = tasks.first().get 'start_date'
-			tasks.comparator = (task) -> task.get 'end_date'
-			end = tasks.last().get 'end_date'
-			start = start.getTime()
-			end = end.getTime()
-			@projectOverview.css {
-				height: tasks.length * 50 + ((tasks.length - 1) * 10)
-			}
-			tasks.each (task, key) =>
-				view = new United.Views.Tasks.TaskElement
-					model: task
-					demo: true
-				el = view.render().$el
-				el.addClass 'demo'
-				s = view.model.get('start_date').getTime()
-				e = view.model.get('end_date').getTime()
-				dx = 10 + (s - start) * 910
-				width = 10 + ((e - start) / (end - start)) * 910
-				el.css {
-					left: dx
-					width: width
-				}
-				@projectOverview.append el
-
 		animateIn: () ->
+			@overview = new United.Views.Projects.ProjectOverview
+				model: new United.Models.Projects.ProjectOverview
+					project: @model.get 'project'
 			@$el.css 'margin-top', -@$el.innerHeight()
 			@$el.animate { 'margin-top': 0 }, 175, 'ease-in'
 			@body.bind 'keyup', @bindEscape
