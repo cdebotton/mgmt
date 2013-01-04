@@ -7,8 +7,8 @@
   define(['backbone', 'underscore', 'ns', 'relational'], function(Backbone, _, ns) {
     var d, n, t;
     d = new Date();
-    t = new Date(d.getFullYear(), d.getMonth(), d.getDate());
-    n = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+    t = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 0, 0, 0);
+    n = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 0, 0, 0);
     n.setDate(n.getDate() + 14);
     ns('United.Models.Tasks.Task');
     United.Models.Tasks.Task = (function(_super) {
@@ -23,7 +23,10 @@
       Task.prototype.defaults = {
         name: 'New Task',
         start_date: t,
-        end_date: n
+        end_date: n,
+        color: null,
+        author_id: window.author_id,
+        percentage: 0
       };
 
       Task.prototype.url = function() {

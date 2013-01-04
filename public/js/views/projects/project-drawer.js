@@ -118,17 +118,7 @@
       };
 
       ProjectDrawer.prototype.newTask = function(e) {
-        var d, n, t;
-        d = new Date();
-        t = new Date(d.getFullYear(), d.getMonth(), d.getDate());
-        n = new Date(t.getTime());
-        n.setDate(n.getDate() + 14);
-        this.model.get('project').get('tasks').add({
-          name: 'New Task',
-          start_date: t,
-          end_date: n,
-          project: this.model.get('project')
-        });
+        this.model.get('project').get('tasks').add({});
         return e.preventDefault();
       };
 
@@ -137,7 +127,6 @@
         s = task.get('start_date');
         e = task.get('end_date');
         ctx = task.toJSON();
-        console.log(ctx);
         ctx.start_month = s.getMonth() + 1;
         ctx.start_day = s.getDate();
         ctx.start_year = s.getFullYear();
@@ -285,11 +274,7 @@
       ProjectDrawer.prototype.validateDates = function() {
         var e, s;
         s = this.model.get('selected').get('start_date');
-        e = this.model.get('selected').get('end_date');
-        console.log(s, e);
-        if (s > e) {
-          return this.model.get('selected').set('end_date', e.setDate(e.getDate + 1));
-        }
+        return e = this.model.get('selected').get('end_date');
       };
 
       ProjectDrawer.prototype.updateColor = function(e) {
@@ -313,13 +298,7 @@
             wait: true,
             success: function(project, attrs, status) {
               project.set('id', attrs.id);
-              _this.model.get('selected').set('author_id', window.user_id);
-              return _this.model.get('selected').save(null, {
-                wait: true,
-                success: function(task, attrs, status) {
-                  return _this.model.get('selected').set('id', attrs.id);
-                }
-              });
+              return console.log(_this.model.toJSON());
             }
           });
         }

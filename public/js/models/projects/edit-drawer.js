@@ -3,7 +3,7 @@
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['backbone', 'ns', 'relational', 'models/projects/project'], function(Backbone, ns) {
+  define(['backbone', 'ns', 'relational', 'models/projects/project', 'models/tasks/task'], function(Backbone, ns) {
     ns('United.Models.Projects.EditDrawer');
     United.Models.Projects.EditDrawer = (function(_super) {
 
@@ -20,7 +20,16 @@
           key: 'project',
           reverseRelation: {
             type: Backbone.HasOne,
-            key: 'modal',
+            key: 'drawer',
+            includeInJSON: false
+          }
+        }, {
+          type: Backbone.HasOne,
+          relatedModel: United.Models.Tasks.Task,
+          key: 'activeTask',
+          reverseRelation: {
+            type: Backbone.HasOne,
+            key: 'drawer',
             includeInJSON: false
           }
         }

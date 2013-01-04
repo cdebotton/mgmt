@@ -17,11 +17,28 @@ class Api_V1_Projects_Controller extends Controller
 	public function post_index()
 	{
 		$input = Input::json();
-		$project = new Project;
-		$project->name = $input->name;
-		$project->code = $input->code;
+		$project 		= new Project;
+		$project->name 	= $input->name;
+		$project->code 	= $input->code;
 		$project->save();
 		$input->id = $project->id;
-		return json_encode($input);
+		
+		if (!empty($input->tasks)) {
+			foreach ($input->tasks as $i => $obj) {
+				$task = new Task;
+				$task->author_id	= $obj->author_id;
+				$task->end_date		= $obj->end_date;
+				$task->start_date	= $obj->start_date;
+				$task->name			= $obj->name;
+				$task->color 		= $obj->color;
+				$task->user_id 		= $obj->user_id;
+				$task->percentage 	= $obj->percentage;
+				$task->track 		= $obj->track;
+				$task->project_id 	= $project->id;
+				$task->save();
+				$input->tasks[$i] 	= $task->to_array();
+			}
+		}
+		return Response::json($input);
 	}
 }

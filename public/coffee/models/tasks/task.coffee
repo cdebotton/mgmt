@@ -6,16 +6,19 @@ define [
 ], (Backbone, _, ns) ->
 	
 	d = new Date()	
-	t = new Date d.getFullYear(), d.getMonth(), d.getDate()
-	n = new Date d.getFullYear(), d.getMonth(), d.getDate()
+	t = new Date d.getFullYear(), d.getMonth(), d.getDate(), 0, 0, 0
+	n = new Date d.getFullYear(), d.getMonth(), d.getDate(), 0, 0, 0
 	n.setDate n.getDate() + 14
 
 	ns 'United.Models.Tasks.Task'
 	class United.Models.Tasks.Task extends Backbone.RelationalModel
 		defaults: {
-			name: 'New Task'
-			start_date: t
-			end_date: n
+			name:			'New Task'
+			start_date:		t
+			end_date:		n
+			color:			null
+			author_id:		window.author_id
+			percentage:		0
 		}
 
 		url: -> "/api/v1/schedules" + if not @isNew() then "/update/#{@get 'id'}" else ''

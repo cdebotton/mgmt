@@ -65,23 +65,13 @@ define [
 			@model.set 'selected', model
 
 		newTask: (e) =>
-			d = new Date()
-			t = new Date d.getFullYear(), d.getMonth(), d.getDate()
-			n = new Date t.getTime()
-			n.setDate n.getDate() + 14
-			@model.get('project').get('tasks').add {
-				name: 'New Task'
-				start_date: t
-				end_date: n
-				project: @model.get('project')
-			}
+			@model.get('project').get('tasks').add {}
 			e.preventDefault()
 
 		editTask: (model, task) ->
 			s = task.get 'start_date'
 			e = task.get 'end_date'
 			ctx = task.toJSON()
-			console.log ctx
 			ctx.start_month = s.getMonth()+1
 			ctx.start_day = s.getDate()
 			ctx.start_year = s.getFullYear()
@@ -195,8 +185,10 @@ define [
 		validateDates: ->
 			s = @model.get('selected').get 'start_date'
 			e = @model.get('selected').get 'end_date'
-			console.log s, e
-			if s > e then @model.get('selected').set 'end_date', e.setDate e.getDate + 1
+			#if s >= e
+			#	target = new Date s.getTime()
+			#	@model.get('selected').set 'end_date', target.setDate target.getDate + 2
+			#	alert @model.get('selected').get('end_date')
 
 		updateColor: (e) =>
 			@model.get('selected').set 'color', e.currentTarget.value
@@ -215,12 +207,7 @@ define [
 					wait: true
 					success: (project, attrs, status) =>
 						project.set 'id', attrs.id
-						@model.get('selected').set 'author_id', window.user_id
-						@model.get('selected').save null, {
-							wait: true
-							success: (task, attrs, status) =>
-								@model.get('selected').set 'id', attrs.id
-						}
+						console.log @model.toJSON()
 				}
 
 		printUsers: (array, opts) =>

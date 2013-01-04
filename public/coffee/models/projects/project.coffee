@@ -17,9 +17,9 @@ define [
 			collectionType:		United.Collections.Tasks.Tasks
 			key:				'tasks'
 			reverseRelation:
-				type:			Backbone.HasOne
 				key:			'project'
-				includeInJSON:	true
+				keySource:		'project_id'
+				includeInJSON:	'id'
 		}]
 
 		defaults:
