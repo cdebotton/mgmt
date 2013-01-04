@@ -80,11 +80,12 @@
       };
 
       TaskElement.prototype.selectTask = function(e) {
-        United.EventBus.trigger('edit-task-element', this.cid, this.model);
+        United.EventBus.trigger('edit-task-element', this.cid);
+        United.EventBus.trigger('load-task-in-editor', this.model);
         return e.preventDefault();
       };
 
-      TaskElement.prototype.taskSelected = function(cid, model) {
+      TaskElement.prototype.taskSelected = function(cid) {
         if (cid === this.cid) {
           return this.$el.addClass('selected');
         } else {

@@ -28,6 +28,8 @@ define [
 
 		initialize: ->
 			United.EventBus.on 'animate-drawer-in', @animateIn, @
+			United.EventBus.on 'load-task-in-editor', @editTask, @
+			@model.get('project').get('tasks').on 'add', @editTask, @
 
 		render: ->
 			@body = $ 'body'
@@ -45,8 +47,10 @@ define [
 		setClient: (e) =>
 			@model.get('project').set 'name', e.currentTarget.value
 
-		selectNewTask: (model) ->
-			United.EventBus.trigger 'load-task-in-editor', model
+		editTask: (task) ->
+			@taskEditor = new United.Views.Projects.ProjectTaskEdit
+				model: new United.Models.Projects.ProjectTaskEdit
+					task: task
 
 		newTask: (e) =>
 			@model.get('project').get('tasks').add {}

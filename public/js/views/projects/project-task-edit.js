@@ -58,13 +58,16 @@
       ProjectTaskEdit.prototype.initialize = function() {
         United.JST.Hb.registerHelper('printUsers', this.printUsers);
         United.JST.Hb.registerHelper('printColors', this.printColors);
-        return United.EventBus.on('load-task-in-editor', this.editTask, this);
+        return this.render();
       };
 
-      ProjectTaskEdit.prototype.editTask = function(task) {
-        var ctx, e, h, html, s;
+      ProjectTaskEdit.prototype.render = function() {
+        var ctx, e, h, html, s, task;
+        task = this.model.get('task');
+        console.log(task.get('project'));
         s = task.get('start_date');
         e = task.get('end_date');
+        console.log(task);
         ctx = task.toJSON();
         ctx.start_month = s.getMonth() + 1;
         ctx.start_day = s.getDate();
@@ -72,10 +75,10 @@
         ctx.end_month = e.getMonth() + 1;
         ctx.end_day = e.getDate();
         ctx.end_year = e.getFullYear();
-        ctx.users = this.model.get('users').toJSON();
+        ctx.users = window.users;
         html = United.JST.ProjectTaskDrawer(ctx);
         this.$el.html(html);
-        h = this.taskHolder.innerHeight();
+        h = this.$el.innerHeight();
         this.$el.css({
           height: 0,
           opacity: 1
@@ -83,89 +86,90 @@
         this.$el.animate({
           height: h
         }, 175, 'ease-in');
+        console.log(this.$el, html, ctx);
         return this;
       };
 
       ProjectTaskEdit.prototype.updateTaskName = function(e) {
-        return this.model.get('selected').set('name', e.currentTarget.value);
+        return this.model.get('task').set('name', e.currentTarget.value);
       };
 
       ProjectTaskEdit.prototype.updateStartYear = function(e) {
         var new_date, selected, start_date, target;
-        selected = this.model.get('selected');
+        selected = this.model.get('task');
         start_date = selected.get('start_date');
         target = parseInt(e.currentTarget.value);
         new_date = new Date(target, start_date.getMonth(), start_date.getDate(), 0, 0, 0);
-        this.model.get('selected').set('start_date', new_date);
+        this.model.get('task').set('start_date', new_date);
         return this.validateDates();
       };
 
       ProjectTaskEdit.prototype.updateStartMonth = function(e) {
         var new_date, selected, start_date, target;
-        selected = this.model.get('selected');
+        selected = this.model.get('task');
         start_date = selected.get('start_date');
         target = parseInt(e.currentTarget.value) - 1;
         new_date = new Date(start_date.getFullYear(), target, start_date.getDate(), 0, 0, 0);
-        this.model.get('selected').set('start_date', new_date);
+        this.model.get('task').set('start_date', new_date);
         return this.validateDates();
       };
 
       ProjectTaskEdit.prototype.updateStartDay = function(e) {
         var new_date, selected, start_date, target;
-        selected = this.model.get('selected');
+        selected = this.model.get('task');
         start_date = selected.get('start_date');
         target = parseInt(e.currentTarget.value);
         new_date = new Date(start_date.getFullYear(), start_date.getMonth(), target, 0, 0, 0);
-        this.model.get('selected').set('start_date', new_date);
+        this.model.get('task').set('start_date', new_date);
         return this.validateDates();
       };
 
       ProjectTaskEdit.prototype.updateEndYear = function(e) {
         var end_date, new_date, selected, target;
-        selected = this.model.get('selected');
+        selected = this.model.get('task');
         end_date = selected.get('end_date');
         target = parseInt(e.currentTarget.value);
         new_date = new Date(target, end_date.getMonth(), end_date.getDate(), 0, 0, 0);
-        this.model.get('selected').set('end_date', new_date);
+        this.model.get('task').set('end_date', new_date);
         return this.validateDates();
       };
 
       ProjectTaskEdit.prototype.updateEndMonth = function(e) {
         var end_date, new_date, selected, target;
-        selected = this.model.get('selected');
+        selected = this.model.get('task');
         end_date = selected.get('end_date');
         target = parseInt(e.currentTarget.value) - 1;
         new_date = new Date(end_date.getFullYear(), target, end_date.getDate(), 0, 0, 0);
-        this.model.get('selected').set('end_date', new_date);
+        this.model.get('task').set('end_date', new_date);
         return this.validateDates();
       };
 
       ProjectTaskEdit.prototype.updateEndDay = function(e) {
         var end_date, new_date, selected, target;
-        selected = this.model.get('selected');
+        selected = this.model.get('task');
         end_date = selected.get('end_date');
         target = parseInt(e.currentTarget.value);
         new_date = new Date(end_date.getFullYear(), end_date.getMonth(), target, 0, 0, 0);
-        this.model.get('selected').set('end_date', new_date);
+        this.model.get('task').set('end_date', new_date);
         return this.validateDates();
       };
 
       ProjectTaskEdit.prototype.validateDates = function() {
         var e, s;
-        s = this.model.get('selected').get('start_date');
-        return e = this.model.get('selected').get('end_date');
+        s = this.model.get('task').get('start_date');
+        return e = this.model.get('task').get('end_date');
       };
 
       ProjectTaskEdit.prototype.updateColor = function(e) {
-        return this.model.get('selected').set('color', e.currentTarget.value);
+        return this.model.get('task').set('color', e.currentTarget.value);
       };
 
       ProjectTaskEdit.prototype.updateUserId = function(e) {
-        return this.model.get('selected').set('user_id', e.currentTarget.value);
+        return this.model.get('task').set('user_id', e.currentTarget.value);
       };
 
       ProjectTaskEdit.prototype.updatePercentage = function(e) {
-        return this.model.get('selected').set('percentage', parseInt(e.currentTarget.value));
+        return this.model.get('task').set('percentage', parseInt(e.currentTarget.value));
       };
 
       ProjectTaskEdit.prototype.saveTask = function(e) {

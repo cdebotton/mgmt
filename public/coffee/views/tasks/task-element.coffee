@@ -22,7 +22,7 @@ define [
 
 		initialize: ->
 			@body = $ 'body'
-			United.JST.Hb.registerHelper 'formatDate', @formatDate	
+			United.JST.Hb.registerHelper 'formatDate', @formatDate
 			@start = @model.get 'start_date'
 			@end = @model.get 'end_date'
 			@model.get('project')?.on 'change:code', @render, @
@@ -45,15 +45,16 @@ define [
 
 			United.EventBus.on 'zoom-grid-updated', @updateZoom, @
 			United.EventBus.on 'offset-timeline', @offsetTimeline, @
-			
+
 			if @model.get('color') isnt null then @$el.addClass @model.get 'color'
 			United.EventBus.on 'gridpoint-dispatch', @gridPointsReceived, @
 
 		selectTask: (e) =>
-			United.EventBus.trigger 'edit-task-element', @cid, @model
+			United.EventBus.trigger 'edit-task-element', @cid
+			United.EventBus.trigger 'load-task-in-editor', @model
 			e.preventDefault()
 
-		taskSelected: (cid, model) ->
+		taskSelected: (cid) ->
 			if cid is @cid
 				@$el.addClass 'selected'
 			else
@@ -84,7 +85,7 @@ define [
 				width: width
 				marginTop: 10 +@model.get('track') * 60
 				'-webkit-transform':	"translate3d(#{offset}px, 0, 0)"
-				
+
 		scrubStart: (e) =>
 			if not United.Models.Users.Session.isAdmin() then return false
 			if e.which isnt 1 then return false

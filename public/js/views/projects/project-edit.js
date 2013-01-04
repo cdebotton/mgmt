@@ -44,7 +44,9 @@
       };
 
       ProjectEdit.prototype.initialize = function() {
-        return United.EventBus.on('animate-drawer-in', this.animateIn, this);
+        United.EventBus.on('animate-drawer-in', this.animateIn, this);
+        United.EventBus.on('load-task-in-editor', this.editTask, this);
+        return this.model.get('project').get('tasks').on('add', this.editTask, this);
       };
 
       ProjectEdit.prototype.render = function() {
@@ -68,8 +70,12 @@
         return this.model.get('project').set('name', e.currentTarget.value);
       };
 
-      ProjectEdit.prototype.selectNewTask = function(model) {
-        return United.EventBus.trigger('load-task-in-editor', model);
+      ProjectEdit.prototype.editTask = function(task) {
+        return this.taskEditor = new United.Views.Projects.ProjectTaskEdit({
+          model: new United.Models.Projects.ProjectTaskEdit({
+            task: task
+          })
+        });
       };
 
       ProjectEdit.prototype.newTask = function(e) {
