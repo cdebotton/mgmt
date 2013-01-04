@@ -1,5 +1,5 @@
 /**
- * Backbone-relational.js 0.6.0
+ * Backbone-relational.js 0.7.0
  * ----- AMD Fork by Dexnode -----
  * (c) 2011 Paul Uithol
  * 
@@ -407,7 +407,7 @@
 		}
 
 		if ( !this.checkPreconditions() ) {
-			return false;
+			return;
 		}
 
 		if ( instance ) {
@@ -444,6 +444,10 @@
 		if ( instance ) {
 			this.initialize();
 
+			if ( options.autoFetch ) {
+				this.instance.fetchRelated( options.key, _.isObject( options.autoFetch ) ? options.autoFetch : {} );
+			}
+
 			// When a model in the store is destroyed, check if it is 'this.instance'.
 			Backbone.Relational.store.getCollection( this.instance )
 				.bind( 'relational:remove', this._modelRemovedFromCollection );
@@ -461,7 +465,8 @@
 		options: {
 			createModels: true,
 			includeInJSON: true,
-			isAutoRelation: false
+			isAutoRelation: false,
+			autoFetch: false
 		},
 		
 		instance: null,
@@ -541,7 +546,7 @@
 
 		/**
 		 * Set the related model(s) for this relation
-		 * @param {Backbone.Mode|Backbone.Collection} related
+		 * @param {Backbone.Model|Backbone.Collection} related
 		 * @param {Object} [options]
 		 */
 		setRelated: function( related, options ) {
@@ -862,7 +867,7 @@
 								model = this.relatedModel.findOrCreate( item, { create: this.options.createModels } );
 							}
 
-							if ( model && !this.related._byCid[ model.cid ] && !this.related.get( model ) ) {
+							if ( model && !this.related.get( model ) ) {
 								models.push( model );
 							}
 						}, this );
@@ -897,7 +902,7 @@
 				if (!_.isArray( attr ) && attr !== undefined) {
 					attr = [ attr ];
 				}
-				var oldIds;
+
 				_.each( attr, function( attributes ) {
 					newIds[ attributes.id ] = true;
 				});
@@ -936,7 +941,7 @@
 		
 		tryAddRelated: function( model, options ) {
 			options = this.sanitizeOptions( options );
-			if ( !this.related._byCid[ model.cid ] && !this.related.get( model ) ) {
+			if ( !this.related.get( model ) ) {
 				// Check if this new model was specified in 'this.keyContents'
 				var item = _.any( this.keyContents || [], function( item ) {
 						var id = Backbone.Relational.store.resolveIdForItem( this.relatedModel, item );
@@ -1009,7 +1014,7 @@
 			var dit = this;
 			options = this.unsanitizeOptions( options );
 			model.queue( function() { // Queued to avoid errors for adding 'model' to the 'this.related' set twice
-				if ( dit.related && !dit.related._byCid[ model.cid ] && !dit.related.get( model ) ) {
+				if ( dit.related && !dit.related.get( model ) ) {
 					dit.related.add( model, options );
 				}
 			});
@@ -1017,7 +1022,7 @@
 		
 		removeRelated: function( model, options ) {
 			options = this.unsanitizeOptions( options );
-			if ( this.related._byCid[ model.cid ] || this.related.get( model ) ) {
+			if ( this.related.get( model ) ) {
 				this.related.remove( model, options );
 			}
 		}
@@ -1194,12 +1199,12 @@
 					var model;
 
 					if ( _.isObject( item ) ) {
-						model = rel.relatedModel.build( item );
+						model = rel.relatedModel.findOrCreate( item );
 					}
 					else {
 						var attrs = {};
 						attrs[ rel.relatedModel.prototype.idAttribute ] = item;
-						model = rel.relatedModel.build( attrs );
+						model = rel.relatedModel.findOrCreate( attrs );
 					}
 
 					return model;
@@ -1554,12 +1559,19 @@
 	 * if the collection.model has subModels.
 	 */
 	Backbone.Collection.prototype.__prepareModel = Backbone.Collection.prototype._prepareModel;
-	Backbone.Collection.prototype._prepareModel = function ( model, options ) {
-		options || (options = {});
-		if ( !( model instanceof Backbone.Model ) ) {
-			var attrs = model;
+	Backbone.Collection.prototype._prepareModel = function ( attrs, options ) {
+		var model;
+		
+		if ( attrs instanceof Backbone.Model ) {
+			if ( !attrs.collection ) {
+				attrs.collection = this;
+			}
+			model = attrs;
+		}
+		else {
+			options || (options = {});
 			options.collection = this;
-
+			
 			if ( typeof this.model.findOrCreate !== 'undefined' ) {
 				model = this.model.findOrCreate( attrs, options );
 			}
@@ -1567,16 +1579,14 @@
 				model = new this.model( attrs, options );
 			}
 			
-			if ( !model._validate( model.attributes, options ) ) {
+			if ( !model._validate( attrs, options ) ) {
 				model = false;
 			}
 		}
-		else if ( !model.collection ) {
-			model.collection = this;
-		}
 		
 		return model;
-	}
+	};
+
 	
 	/**
 	 * Override Backbone.Collection.add, so objects fetched from the server multiple times will
@@ -1599,10 +1609,10 @@
 				model = Backbone.Collection.prototype._prepareModel.call( this, model, options );
 			}
 
-			if ( model instanceof Backbone.Model && !this.get( model ) && !this._byCid[ model.cid ] ) {
-				modelsToAdd.push( model );
-			}
-		}, this );
+				if ( model instanceof Backbone.Model && !this.get( model ) ) {
+					modelsToAdd.push( model );
+				}
+			}, this );
 
 		// Add 'models' in a single batch, so the original add will only be called once (and thus 'sort', etc).
 		if ( modelsToAdd.length ) {
@@ -1631,7 +1641,7 @@
 
 		//console.debug('calling remove on coll=%o; models=%o, options=%o', this, models, options );
 		_.each( models || [], function( model ) {
-				model = this._byCid[ model.cid ] || this.get( model );
+				model = this.get( model );
 
 				if ( model instanceof Backbone.Model ) {
 					remove.call( this, model, options );
@@ -1674,11 +1684,11 @@
 			var dit = this, args = arguments;
 			
 			if (eventName === 'add') {
-				args = _.toArray(args);
+				args = _.toArray( args );
 				// the fourth argument in case of a regular add is the option object.
 				// we need to clone it, as it could be modified while we wait on the eventQueue to be unblocked
-				if (_.isObject(args[3])) {
-					args[3] = _.clone(args[3]);
+				if (_.isObject( args[3] ) ) {
+					args[3] = _.clone( args[3] );
 				}
 			}
 			
