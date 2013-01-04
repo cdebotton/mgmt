@@ -4,7 +4,7 @@
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['backbone', 'jquery', 'ns', 'jst', 'animate', 'views/projects/project-drawer', 'models/projects/edit-drawer', 'models/projects/project', 'models/tasks/task'], function(Backbone, $, ns) {
+  define(['backbone', 'jquery', 'ns', 'jst', 'animate', 'views/projects/project-edit', 'models/projects/project-edit', 'models/projects/project', 'models/tasks/task'], function(Backbone, $, ns) {
     ns('United.Views.Projects.ProjectList');
     return United.Views.Projects.ProjectList = (function(_super) {
       var DRAWER_OPEN;
@@ -52,8 +52,8 @@
         if (project !== null) {
           params['project'] = project;
         }
-        this.drawer = new United.Views.Projects.ProjectDrawer({
-          model: new United.Models.Projects.EditDrawer(params)
+        this.drawer = new United.Views.Projects.ProjectEdit({
+          model: new United.Models.Projects.ProjectEdit(params)
         });
         this.$el.prepend(this.drawer.render().$el);
         return United.EventBus.trigger('animate-drawer-in');

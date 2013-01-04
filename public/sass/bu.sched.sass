@@ -40,6 +40,12 @@ $modal-width: 480px
 		@include transition-property('background-color, opacity')
 		@include transition-duration('.25s')
 		@include transition-timing-function('ease-in')
+		&.selectable
+			cursor: pointer
+			&:hover
+				border: 1px solid rgba(255,255,255,0.25)
+			&.selected
+				border: 2px solid rgba(255,255,255,0.75)
 		&.no-drag
 			cursor: default
 		&:hover

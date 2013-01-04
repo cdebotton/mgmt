@@ -23,22 +23,6 @@ class Api_V1_Projects_Controller extends Controller
 		$project->save();
 		$input->id = $project->id;
 		
-		if (!empty($input->tasks)) {
-			foreach ($input->tasks as $i => $obj) {
-				$task = new Task;
-				$task->author_id	= $obj->author_id;
-				$task->end_date		= $obj->end_date;
-				$task->start_date	= $obj->start_date;
-				$task->name			= $obj->name;
-				$task->color 		= $obj->color;
-				$task->user_id 		= $obj->user_id;
-				$task->percentage 	= $obj->percentage;
-				$task->track 		= $obj->track;
-				$task->project_id 	= $project->id;
-				$task->save();
-				$input->tasks[$i] 	= $task->to_array();
-			}
-		}
 		return Response::json($input);
 	}
 }

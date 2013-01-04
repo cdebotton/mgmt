@@ -1,28 +1,16 @@
 define [
 	'backbone'
-	'jquery'
 	'ns'
 	'jst'
-	'animate'
-	'views/tasks/task-element'
-], (Backbone, $, ns) ->
+], (Backbone, ns) ->
 
-	ns 'United.Views.Projects.ProjectDrawer'
-	class United.Views.Projects.ProjectDrawer extends Backbone.View
-		TASK_DRAWER_OPEN = false
+	ns 'United.Views.Projects.ProjectTaskEdit'
+	class United.Views.Projects.ProjectTaskEdit extends Backbone.View
 
-		tagName:	'section'
-		
-		className:	'project-drawer'
-		
+		el: '#project-task-holder'
+
 		events:
-			'click button[type="submit"]':		'saveProject'
-			'click .add-task-to-project':		'newTask'
-			'click .icon-remove':				'closeDrawer'
 			'click #save-task':					'saveTask'
-			'keyup input[name="project-name"]':	'setName'
-			'keyup input[name="code"]':			'setCode'
-			'keyup input[name="client"]':		'setClient'
 			'keyup input[name="task-name"]':	'updateTaskName'
 			'keyup input[name="start_year"]':	'updateStartYear'
 			'keyup input[name="start_month"]':	'updateStartMonth'
@@ -35,40 +23,11 @@ define [
 			'change select[name="user_id"]':	'updateUserId'
 
 		initialize: ->
-			@model.get('project').get('tasks').on 'add', @selectNewTask, @
-			@model.get('project').get('tasks').on 'add', @updateTaskPreview, @
-			@model.on 'change:selected', @editTask, @
-			United.EventBus.on 'animate-drawer-in', @animateIn, @
 			United.JST.Hb.registerHelper 'printUsers', @printUsers
 			United.JST.Hb.registerHelper 'printColors', @printColors
+			United.EventBus.on 'edit-task-element', @editTask, @
 
-		render: ->
-			@body = $ 'body'
-			ctx = @model.get('project').toJSON()
-			html = United.JST.ProjectDrawer ctx
-			@$el.html html
-			@taskHolder = @$el.find '#project-task-holder'
-			@projectOverview = @$el.find '#project-overview'
-			@
-
-		setName: (e) =>
-			@model.get('project').set 'name', e.currentTarget.value
-
-		setCode: (e) =>
-			@model.get('project').set 'code', e.currentTarget.value
-
-		setClient: (e) =>
-			@model.get('project').set 'name', e.currentTarget.value
-
-		selectNewTask: (model) ->
-			model.on 'change', @updateTaskPreview, @
-			@model.set 'selected', model
-
-		newTask: (e) =>
-			@model.get('project').get('tasks').add {}
-			e.preventDefault()
-
-		editTask: (model, task) ->
+		editTask: (cid, task) ->
 			s = task.get 'start_date'
 			e = task.get 'end_date'
 			ctx = task.toJSON()
@@ -80,59 +39,19 @@ define [
 			ctx.end_year = e.getFullYear()
 			ctx.users = @model.get('users').toJSON()
 			html = United.JST.ProjectTaskDrawer ctx
-			@taskHolder.html html
+			@$el.html html
 			h = @taskHolder.innerHeight()
-			@taskHolder.css {
+			@$el.css {
 				height: 0
 				opacity: 1
 			}
-			@taskHolder.animate {
+			@$el.animate {
 				height: h
 			}, 175, 'ease-in'
 			@
 
 		updateTaskName: (e) =>
 			@model.get('selected').set 'name', e.currentTarget.value
-
-		updateTaskPreview: (task) ->
-			@projectOverview.html ''
-			tasks = @model.get('project').get('tasks')
-			start = tasks.first().get 'start_date'
-			tasks.comparator = (task) -> task.get 'end_date'
-			end = tasks.last().get 'end_date'
-			start = start.getTime()
-			end = end.getTime()
-			@projectOverview.css {
-				height: tasks.length * 50 + ((tasks.length - 1) * 10)
-			}
-			tasks.each (task, key) =>
-				view = new United.Views.Tasks.TaskElement
-					model: task
-					demo: true
-				el = view.render().$el
-				el.addClass 'demo'
-				s = view.model.get('start_date').getTime()
-				e = view.model.get('end_date').getTime()
-				dx = 10 + (s - start) * 910
-				width = 10 + ((e - start) / (end - start)) * 910
-				el.css {
-					left: dx
-					width: width
-				}
-				@projectOverview.append el
-
-		animateIn: () ->
-			@$el.css 'margin-top', -@$el.innerHeight()
-			@$el.animate { 'margin-top': 0 }, 175, 'ease-in'
-			@body.bind 'keyup', @bindEscape
-
-		closeDrawer: (e) =>
-			@$el.animate { 'margin-top': -@$el.innerHeight() }, 175, 'ease-out', =>
-				@remove()
-				United.EventBus.trigger 'close-project-drawer'			
-			e.preventDefault()
-
-		bindEscape: (e) => if e.keyCode is 27 then @closeDrawer e
 
 		updateStartYear: (e) =>
 			selected = @model.get 'selected'
@@ -198,8 +117,6 @@ define [
 
 		updatePercentage: (e) =>
 			@model.get('selected').set 'percentage', parseInt e.currentTarget.value
-
-		saveProject: (e) =>
 
 		saveTask: (e) =>
 			if @model.get('project').isNew()

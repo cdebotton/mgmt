@@ -4,8 +4,8 @@ define [
 	'ns'
 	'jst'
 	'animate'
-	'views/projects/project-drawer'
-	'models/projects/edit-drawer'
+	'views/projects/project-edit'
+	'models/projects/project-edit'
 	'models/projects/project'
 	'models/tasks/task'
 ], (Backbone, $, ns) ->
@@ -36,8 +36,8 @@ define [
 			params = {}
 			params['users'] = @model.get('users')
 			if project isnt null then params['project'] = project
-			@drawer = new United.Views.Projects.ProjectDrawer
-				model: new United.Models.Projects.EditDrawer params
+			@drawer = new United.Views.Projects.ProjectEdit
+				model: new United.Models.Projects.ProjectEdit params
 			@$el.prepend @drawer.render().$el
 			United.EventBus.trigger 'animate-drawer-in'
 

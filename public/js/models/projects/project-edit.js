@@ -4,16 +4,16 @@
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   define(['backbone', 'ns', 'relational', 'models/projects/project', 'models/tasks/task'], function(Backbone, ns) {
-    ns('United.Models.Projects.EditDrawer');
-    United.Models.Projects.EditDrawer = (function(_super) {
+    ns('United.Models.Projects.ProjectEdit');
+    United.Models.Projects.ProjectEdit = (function(_super) {
 
-      __extends(EditDrawer, _super);
+      __extends(ProjectEdit, _super);
 
-      function EditDrawer() {
-        return EditDrawer.__super__.constructor.apply(this, arguments);
+      function ProjectEdit() {
+        return ProjectEdit.__super__.constructor.apply(this, arguments);
       }
 
-      EditDrawer.prototype.relations = [
+      ProjectEdit.prototype.relations = [
         {
           type: Backbone.HasOne,
           relatedModel: United.Models.Projects.Project,
@@ -23,22 +23,13 @@
             key: 'drawer',
             includeInJSON: false
           }
-        }, {
-          type: Backbone.HasOne,
-          relatedModel: United.Models.Tasks.Task,
-          key: 'activeTask',
-          reverseRelation: {
-            type: Backbone.HasOne,
-            key: 'drawer',
-            includeInJSON: false
-          }
         }
       ];
 
-      return EditDrawer;
+      return ProjectEdit;
 
     })(Backbone.RelationalModel);
-    return United.Models.Projects.EditDrawer.setup();
+    return United.Models.Projects.ProjectEdit.setup();
   });
 
 }).call(this);

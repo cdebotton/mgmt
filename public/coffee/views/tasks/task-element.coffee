@@ -37,6 +37,10 @@ define [
 				@model.on 'change:end_date', @updatePositions, @
 				@model.on 'change:start_date', @updatePositions, @
 				@model.on 'change:track', @updatePositions, @
+			else if @options.demo? is true
+				@$el.addClass 'selectable'
+				@$el.on 'click', @selectTask
+				United.EventBus.on 'edit-project-task', @taskSelected, @
 			else @$el.addClass 'no-drag'
 
 			United.EventBus.on 'zoom-grid-updated', @updateZoom, @
@@ -44,6 +48,16 @@ define [
 			
 			if @model.get('color') isnt null then @$el.addClass @model.get 'color'
 			United.EventBus.on 'gridpoint-dispatch', @gridPointsReceived, @
+
+		selectTask: (e) =>
+			United.EventBus.trigger 'edit-task-element', @cid, @model
+			e.preventDefault()
+
+		taskSelected: (cid, model) ->
+			if cid is @cid
+				@$el.addClass 'selected'
+			else
+				@$el.removeClass 'selected'
 
 		render: ->
 			United.EventBus.trigger 'where-am-i', @cid, @start, @end

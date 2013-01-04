@@ -4,21 +4,18 @@
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['backbone', 'jquery', 'ns', 'jst', 'animate', 'views/tasks/task-element'], function(Backbone, $, ns) {
-    ns('United.Views.Projects.ProjectDrawer');
-    return United.Views.Projects.ProjectDrawer = (function(_super) {
-      var TASK_DRAWER_OPEN;
+  define(['backbone', 'ns', 'jst'], function(Backbone, ns) {
+    ns('United.Views.Projects.ProjectTaskEdit');
+    return United.Views.Projects.ProjectTaskEdit = (function(_super) {
 
-      __extends(ProjectDrawer, _super);
+      __extends(ProjectTaskEdit, _super);
 
-      function ProjectDrawer() {
+      function ProjectTaskEdit() {
         this.printColors = __bind(this.printColors, this);
 
         this.printUsers = __bind(this.printUsers, this);
 
         this.saveTask = __bind(this.saveTask, this);
-
-        this.saveProject = __bind(this.saveProject, this);
 
         this.updatePercentage = __bind(this.updatePercentage, this);
 
@@ -38,36 +35,14 @@
 
         this.updateStartYear = __bind(this.updateStartYear, this);
 
-        this.bindEscape = __bind(this.bindEscape, this);
-
-        this.closeDrawer = __bind(this.closeDrawer, this);
-
         this.updateTaskName = __bind(this.updateTaskName, this);
-
-        this.newTask = __bind(this.newTask, this);
-
-        this.setClient = __bind(this.setClient, this);
-
-        this.setCode = __bind(this.setCode, this);
-
-        this.setName = __bind(this.setName, this);
-        return ProjectDrawer.__super__.constructor.apply(this, arguments);
+        return ProjectTaskEdit.__super__.constructor.apply(this, arguments);
       }
 
-      TASK_DRAWER_OPEN = false;
+      ProjectTaskEdit.prototype.el = '#project-task-holder';
 
-      ProjectDrawer.prototype.tagName = 'section';
-
-      ProjectDrawer.prototype.className = 'project-drawer';
-
-      ProjectDrawer.prototype.events = {
-        'click button[type="submit"]': 'saveProject',
-        'click .add-task-to-project': 'newTask',
-        'click .icon-remove': 'closeDrawer',
+      ProjectTaskEdit.prototype.events = {
         'click #save-task': 'saveTask',
-        'keyup input[name="project-name"]': 'setName',
-        'keyup input[name="code"]': 'setCode',
-        'keyup input[name="client"]': 'setClient',
         'keyup input[name="task-name"]': 'updateTaskName',
         'keyup input[name="start_year"]': 'updateStartYear',
         'keyup input[name="start_month"]': 'updateStartMonth',
@@ -80,49 +55,13 @@
         'change select[name="user_id"]': 'updateUserId'
       };
 
-      ProjectDrawer.prototype.initialize = function() {
-        this.model.get('project').get('tasks').on('add', this.selectNewTask, this);
-        this.model.get('project').get('tasks').on('add', this.updateTaskPreview, this);
-        this.model.on('change:selected', this.editTask, this);
-        United.EventBus.on('animate-drawer-in', this.animateIn, this);
+      ProjectTaskEdit.prototype.initialize = function() {
         United.JST.Hb.registerHelper('printUsers', this.printUsers);
-        return United.JST.Hb.registerHelper('printColors', this.printColors);
+        United.JST.Hb.registerHelper('printColors', this.printColors);
+        return United.EventBus.on('edit-task-element', this.editTask, this);
       };
 
-      ProjectDrawer.prototype.render = function() {
-        var ctx, html;
-        this.body = $('body');
-        ctx = this.model.get('project').toJSON();
-        html = United.JST.ProjectDrawer(ctx);
-        this.$el.html(html);
-        this.taskHolder = this.$el.find('#project-task-holder');
-        this.projectOverview = this.$el.find('#project-overview');
-        return this;
-      };
-
-      ProjectDrawer.prototype.setName = function(e) {
-        return this.model.get('project').set('name', e.currentTarget.value);
-      };
-
-      ProjectDrawer.prototype.setCode = function(e) {
-        return this.model.get('project').set('code', e.currentTarget.value);
-      };
-
-      ProjectDrawer.prototype.setClient = function(e) {
-        return this.model.get('project').set('name', e.currentTarget.value);
-      };
-
-      ProjectDrawer.prototype.selectNewTask = function(model) {
-        model.on('change', this.updateTaskPreview, this);
-        return this.model.set('selected', model);
-      };
-
-      ProjectDrawer.prototype.newTask = function(e) {
-        this.model.get('project').get('tasks').add({});
-        return e.preventDefault();
-      };
-
-      ProjectDrawer.prototype.editTask = function(model, task) {
+      ProjectTaskEdit.prototype.editTask = function(cid, task) {
         var ctx, e, h, html, s;
         s = task.get('start_date');
         e = task.get('end_date');
@@ -135,83 +74,23 @@
         ctx.end_year = e.getFullYear();
         ctx.users = this.model.get('users').toJSON();
         html = United.JST.ProjectTaskDrawer(ctx);
-        this.taskHolder.html(html);
+        this.$el.html(html);
         h = this.taskHolder.innerHeight();
-        this.taskHolder.css({
+        this.$el.css({
           height: 0,
           opacity: 1
         });
-        this.taskHolder.animate({
+        this.$el.animate({
           height: h
         }, 175, 'ease-in');
         return this;
       };
 
-      ProjectDrawer.prototype.updateTaskName = function(e) {
+      ProjectTaskEdit.prototype.updateTaskName = function(e) {
         return this.model.get('selected').set('name', e.currentTarget.value);
       };
 
-      ProjectDrawer.prototype.updateTaskPreview = function(task) {
-        var end, start, tasks,
-          _this = this;
-        this.projectOverview.html('');
-        tasks = this.model.get('project').get('tasks');
-        start = tasks.first().get('start_date');
-        tasks.comparator = function(task) {
-          return task.get('end_date');
-        };
-        end = tasks.last().get('end_date');
-        start = start.getTime();
-        end = end.getTime();
-        this.projectOverview.css({
-          height: tasks.length * 50 + ((tasks.length - 1) * 10)
-        });
-        return tasks.each(function(task, key) {
-          var dx, e, el, s, view, width;
-          view = new United.Views.Tasks.TaskElement({
-            model: task,
-            demo: true
-          });
-          el = view.render().$el;
-          el.addClass('demo');
-          s = view.model.get('start_date').getTime();
-          e = view.model.get('end_date').getTime();
-          dx = 10 + (s - start) * 910;
-          width = 10 + ((e - start) / (end - start)) * 910;
-          el.css({
-            left: dx,
-            width: width
-          });
-          return _this.projectOverview.append(el);
-        });
-      };
-
-      ProjectDrawer.prototype.animateIn = function() {
-        this.$el.css('margin-top', -this.$el.innerHeight());
-        this.$el.animate({
-          'margin-top': 0
-        }, 175, 'ease-in');
-        return this.body.bind('keyup', this.bindEscape);
-      };
-
-      ProjectDrawer.prototype.closeDrawer = function(e) {
-        var _this = this;
-        this.$el.animate({
-          'margin-top': -this.$el.innerHeight()
-        }, 175, 'ease-out', function() {
-          _this.remove();
-          return United.EventBus.trigger('close-project-drawer');
-        });
-        return e.preventDefault();
-      };
-
-      ProjectDrawer.prototype.bindEscape = function(e) {
-        if (e.keyCode === 27) {
-          return this.closeDrawer(e);
-        }
-      };
-
-      ProjectDrawer.prototype.updateStartYear = function(e) {
+      ProjectTaskEdit.prototype.updateStartYear = function(e) {
         var new_date, selected, start_date, target;
         selected = this.model.get('selected');
         start_date = selected.get('start_date');
@@ -221,7 +100,7 @@
         return this.validateDates();
       };
 
-      ProjectDrawer.prototype.updateStartMonth = function(e) {
+      ProjectTaskEdit.prototype.updateStartMonth = function(e) {
         var new_date, selected, start_date, target;
         selected = this.model.get('selected');
         start_date = selected.get('start_date');
@@ -231,7 +110,7 @@
         return this.validateDates();
       };
 
-      ProjectDrawer.prototype.updateStartDay = function(e) {
+      ProjectTaskEdit.prototype.updateStartDay = function(e) {
         var new_date, selected, start_date, target;
         selected = this.model.get('selected');
         start_date = selected.get('start_date');
@@ -241,7 +120,7 @@
         return this.validateDates();
       };
 
-      ProjectDrawer.prototype.updateEndYear = function(e) {
+      ProjectTaskEdit.prototype.updateEndYear = function(e) {
         var end_date, new_date, selected, target;
         selected = this.model.get('selected');
         end_date = selected.get('end_date');
@@ -251,7 +130,7 @@
         return this.validateDates();
       };
 
-      ProjectDrawer.prototype.updateEndMonth = function(e) {
+      ProjectTaskEdit.prototype.updateEndMonth = function(e) {
         var end_date, new_date, selected, target;
         selected = this.model.get('selected');
         end_date = selected.get('end_date');
@@ -261,7 +140,7 @@
         return this.validateDates();
       };
 
-      ProjectDrawer.prototype.updateEndDay = function(e) {
+      ProjectTaskEdit.prototype.updateEndDay = function(e) {
         var end_date, new_date, selected, target;
         selected = this.model.get('selected');
         end_date = selected.get('end_date');
@@ -271,27 +150,25 @@
         return this.validateDates();
       };
 
-      ProjectDrawer.prototype.validateDates = function() {
+      ProjectTaskEdit.prototype.validateDates = function() {
         var e, s;
         s = this.model.get('selected').get('start_date');
         return e = this.model.get('selected').get('end_date');
       };
 
-      ProjectDrawer.prototype.updateColor = function(e) {
+      ProjectTaskEdit.prototype.updateColor = function(e) {
         return this.model.get('selected').set('color', e.currentTarget.value);
       };
 
-      ProjectDrawer.prototype.updateUserId = function(e) {
+      ProjectTaskEdit.prototype.updateUserId = function(e) {
         return this.model.get('selected').set('user_id', e.currentTarget.value);
       };
 
-      ProjectDrawer.prototype.updatePercentage = function(e) {
+      ProjectTaskEdit.prototype.updatePercentage = function(e) {
         return this.model.get('selected').set('percentage', parseInt(e.currentTarget.value));
       };
 
-      ProjectDrawer.prototype.saveProject = function(e) {};
-
-      ProjectDrawer.prototype.saveTask = function(e) {
+      ProjectTaskEdit.prototype.saveTask = function(e) {
         var _this = this;
         if (this.model.get('project').isNew()) {
           return this.model.get('project').save(null, {
@@ -304,7 +181,7 @@
         }
       };
 
-      ProjectDrawer.prototype.printUsers = function(array, opts) {
+      ProjectTaskEdit.prototype.printUsers = function(array, opts) {
         var buffer, item, key, user, _i, _len, _ref;
         if (array != null ? array.length : void 0) {
           buffer = '';
@@ -323,7 +200,7 @@
         }
       };
 
-      ProjectDrawer.prototype.printColors = function(opts) {
+      ProjectTaskEdit.prototype.printColors = function(opts) {
         var buffer, color, colors, id, _ref;
         colors = {
           blue: 'Blue',
@@ -343,7 +220,7 @@
         return buffer;
       };
 
-      return ProjectDrawer;
+      return ProjectTaskEdit;
 
     })(Backbone.View);
   });

@@ -21,6 +21,8 @@
         this.scrubMove = __bind(this.scrubMove, this);
 
         this.scrubStart = __bind(this.scrubStart, this);
+
+        this.selectTask = __bind(this.selectTask, this);
         return TaskElement.__super__.constructor.apply(this, arguments);
       }
 
@@ -62,6 +64,10 @@
           this.model.on('change:end_date', this.updatePositions, this);
           this.model.on('change:start_date', this.updatePositions, this);
           this.model.on('change:track', this.updatePositions, this);
+        } else if ((this.options.demo != null) === true) {
+          this.$el.addClass('selectable');
+          this.$el.on('click', this.selectTask);
+          United.EventBus.on('edit-project-task', this.taskSelected, this);
         } else {
           this.$el.addClass('no-drag');
         }
@@ -71,6 +77,19 @@
           this.$el.addClass(this.model.get('color'));
         }
         return United.EventBus.on('gridpoint-dispatch', this.gridPointsReceived, this);
+      };
+
+      TaskElement.prototype.selectTask = function(e) {
+        United.EventBus.trigger('edit-task-element', this.cid, this.model);
+        return e.preventDefault();
+      };
+
+      TaskElement.prototype.taskSelected = function(cid, model) {
+        if (cid === this.cid) {
+          return this.$el.addClass('selected');
+        } else {
+          return this.$el.removeClass('selected');
+        }
       };
 
       TaskElement.prototype.render = function() {

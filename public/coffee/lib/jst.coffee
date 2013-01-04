@@ -15,13 +15,23 @@ define [
 
 	ns 'United.JST'
 	United.JST =
+		### Modules ###
 		Hb:					Handlebars
+
+		### Schedule Timeline ###
 		UserBadge:			Handlebars.compile UserBadge
 		UserTimeline:		Handlebars.compile UserTimeline
 		GraphTimeline:		Handlebars.compile GraphTimeline
 		TaskElement:		Handlebars.compile TaskElement
 		EditModal:			Handlebars.compile EditModal
-		ProjectDrawer:		Handlebars.compile ProjectDrawer
 		Overage:			Handlebars.compile OverageTemplate
-		UserCalendar:		Handlebars.compile UserCalendar
+
+		### Project Management ###
+		ProjectDrawer:		Handlebars.compile ProjectDrawer
 		ProjectTaskDrawer:	Handlebars.compile ProjectTaskDrawer
+
+		### Dashboard ###
+		UserCalendar:		Handlebars.compile UserCalendar
+
+		### Paid Day Off Management ###
+		### User Management ###

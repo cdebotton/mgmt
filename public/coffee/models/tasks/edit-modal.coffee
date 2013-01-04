@@ -7,6 +7,7 @@ define [
 
 	ns 'United.Models.Tasks.EditModal'
 	class United.Models.Tasks.EditModal extends Backbone.RelationalModel
+
 		relations: [{
 			type:				Backbone.HasOne
 			key:				'task'
@@ -15,4 +16,5 @@ define [
 				key:			'modal'
 				includeInJSON:	false
 		}]
+		
 	United.Models.Tasks.EditModal.setup()
