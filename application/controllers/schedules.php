@@ -2,13 +2,7 @@
 
 use User\Role as Role;
 use User\Discipline as Discipline;
-
-Validator::register('chronology', function ($attribute, $value, $parameters)
-{
-	$start_date = Input::get('start_year') . '-' . ((int) Input::get('start_month') + 1) . '-' . Input::get('start_day');
-	$end_date = Input::get('end_year') . '-' . ((int) Input::get('end_month') + 1) . '-' . Input::get('end_day');
-	return strtotime($end_date) > strtotime($start_date);
-});
+use Validations\Schedule as ScheduleValidator;
 
 class Schedules_Controller extends Base_Controller {
 
@@ -27,7 +21,7 @@ class Schedules_Controller extends Base_Controller {
 				$userArray[$u->id] = $u->email;
 			}
 			$colors = array(
-				'blue'		=> 'Blue', 
+				'blue'		=> 'Blue',
 				'red'		=> 'Red',
 				'green'		=> 'Green',
 				'yellow'	=> 'Yellow'
@@ -45,13 +39,13 @@ class Schedules_Controller extends Base_Controller {
 			return View::make('tasks.index')
 				->with('dev_json', json_encode(array($users->to_array())));
 		}
-		
+
 	}
 
 	public function get_create ()
 	{
 		$dates = array();
-		
+
 		$years = range((int) date('Y') - 10, (int) date('Y') + 10);
 		$years = array_combine($years, $years);
 		$dates['years'] = $years;
@@ -84,10 +78,10 @@ class Schedules_Controller extends Base_Controller {
 			'name'				=> 'required|unique:tasks',
 			'project_code'		=> 'required|alpha_num',
 			'client'			=> 'required',
-			'end_year'			=> 'chronology' 
+			'end_year'			=> 'chronology'
 			);
 
-		$validations = Validator::make(Input::get(), $rules);
+		$validations = ScheduleValidator::make(Input::get(), $rules);
 		if($validations->fails())
 		{
 			return Redirect::back()
