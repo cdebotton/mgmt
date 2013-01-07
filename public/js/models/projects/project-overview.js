@@ -9,21 +9,21 @@
 
       __extends(ProjectOverview, _super);
 
+      /*
+      		relations: [{
+      			type:					Backbone.HasOne
+      			key:					'project'
+      			relatedModel:			United.Models.Projects.Project
+      			reverseRelation:
+      				key:				'overview'
+      				includeInJSON:		false
+      		}]
+      */
+
+
       function ProjectOverview() {
         return ProjectOverview.__super__.constructor.apply(this, arguments);
       }
-
-      ProjectOverview.prototype.relations = [
-        {
-          type: Backbone.HasOne,
-          key: 'project',
-          relatedModel: United.Models.Projects.Project,
-          reverseRelation: {
-            key: 'overview',
-            includeInJSON: false
-          }
-        }
-      ];
 
       return ProjectOverview;
 

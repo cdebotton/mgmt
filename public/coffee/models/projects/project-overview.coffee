@@ -8,7 +8,7 @@ define [
 	ns 'United.Models.Projects.ProjectOverview'
 
 	class United.Models.Projects.ProjectOverview extends Backbone.RelationalModel
-
+		###
 		relations: [{
 			type:					Backbone.HasOne
 			key:					'project'
@@ -17,5 +17,5 @@ define [
 				key:				'overview'
 				includeInJSON:		false
 		}]
-
+		###
 	United.Models.Projects.ProjectOverview.setup()

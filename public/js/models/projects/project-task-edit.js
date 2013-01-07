@@ -9,22 +9,22 @@
 
       __extends(ProjectTaskEdit, _super);
 
+      /*
+      		relations: [{
+      			type:				Backbone.HasOne
+      			relatedModel:		United.Models.Tasks.Task
+      			key:				'task'
+      			reverseRelation:
+      				type:			Backbone.HasOne
+      				key:			'drawer'
+      				includeInJSON:	true
+      		}]
+      */
+
+
       function ProjectTaskEdit() {
         return ProjectTaskEdit.__super__.constructor.apply(this, arguments);
       }
-
-      ProjectTaskEdit.prototype.relations = [
-        {
-          type: Backbone.HasOne,
-          relatedModel: United.Models.Tasks.Task,
-          key: 'task',
-          reverseRelation: {
-            type: Backbone.HasOne,
-            key: 'drawer',
-            includeInJSON: true
-          }
-        }
-      ];
 
       return ProjectTaskEdit;
 
