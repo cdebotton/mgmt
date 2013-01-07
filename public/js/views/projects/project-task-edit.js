@@ -4,7 +4,7 @@
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['backbone', 'ns', 'jst'], function(Backbone, ns) {
+  define(['backbone', 'ns', 'jst', 'widgets/modal'], function(Backbone, ns) {
     ns('United.Views.Projects.ProjectTaskEdit');
     return United.Views.Projects.ProjectTaskEdit = (function(_super) {
 
@@ -16,6 +16,8 @@
         this.printUsers = __bind(this.printUsers, this);
 
         this.saveTask = __bind(this.saveTask, this);
+
+        this.saveProjectModal = __bind(this.saveProjectModal, this);
 
         this.updatePercentage = __bind(this.updatePercentage, this);
 
@@ -64,10 +66,8 @@
       ProjectTaskEdit.prototype.render = function() {
         var ctx, e, h, html, s, task;
         task = this.model.get('task');
-        console.log(task.get('project'));
         s = task.get('start_date');
         e = task.get('end_date');
-        console.log(task);
         ctx = task.toJSON();
         ctx.start_month = s.getMonth() + 1;
         ctx.start_day = s.getDate();
@@ -86,7 +86,6 @@
         this.$el.animate({
           height: h
         }, 175, 'ease-in');
-        console.log(this.$el, html, ctx);
         return this;
       };
 
@@ -172,15 +171,31 @@
         return this.model.get('task').set('percentage', parseInt(e.currentTarget.value));
       };
 
-      ProjectTaskEdit.prototype.saveTask = function(e) {
+      ProjectTaskEdit.prototype.saveProjectModal = function(e) {
         var _this = this;
-        if (this.model.get('project').isNew()) {
-          return this.model.get('project').save(null, {
-            wait: true,
-            success: function(project, attrs, status) {
-              project.set('id', attrs.id);
-              return console.log(_this.model.toJSON());
-            }
+        this.model.get('task').get('project').save(null, {
+          wait: true,
+          success: function(project, attrs, status) {
+            project.set('id', attrs.id);
+            _this.model.get('task').set('project', project);
+            console.log(_this.model.toJSON());
+            return _this.modal.closeModal();
+          }
+        });
+        return e.preventDefault();
+      };
+
+      ProjectTaskEdit.prototype.saveTask = function(e) {
+        if (this.model.get('task').get('project').isNew()) {
+          return this.modal = new United.Widgets.Modal({
+            model: new Backbone.Model({
+              title: 'Unsaved Project!',
+              msg: '<p>The project must be saved before child tasks can be added.</p>',
+              options: {
+                'Save Project': this.saveProjectModal,
+                'Cancel': United.Widgets.Modal.prototype.closeModal
+              }
+            })
           });
         }
       };

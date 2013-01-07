@@ -2,6 +2,7 @@ define [
 	'backbone'
 	'ns'
 	'jst'
+	'widgets/modal'
 ], (Backbone, ns) ->
 
 	ns 'United.Views.Projects.ProjectTaskEdit'
@@ -29,10 +30,8 @@ define [
 
 		render: () ->
 			task = @model.get 'task'
-			console.log task.get 'project'
 			s = task.get 'start_date'
 			e = task.get 'end_date'
-			console.log task
 			ctx = task.toJSON()
 			ctx.start_month = s.getMonth()+1
 			ctx.start_day = s.getDate()
@@ -51,7 +50,6 @@ define [
 			@$el.animate {
 				height: h
 			}, 175, 'ease-in'
-			console.log @$el, html, ctx
 			@
 
 		updateTaskName: (e) =>
@@ -122,16 +120,27 @@ define [
 		updatePercentage: (e) =>
 			@model.get('task').set 'percentage', parseInt e.currentTarget.value
 
-		saveTask: (e) =>
-			if @model.get('project').isNew()
-				###
-				@model.get('project').save null, {
-					wait: true
-					success: (project, attrs, status) =>
-						project.set 'id', attrs.id
-						console.log @model.toJSON()
+		saveProjectModal: (e) =>
+			@model.get('task').get('project').save null, {
+				wait: true
+				success: (project, attrs, status) =>
+					project.set 'id', attrs.id
+					@model.get('task').set 'project', project
+					console.log @model.toJSON()
+					@modal.closeModal()
 				}
-				###
+			e.preventDefault()
+
+		saveTask: (e) =>
+			if @model.get('task').get('project').isNew()
+				@modal = new United.Widgets.Modal
+					model: new Backbone.Model
+						title: 'Unsaved Project!'
+						msg: '<p>The project must be saved before child tasks can be added.</p>'
+						options:
+							'Save Project': @saveProjectModal
+							'Cancel': United.Widgets.Modal.prototype.closeModal
+
 
 		printUsers: (array, opts) =>
 			if array?.length

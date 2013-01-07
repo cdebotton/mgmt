@@ -1,0 +1,24 @@
+<article class="edit-modal">
+	<nav class="navbar navbar-inverse">
+		<div class="navbar-inner">
+			<span href="#" class="brand">
+				{{#if title}}
+					{{ title }}
+				{{ else }}
+					Alert!
+				{{/if}}
+			</span>
+			<a href="#" class="icon icon-white icon-remove"></a>
+		</div>
+	</nav>
+	{{#if msg}}
+		{{{ printMsg }}}
+	{{/if}}
+	{{#if options}}
+		<nav class="modal-actions">
+			{{#printOptions options}}
+				<a href="#" class="btn btn-small {{ className }}">{{ label }}</a>
+			{{/printOptions}}
+		</nav>
+	{{/if}}
+</article>

@@ -11,12 +11,16 @@ define [
 	'text!templates/user-calendar.html'
 	'text!templates/edit-project-drawer.html'
 	'text!templates/edit-project-task-drawer.html'
-], (ns, Handlebars, _, UserBadge, UserTimeline, GraphTimeline, TaskElement, EditModal, OverageTemplate, UserCalendar, ProjectDrawer, ProjectTaskDrawer) ->
+	'text!templates/option-modal.html'
+], (ns, Handlebars, _, UserBadge, UserTimeline, GraphTimeline, TaskElement, EditModal, OverageTemplate, UserCalendar, ProjectDrawer, ProjectTaskDrawer, OptionModal) ->
 
 	ns 'United.JST'
 	United.JST =
 		### Modules ###
 		Hb:					Handlebars
+
+		### Widgets ###
+		OptionModal:		Handlebars.compile OptionModal
 
 		### Schedule Timeline ###
 		UserBadge:			Handlebars.compile UserBadge
