@@ -124,12 +124,14 @@ define [
 
 		saveTask: (e) =>
 			if @model.get('project').isNew()
+				###
 				@model.get('project').save null, {
 					wait: true
 					success: (project, attrs, status) =>
 						project.set 'id', attrs.id
 						console.log @model.toJSON()
 				}
+				###
 
 		printUsers: (array, opts) =>
 			if array?.length
