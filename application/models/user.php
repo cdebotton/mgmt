@@ -1,7 +1,9 @@
 <?php
 
+use Validations\User as UserValidator;
+
 class User extends Eloquent {
-	
+
 	public static $hidden = array('password');
 
 	public function pdos ()
@@ -21,7 +23,7 @@ class User extends Eloquent {
 
 	/**
 	* User has many and belongs to roles.
-	* 
+	*
 	* @return Role
 	*/
 	public function roles()
@@ -39,8 +41,8 @@ class User extends Eloquent {
 		$ckey = 'has_roles_'.$this->id;
 		$cache = Cache::driver('memory');
 
-		if ( ! $roles = $cache->get($ckey)) 
-		{       
+		if ( ! $roles = $cache->get($ckey))
+		{
 			$roles = $this->roles()->lists('name');
 			foreach ($roles as &$role) {
 				$role = strtolower($role);
@@ -53,7 +55,7 @@ class User extends Eloquent {
 
 	/**
 	* Check has exact role?
-	* 
+	*
 	* @param  string  $key
 	* @return bool
 	*/
