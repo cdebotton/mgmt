@@ -2,7 +2,7 @@
 
 use User\Role as Role;
 use User\Discipline as Discipline;
-use Validations\Schedule as ScheduleValidator;
+use Validations\ScheduleValidator as ScheduleValidator;
 
 class Schedules_Controller extends Base_Controller {
 
