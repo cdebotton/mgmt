@@ -2,9 +2,9 @@
 
 namespace Validations;
 
-use Laravel\Validator;
+use \Laravel\Validator as Validator;
 
-class Schedule extends Laravel\Validator
+class Schedule extends Validator
 {
 	public static function validate_chronology ($attribute, $value, $parameters)
 	{
