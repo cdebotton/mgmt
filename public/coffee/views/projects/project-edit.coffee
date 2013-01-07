@@ -57,9 +57,9 @@ define [
 			e.preventDefault()
 
 		animateIn: () ->
-			#@overview = new United.Views.Projects.ProjectOverview
-			#	model: new United.Models.Projects.ProjectOverview
-			#		project: @model.get 'project'
+			@overview = new United.Views.Projects.ProjectOverview
+				model: new United.Models.Projects.ProjectOverview
+					project: @model.get 'project'
 			@$el.css 'margin-top', -@$el.innerHeight()
 			@$el.animate { 'margin-top': 0 }, 175, 'ease-in'
 			@body.bind 'keyup', @bindEscape

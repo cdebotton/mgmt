@@ -9,7 +9,7 @@ define [
 		el: '#project-overview'
 
 		initialize: ->
-			@model.get('project').get('tasks').on 'add', @updateTaskPreview, @
+			#@model.get('project').get('tasks').on 'add', @updateTaskPreview, @
 			@model.get('project').get('tasks').on 'add', @addOne, @
 			@addAll()
 

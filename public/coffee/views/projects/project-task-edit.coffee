@@ -52,6 +52,11 @@ define [
 			}, 175, 'ease-in'
 			@
 
+		animateOut: =>
+			@$el.animate {
+				height: 0
+			}, 175, 'ease-out', => @remove
+
 		updateTaskName: (e) =>
 			@model.get('task').set 'name', e.currentTarget.value
 
@@ -124,14 +129,17 @@ define [
 			task = @model.get 'task'
 			@model.get('task').get('project').save null, {
 				wait: true
+				silent: true
 				success: (project, attrs, status) =>
-					project.set 'id', attrs.id
-					@model.set 'task', task
-					@model.get('task').set 'project_id', attrs.id
+					project.set 'id', attrs.id, { silent: true }
+					@model.set 'task', task, { silent: true}
+					@model.get('task').set 'project_id', attrs.id, { silent: true }
 					project.get('tasks').at(0).save null, {
 						wait: true
+						silent: true
 						success: (task, attrs, status) =>
-							task.set 'id', attrs.id
+							task.set 'id', attrs.id, { silent: true }
+							@animateOut()
 					}
 					@modal.closeModal()
 				}

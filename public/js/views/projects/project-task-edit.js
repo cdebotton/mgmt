@@ -38,6 +38,8 @@
         this.updateStartYear = __bind(this.updateStartYear, this);
 
         this.updateTaskName = __bind(this.updateTaskName, this);
+
+        this.animateOut = __bind(this.animateOut, this);
         return ProjectTaskEdit.__super__.constructor.apply(this, arguments);
       }
 
@@ -87,6 +89,15 @@
           height: h
         }, 175, 'ease-in');
         return this;
+      };
+
+      ProjectTaskEdit.prototype.animateOut = function() {
+        var _this = this;
+        return this.$el.animate({
+          height: 0
+        }, 175, 'ease-out', function() {
+          return _this.remove;
+        });
       };
 
       ProjectTaskEdit.prototype.updateTaskName = function(e) {
@@ -177,14 +188,25 @@
         task = this.model.get('task');
         this.model.get('task').get('project').save(null, {
           wait: true,
+          silent: true,
           success: function(project, attrs, status) {
-            project.set('id', attrs.id);
-            _this.model.set('task', task);
-            _this.model.get('task').set('project_id', attrs.id);
+            project.set('id', attrs.id, {
+              silent: true
+            });
+            _this.model.set('task', task, {
+              silent: true
+            });
+            _this.model.get('task').set('project_id', attrs.id, {
+              silent: true
+            });
             project.get('tasks').at(0).save(null, {
               wait: true,
+              silent: true,
               success: function(task, attrs, status) {
-                return task.set('id', attrs.id);
+                task.set('id', attrs.id, {
+                  silent: true
+                });
+                return _this.animateOut();
               }
             });
             return _this.modal.closeModal();

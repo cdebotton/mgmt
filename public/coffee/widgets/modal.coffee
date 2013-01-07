@@ -33,7 +33,6 @@ define [
 			@modal = @$ '.edit-modal'
 			@animateCheechIn()
 
-
 		animateCheechIn: () ->
 			@$el.animate { opacity: 1 }, 150, 'ease-in', @animateModalIn()
 

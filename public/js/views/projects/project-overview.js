@@ -20,7 +20,6 @@
       ProjectOverview.prototype.el = '#project-overview';
 
       ProjectOverview.prototype.initialize = function() {
-        this.model.get('project').get('tasks').on('add', this.updateTaskPreview, this);
         this.model.get('project').get('tasks').on('add', this.addOne, this);
         return this.addAll();
       };
