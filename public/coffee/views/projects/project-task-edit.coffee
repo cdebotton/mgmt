@@ -121,12 +121,18 @@ define [
 			@model.get('task').set 'percentage', parseInt e.currentTarget.value
 
 		saveProjectModal: (e) =>
+			task = @model.get 'task'
 			@model.get('task').get('project').save null, {
 				wait: true
 				success: (project, attrs, status) =>
 					project.set 'id', attrs.id
-					@model.get('task').set 'project', project
-					console.log @model.toJSON()
+					@model.set 'task', task
+					@model.get('task').set 'project_id', attrs.id
+					project.get('tasks').at(0).save null, {
+						wait: true
+						success: (task, attrs, status) =>
+							task.set 'id', attrs.id
+					}
 					@modal.closeModal()
 				}
 			e.preventDefault()

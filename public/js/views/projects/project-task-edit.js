@@ -172,13 +172,21 @@
       };
 
       ProjectTaskEdit.prototype.saveProjectModal = function(e) {
-        var _this = this;
+        var task,
+          _this = this;
+        task = this.model.get('task');
         this.model.get('task').get('project').save(null, {
           wait: true,
           success: function(project, attrs, status) {
             project.set('id', attrs.id);
-            _this.model.get('task').set('project', project);
-            console.log(_this.model.toJSON());
+            _this.model.set('task', task);
+            _this.model.get('task').set('project_id', attrs.id);
+            project.get('tasks').at(0).save(null, {
+              wait: true,
+              success: function(task, attrs, status) {
+                return task.set('id', attrs.id);
+              }
+            });
             return _this.modal.closeModal();
           }
         });

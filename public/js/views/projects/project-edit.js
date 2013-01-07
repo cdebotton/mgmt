@@ -84,11 +84,6 @@
       };
 
       ProjectEdit.prototype.animateIn = function() {
-        this.overview = new United.Views.Projects.ProjectOverview({
-          model: new United.Models.Projects.ProjectOverview({
-            project: this.model.get('project')
-          })
-        });
         this.$el.css('margin-top', -this.$el.innerHeight());
         this.$el.animate({
           'margin-top': 0

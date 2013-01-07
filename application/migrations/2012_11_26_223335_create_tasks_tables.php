@@ -18,7 +18,7 @@ class Create_Tasks_Tables {
 			$table->text('description');
 			$table->string('color')->nullable();
 			$table->integer('track')->default(0);
-			$table->integer('user_id');
+			$table->integer('user_id')->nullable();
 			$table->integer('project_id')->nullable();
 			$table->timestamps();
 		});

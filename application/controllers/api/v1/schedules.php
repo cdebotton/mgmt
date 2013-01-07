@@ -14,7 +14,7 @@ class Api_V1_Schedules_Controller extends Controller {
 	final public function get_index()
 	{
 		$tasks = Task::with('users')->get();
-		return eloquent_to_json($tasks);		
+		return eloquent_to_json($tasks);
 	}
 
 	final public function post_index()
@@ -37,8 +37,9 @@ class Api_V1_Schedules_Controller extends Controller {
 		$task->user_id 				= $json->user_id;
 		$task->percentage 			= $json->percentage;
 		$task->track 				= $json->track;
+		$task->project_id			= $json->project_id ?: null;
 		$task->save();
-		
+
 		$json->id = $task->id;
 		return Response::json($json, 200);
 	}
@@ -47,7 +48,7 @@ class Api_V1_Schedules_Controller extends Controller {
 	{
 		$task = Task::find($id);
 		$json = Input::json();
-		
+
 		if(preg_match('/^(\d{4}\-\d{2}\-\d{2})/', $json->start_date, $matches)) {
 			$json->start_date = $matches[1];
 		}
@@ -63,6 +64,7 @@ class Api_V1_Schedules_Controller extends Controller {
 		$task->user_id 				= $json->user_id;
 		$task->percentage 			= $json->percentage;
 		$task->track 				= $json->track;
+		$task->project_id			= $json->project_id ?: null;
 		$task->save();
 
 		return Response::json($task);
@@ -94,7 +96,7 @@ class Api_V1_Schedules_Controller extends Controller {
 
 		$user->pivot->percentage = 75;
 		$user->pivot->save();
-		
+
 
 		return json_encode($user);
 	}

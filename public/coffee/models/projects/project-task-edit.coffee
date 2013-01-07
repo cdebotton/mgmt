@@ -14,7 +14,7 @@ define [
 			reverseRelation:
 				type:			Backbone.HasOne
 				key:			'drawer'
-				includeInJSON:	false
+				includeInJSON:	true
 		}]
 
 	United.Models.Projects.ProjectTaskEdit.setup()
