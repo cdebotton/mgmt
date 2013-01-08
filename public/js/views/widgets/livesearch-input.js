@@ -32,6 +32,7 @@
 
       LiveSearchInput.prototype.initialize = function() {
         United.JST.Hb.registerHelper('printResults', this.printResults);
+        this.list = new United.Views.Widgets.LiveSearchList;
         return this.model.on('change:results', this.render, this);
       };
 
@@ -99,7 +100,11 @@
       };
 
       LiveSearchInput.prototype.render = function() {
-        return console.log(this.model.get('results').toJSON());
+        if (this.model.get('results').length > 0) {
+
+        } else {
+
+        }
       };
 
       LiveSearchInput.prototype.hide = function() {};

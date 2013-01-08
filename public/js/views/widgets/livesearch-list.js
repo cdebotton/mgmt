@@ -13,6 +13,12 @@
         return LiveSearchList.__super__.constructor.apply(this, arguments);
       }
 
+      LiveSearchList.prototype.tagName = 'ul';
+
+      LiveSearchList.prototype.clasName = 'livesearch-list';
+
+      LiveSearchList.prototype.initialize = function() {};
+
       return LiveSearchList;
 
     })(Backbone.View);

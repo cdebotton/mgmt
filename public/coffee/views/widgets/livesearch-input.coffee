@@ -17,6 +17,7 @@ define [
 
 			initialize: ->
 				United.JST.Hb.registerHelper 'printResults', @printResults
+				@list = new United.Views.Widgets.LiveSearchList
 				@model.on 'change:results', @render, @
 
 			keyDown: (e) =>
@@ -60,7 +61,10 @@ define [
 
 
 			render: ->
-				console.log @model.get('results').toJSON()
+				if @model.get('results').length > 0
+					return
+				else
+					return
 
 			hide: ->
 
