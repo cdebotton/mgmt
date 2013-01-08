@@ -4,7 +4,7 @@
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['backbone', 'ns', 'views/tasks/task-element'], function(Backbone, ns) {
+  define(['backbone', 'underscore', 'ns', 'views/tasks/task-element'], function(Backbone, _, ns) {
     ns('United.Views.Projects.ProjectOverview');
     return United.Views.Projects.ProjectOverview = (function(_super) {
 
@@ -17,21 +17,30 @@
         return ProjectOverview.__super__.constructor.apply(this, arguments);
       }
 
+      ProjectOverview.prototype.tasks = [];
+
       ProjectOverview.prototype.el = '#project-overview';
 
       ProjectOverview.prototype.initialize = function() {
-        this.model.get('project').get('tasks').on('add', this.addOne, this);
+        this.model.get('project').get('tasks').on('add', this.addAll, this);
+        this.model.get('project').get('tasks').on('change', this.addAll, this);
         return this.addAll();
       };
 
       ProjectOverview.prototype.addAll = function() {
+        var _this = this;
+        this.generateRange();
+        _.each(this.tasks, function(task, key) {
+          task.remove();
+          return delete _this.tasks[key];
+        });
+        this.tasks = [];
         this.$el.html('');
         return this.model.get('project').get('tasks').each(this.addOne);
       };
 
       ProjectOverview.prototype.addOne = function(task, key) {
-        var dx, e, el, s, view, width;
-        this.generateRange();
+        var dx, dy, e, el, s, view, width;
         view = new United.Views.Tasks.TaskElement({
           model: task,
           demo: true
@@ -40,26 +49,52 @@
         el.addClass('demo');
         s = view.model.get('start_date').getTime();
         e = view.model.get('end_date').getTime();
-        dx = 10 + (s - this.start) * 910;
-        width = 10 + ((e - this.start) / (this.end - this.start)) * 910;
+        dx = 10 + ((s - this.start) * this.scale);
+        width = (e - s) * this.scale;
+        dy = 15;
+        _.each(this.tasks, function(comp, key) {
+          var compend, compstart, end, start;
+          start = task.get('start_date');
+          end = task.get('end_date');
+          compstart = comp.model.get('start_date');
+          compend = comp.model.get('end_date');
+          if (start < compend && end > compstart && comp.options.dy === dy) {
+            return dy += 60;
+          }
+        });
         el.css({
           left: dx,
+          top: dy,
           width: width
         });
+        view.options.dy = dy;
+        this.tasks.push(view);
+        this.$el.css('height', dy + 35);
         return this.$el.append(el);
       };
 
       ProjectOverview.prototype.generateRange = function() {
-        var end, start, tasks;
+        var diff, end, start, tasks;
         tasks = this.model.get('project').get('tasks');
         if (tasks.length) {
+          tasks.comparator = function(task) {
+            return task.get('start_date');
+          };
+          tasks.sort();
           start = tasks.first().get('start_date');
           tasks.comparator = function(task) {
             return task.get('end_date');
           };
+          tasks.sort();
           end = tasks.last().get('end_date');
+          tasks.comparator = function(task) {
+            return task.get('start_date');
+          };
+          tasks.sort();
           this.start = start.getTime();
           this.end = end.getTime();
+          diff = end - start;
+          this.scale = 910 / diff;
           return this.$el.css({
             height: tasks.length * 50 + ((tasks.length - 1) * 10)
           });

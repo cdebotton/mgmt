@@ -7,8 +7,6 @@ define [
 
 	ns 'United.Views.Projects.ProjectTaskEdit'
 	class United.Views.Projects.ProjectTaskEdit extends Backbone.View
-		el: '#project-task-holder'
-
 		events:
 			'click #save-task':					'saveTask'
 			'keyup input[name="task-name"]':	'updateTaskName'
@@ -25,9 +23,9 @@ define [
 		initialize: ->
 			United.JST.Hb.registerHelper 'printUsers', @printUsers
 			United.JST.Hb.registerHelper 'printColors', @printColors
-			@render()
 
 		render: () ->
+			@$el.css 'opacity', 0
 			task = @model.get 'task'
 			s = task.get 'start_date'
 			e = task.get 'end_date'
@@ -44,20 +42,21 @@ define [
 			@$el.html html
 			h = @$el.innerHeight()
 			@$el.css {
-				height: 0
-				opacity: 1
+				height:		0
+				opacity:	1
 			}
 			@$el.animate {
-				height: h
+				height:		h
 			}, 175, 'ease-in'
+			@model.get('task').on 'change', (task) -> console.log task.cid
 			@
 
 		animateOut: =>
 			@$el.animate {
-				height: 0
+				height:		0
 			}, 175, 'ease-out', =>
 				United.EventBus.trigger 'close-project-task-drawer'
-				@remove
+				@remove()
 
 		updateTaskName: (e) =>
 			@model.get('task').set 'name', e.currentTarget.value
@@ -68,6 +67,7 @@ define [
 			target = parseInt(e.currentTarget.value)
 			new_date = new Date target, start_date.getMonth(), start_date.getDate(), 0, 0, 0
 			@model.get('task').set 'start_date', new_date
+			console.log @model.get 'task'
 			@validateDates()
 
 		updateStartMonth: (e) =>

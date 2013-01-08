@@ -52,6 +52,7 @@
         ctx = this.model.get('project').toJSON();
         html = United.JST.ProjectDrawer(ctx);
         this.$el.html(html);
+        this.taskHolder = this.$('#project-task-holder');
         return this;
       };
 
@@ -68,11 +69,12 @@
       };
 
       ProjectEdit.prototype.editTask = function(task) {
-        return this.taskEditor = new United.Views.Projects.ProjectTaskEdit({
+        this.taskEditor = new United.Views.Projects.ProjectTaskEdit({
           model: new United.Models.Projects.ProjectTaskEdit({
             task: task
           })
         });
+        return this.taskHolder.html(this.taskEditor.render().$el);
       };
 
       ProjectEdit.prototype.newTask = function(e) {

@@ -34,6 +34,7 @@ define [
 			ctx = @model.get('project').toJSON()
 			html = United.JST.ProjectDrawer ctx
 			@$el.html html
+			@taskHolder = @$ '#project-task-holder'
 			@
 
 		setName: (e) =>
@@ -49,6 +50,8 @@ define [
 			@taskEditor = new United.Views.Projects.ProjectTaskEdit
 				model: new United.Models.Projects.ProjectTaskEdit
 					task: task
+			@taskHolder.html @taskEditor.render().$el
+
 
 		newTask: (e) =>
 			@model.get('project').get('tasks').add {}

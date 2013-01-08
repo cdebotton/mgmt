@@ -43,8 +43,6 @@
         return ProjectTaskEdit.__super__.constructor.apply(this, arguments);
       }
 
-      ProjectTaskEdit.prototype.el = '#project-task-holder';
-
       ProjectTaskEdit.prototype.events = {
         'click #save-task': 'saveTask',
         'keyup input[name="task-name"]': 'updateTaskName',
@@ -61,12 +59,12 @@
 
       ProjectTaskEdit.prototype.initialize = function() {
         United.JST.Hb.registerHelper('printUsers', this.printUsers);
-        United.JST.Hb.registerHelper('printColors', this.printColors);
-        return this.render();
+        return United.JST.Hb.registerHelper('printColors', this.printColors);
       };
 
       ProjectTaskEdit.prototype.render = function() {
         var ctx, e, h, html, s, task;
+        this.$el.css('opacity', 0);
         task = this.model.get('task');
         s = task.get('start_date');
         e = task.get('end_date');
@@ -89,6 +87,9 @@
         this.$el.animate({
           height: h
         }, 175, 'ease-in');
+        this.model.get('task').on('change', function(task) {
+          return console.log(task.cid);
+        });
         return this;
       };
 
@@ -98,7 +99,7 @@
           height: 0
         }, 175, 'ease-out', function() {
           United.EventBus.trigger('close-project-task-drawer');
-          return _this.remove;
+          return _this.remove();
         });
       };
 
@@ -113,6 +114,7 @@
         target = parseInt(e.currentTarget.value);
         new_date = new Date(target, start_date.getMonth(), start_date.getDate(), 0, 0, 0);
         this.model.get('task').set('start_date', new_date);
+        console.log(this.model.get('task'));
         return this.validateDates();
       };
 
