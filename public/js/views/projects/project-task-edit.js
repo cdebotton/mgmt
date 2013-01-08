@@ -220,6 +220,7 @@
       };
 
       ProjectTaskEdit.prototype.saveTask = function(e) {
+        var _this = this;
         if (this.model.get('task').get('project').isNew()) {
           return this.modal = new United.Widgets.Modal({
             model: new Backbone.Model({
@@ -230,6 +231,14 @@
                 'Cancel': United.Widgets.Modal.prototype.closeModal
               }
             })
+          });
+        } else {
+          return this.model.get('task').save(null, {
+            wait: true,
+            success: function(task, attrs, status) {
+              _this.model.get('task').set('id', attrs.id);
+              return _this.animateOut();
+            }
           });
         }
       };

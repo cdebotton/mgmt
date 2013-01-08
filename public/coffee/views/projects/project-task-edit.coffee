@@ -156,6 +156,12 @@ define [
 						options:
 							'Save Project': @saveProjectModal
 							'Cancel': United.Widgets.Modal.prototype.closeModal
+			else @model.get('task').save null, {
+				wait: true
+				success: (task, attrs, status) =>
+					@model.get('task').set 'id', attrs.id
+					@animateOut()
+			}
 
 
 		printUsers: (array, opts) =>
