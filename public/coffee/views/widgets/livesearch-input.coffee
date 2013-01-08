@@ -2,6 +2,7 @@ define [
 	'backbone'
 	'ns'
 	'views/widgets/livesearch-list'
+	'lib/keycodes'
 ], (Backbone, ns) ->
 
 	ns 'United.Views.Widgets.LiveSearchInput'
@@ -24,18 +25,18 @@ define [
 
 			keyUp: (e) =>
 				switch(e.keyCode)
-					when 40 then break					# down arrow
-					when 38 then break					# up arrow
-					when 16 then break					# shift
-					when 17 then break					# ctrl
-					when 18 then break					# alt
-					when 9								# tab
+					when United.Keyboard.DOWN then break
+					when United.Keyboard.UP then break
+					when United.Keyboard.SHIFT then break
+					when United.Keyboard.CTRL then break
+					when United.Keyboard.ALT then break
+					when United.Keyboard.TAB
 						if not LIST_VISIBLE then return
 						@select()
-					when 13								#enter
+					when United.Keyboard.ENTER
 						if not LIST_VISIBLE then return
-						@select()						# enter
-					when 27								# escape
+						@select()
+					when United.Keyboard.ESC
 						if not LIST_VISIBLE then return
 						@hide()
 					else @lookup()
@@ -51,13 +52,13 @@ define [
 			move: (e) =>
 				if not LIST_VISIBLE then return false
 				switch e.keyCode
-					when 9 then e.preventDefault()		#tab
-					when 13 then e.preventDefault()		#enter
-					when 27 then e.preventDefault()		#escape
-					when 38								#up
+					when United.Keyboard.TAB then e.preventDefault()
+					when United.Keyboard.ENTER then e.preventDefault()
+					when United.Keyboard.ESC then e.preventDefault()
+					when United.Keyboard.UP
 						e.preventDefault()
 						@previous()
-					when 40
+					when United.Keyboard.DOWN
 						e.preventDefault()
 						@next()
 				e.stopPropagation()

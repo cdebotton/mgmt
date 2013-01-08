@@ -4,7 +4,7 @@
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['backbone', 'ns', 'views/widgets/livesearch-list'], function(Backbone, ns) {
+  define(['backbone', 'ns', 'views/widgets/livesearch-list', 'lib/keycodes'], function(Backbone, ns) {
     ns('United.Views.Widgets.LiveSearchInput');
     return United.Views.Widgets.LiveSearchInput = (function(_super) {
       var LIST_VISIBLE;
@@ -46,29 +46,29 @@
 
       LiveSearchInput.prototype.keyUp = function(e) {
         switch (e.keyCode) {
-          case 40:
+          case United.Keyboard.DOWN:
             break;
-          case 38:
+          case United.Keyboard.UP:
             break;
-          case 16:
+          case United.Keyboard.SHIFT:
             break;
-          case 17:
+          case United.Keyboard.CTRL:
             break;
-          case 18:
+          case United.Keyboard.ALT:
             break;
-          case 9:
+          case United.Keyboard.TAB:
             if (!LIST_VISIBLE) {
               return;
             }
             this.select();
             break;
-          case 13:
+          case United.Keyboard.ENTER:
             if (!LIST_VISIBLE) {
               return;
             }
             this.select();
             break;
-          case 27:
+          case United.Keyboard.ESC:
             if (!LIST_VISIBLE) {
               return;
             }
@@ -92,20 +92,20 @@
           return false;
         }
         switch (e.keyCode) {
-          case 9:
+          case United.Keyboard.TAB:
             e.preventDefault();
             break;
-          case 13:
+          case United.Keyboard.ENTER:
             e.preventDefault();
             break;
-          case 27:
+          case United.Keyboard.ESC:
             e.preventDefault();
             break;
-          case 38:
+          case United.Keyboard.UP:
             e.preventDefault();
             this.previous();
             break;
-          case 40:
+          case United.Keyboard.DOWN:
             e.preventDefault();
             this.next();
         }
