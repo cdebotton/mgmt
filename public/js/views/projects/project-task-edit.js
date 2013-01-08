@@ -4,7 +4,7 @@
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['backbone', 'ns', 'jst', 'widgets/modal'], function(Backbone, ns) {
+  define(['backbone', 'ns', 'jst', 'views/widgets/modal'], function(Backbone, ns) {
     ns('United.Views.Projects.ProjectTaskEdit');
     return United.Views.Projects.ProjectTaskEdit = (function(_super) {
 
@@ -219,13 +219,13 @@
       ProjectTaskEdit.prototype.saveTask = function(e) {
         var _this = this;
         if (this.model.get('task').get('project').isNew()) {
-          return this.modal = new United.Widgets.Modal({
+          return this.modal = new United.Views.Widgets.Modal({
             model: new Backbone.Model({
               title: 'Unsaved Project!',
               msg: '<p>The project must be saved before child tasks can be added.</p>',
               options: {
                 'Save Project': this.saveProjectModal,
-                'Cancel': United.Widgets.Modal.prototype.closeModal
+                'Cancel': United.Views.Widgets.Modal.prototype.closeModal
               }
             })
           });

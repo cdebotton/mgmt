@@ -7,8 +7,8 @@ define [
 	'animate'
 ], (Backbone, _, ns, $) ->
 
-	ns 'United.Widgets.Modal'
-	class United.Widgets.Modal extends Backbone.View
+	ns 'United.Views.Widgets.Modal'
+	class United.Views.Widgets.Modal extends Backbone.View
 		tagName: 	'section'
 
 		className:	'striped-cheech'

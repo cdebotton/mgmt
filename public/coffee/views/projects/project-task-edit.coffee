@@ -2,7 +2,7 @@ define [
 	'backbone'
 	'ns'
 	'jst'
-	'widgets/modal'
+	'views/widgets/modal'
 ], (Backbone, ns) ->
 
 	ns 'United.Views.Projects.ProjectTaskEdit'
@@ -148,13 +148,13 @@ define [
 
 		saveTask: (e) =>
 			if @model.get('task').get('project').isNew()
-				@modal = new United.Widgets.Modal
+				@modal = new United.Views.Widgets.Modal
 					model: new Backbone.Model
 						title: 'Unsaved Project!'
 						msg: '<p>The project must be saved before child tasks can be added.</p>'
 						options:
 							'Save Project': @saveProjectModal
-							'Cancel': United.Widgets.Modal.prototype.closeModal
+							'Cancel': United.Views.Widgets.Modal.prototype.closeModal
 			else @model.get('task').save null, {
 				wait: true
 				success: (task, attrs, status) =>
