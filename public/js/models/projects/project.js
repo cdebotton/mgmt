@@ -24,21 +24,27 @@
           collectionType: United.Collections.Tasks.Tasks,
           key: 'tasks',
           reverseRelation: {
-            type: Backbone.HasOne,
             key: 'project',
             keyDestination: 'project_id',
             keySource: 'project_id',
-            includeInJSON: true
+            includeInJSON: 'id'
           }
         }
       ];
 
       Project.prototype.defaults = {
         name: 'Unnamed Project',
-        code: 'NEW'
+        code: 'NEW',
+        client_id: null,
+        client_name: null
       };
 
-      Project.prototype.initialize = function() {};
+      Project.prototype.initialize = function() {
+        var _this = this;
+        return this.on('change:id', function() {
+          return console.log(_this);
+        });
+      };
 
       Project.prototype.parse = function() {
         return this.get('tasks').each(function(task, key) {

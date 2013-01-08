@@ -21,7 +21,7 @@ define [
 				@$el.wrap '<span class="live-search"></span>'
 				@wrapper = @$el.parent '.live-search'
 				@wrapper.append @list.$el
-				@icons = $ '<span class="add-on"><i class="icon icon-search"></i><i class="icon icon-remove"></i></span>'
+				@icons = $ '<span class="add-on"><i class="icon icon-search"></i><i class="icon icon-remove icon-white"></i></span>'
 				@$el.after @icons
 
 			keyDown: (e) =>
@@ -75,6 +75,7 @@ define [
 				if results.length > 0 and query isnt ''
 					LIST_VISIBLE = true
 					results = new Backbone.Collection @sorter results, query
+					results.on 'selected', @itemSelected, @
 					United.EventBus.trigger 'search-results-found', query, results, @cid
 					@model.set 'results', results
 					@model.set 'currentIndex', 0
@@ -103,6 +104,7 @@ define [
 				@$el.val selection.get 'name'
 				@$el.attr 'disabled', true
 				@icons.on 'click', _.bind @deselect, @
+				@model.set 'value', selection.get 'id'
 				@hide()
 
 			deselect: (e) ->
@@ -111,4 +113,10 @@ define [
 				@$el.val ''
 				@model.unset 'results'
 				@model.unset 'currentIndex'
+				@model.set 'value', null
 				e.preventDefault()
+
+			itemSelected: (model) ->
+				index = @model.get('results').indexOf model
+				@model.set 'currentIndex', index
+				@select()

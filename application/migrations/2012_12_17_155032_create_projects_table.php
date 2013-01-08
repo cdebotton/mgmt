@@ -12,7 +12,7 @@ class Create_Projects_Table {
 		Schema::create('projects', function($table)
 		{
 			$table->increments('id');
-			$table->integer('client_id');
+			$table->integer('client_id')->nullable();
 			$table->string('name');
 			$table->string('code');
 			$table->text('memo');

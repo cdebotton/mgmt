@@ -13,6 +13,8 @@
       function ProjectEdit() {
         this.saveProject = __bind(this.saveProject, this);
 
+        this.setClientId = __bind(this.setClientId, this);
+
         this.bindEscape = __bind(this.bindEscape, this);
 
         this.closeDrawer = __bind(this.closeDrawer, this);
@@ -65,7 +67,7 @@
       };
 
       ProjectEdit.prototype.setClient = function(e) {
-        return this.model.get('project').set('name', e.currentTarget.value);
+        return this.model.get('project').set('client_name', e.currentTarget.value);
       };
 
       ProjectEdit.prototype.editTask = function(task) {
@@ -94,6 +96,7 @@
             sources: window.clients
           })
         });
+        this.liveSearch.model.on('change:value', this.setClientId, this);
         this.$el.css('margin-top', -this.$el.innerHeight());
         this.$el.animate({
           'margin-top': 0
@@ -118,6 +121,10 @@
         if (e.keyCode === 27) {
           return this.closeDrawer(e);
         }
+      };
+
+      ProjectEdit.prototype.setClientId = function(model, value) {
+        return this.model.get('project').set('client_id', value);
       };
 
       ProjectEdit.prototype.saveProject = function(e) {};

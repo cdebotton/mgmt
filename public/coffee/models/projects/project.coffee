@@ -17,18 +17,20 @@ define [
 			collectionType:		United.Collections.Tasks.Tasks
 			key:				'tasks'
 			reverseRelation:
-				type:			Backbone.HasOne
 				key:			'project'
 				keyDestination:	'project_id'
 				keySource:		'project_id'
-				includeInJSON:	true
+				includeInJSON:	'id'
 		}]
 
 		defaults:
-			name: 'Unnamed Project'
-			code: 'NEW'
+			name: 			'Unnamed Project'
+			code: 			'NEW'
+			client_id:		null
+			client_name:	null
 
 		initialize: ->
+			@on 'change:id', => console.log @
 
 		parse: ->
 			@get('tasks').each (task, key) ->

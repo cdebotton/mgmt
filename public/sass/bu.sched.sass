@@ -755,12 +755,17 @@ $modal-width: 480px
 					@include transition-property('background-color, border')
 					@include transition-duration('75ms')
 					@include transition-timing-function('ease-in')
+					cursor: pointer
 					&+.li
 						border-top: 1px solid #ccc
 					&.active
 						background-color: #D0FFFF
 						border-top: 1px solid #70FFFF
 						border-bottom: 1px solid #70FFFF
+					&:hover
+						background-color: #F7FFFF
+						border-top: 1px solid #E0FFFF
+						border-bottom: 1px solid #E0FFFF
 		.project-drawer-header
 			overflow: hidden
 			display: block

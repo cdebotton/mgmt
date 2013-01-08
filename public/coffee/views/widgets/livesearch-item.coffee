@@ -7,6 +7,9 @@ define [
 	class United.Views.Widgets.LiveSearchItem extends Backbone.View
 		tagName: 'li'
 
+		events:
+			'click':	'selected'
+
 		initialize: ->
 			@model.on 'change:active', @highlight, @
 
@@ -21,3 +24,5 @@ define [
 			if active is true
 				@$el.addClass 'active'
 			else @$el.removeClass 'active'
+
+		selected: (e) => @model.trigger 'selected', @model

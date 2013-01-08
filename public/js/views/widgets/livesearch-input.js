@@ -38,7 +38,7 @@
         this.$el.wrap('<span class="live-search"></span>');
         this.wrapper = this.$el.parent('.live-search');
         this.wrapper.append(this.list.$el);
-        this.icons = $('<span class="add-on"><i class="icon icon-search"></i><i class="icon icon-remove"></i></span>');
+        this.icons = $('<span class="add-on"><i class="icon icon-search"></i><i class="icon icon-remove icon-white"></i></span>');
         return this.$el.after(this.icons);
       };
 
@@ -127,6 +127,7 @@
         if (results.length > 0 && query !== '') {
           LIST_VISIBLE = true;
           results = new Backbone.Collection(this.sorter(results, query));
+          results.on('selected', this.itemSelected, this);
           United.EventBus.trigger('search-results-found', query, results, this.cid);
           this.model.set('results', results);
           return this.model.set('currentIndex', 0);
@@ -171,6 +172,7 @@
         this.$el.val(selection.get('name'));
         this.$el.attr('disabled', true);
         this.icons.on('click', _.bind(this.deselect, this));
+        this.model.set('value', selection.get('id'));
         return this.hide();
       };
 
@@ -180,7 +182,15 @@
         this.$el.val('');
         this.model.unset('results');
         this.model.unset('currentIndex');
+        this.model.set('value', null);
         return e.preventDefault();
+      };
+
+      LiveSearchInput.prototype.itemSelected = function(model) {
+        var index;
+        index = this.model.get('results').indexOf(model);
+        this.model.set('currentIndex', index);
+        return this.select();
       };
 
       return LiveSearchInput;

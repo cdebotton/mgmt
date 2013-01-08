@@ -4,7 +4,7 @@
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['backbone', 'jquery', 'ns', 'jst', 'animate', 'views/projects/project-edit', 'models/projects/project-edit', 'models/projects/project', 'models/tasks/task'], function(Backbone, $, ns) {
+  define(['backbone', 'jquery', 'ns', 'jst', 'animate', 'views/projects/project-edit', 'models/projects/project-edit', 'models/clients/client'], function(Backbone, $, ns) {
     ns('United.Views.Projects.ProjectList');
     return United.Views.Projects.ProjectList = (function(_super) {
       var DRAWER_OPEN;

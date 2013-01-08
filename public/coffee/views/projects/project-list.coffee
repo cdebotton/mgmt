@@ -6,8 +6,9 @@ define [
 	'animate'
 	'views/projects/project-edit'
 	'models/projects/project-edit'
-	'models/projects/project'
-	'models/tasks/task'
+	'models/clients/client'
+	#'models/projects/project'
+	#'models/tasks/task'
 ], (Backbone, $, ns) ->
 
 	ns 'United.Views.Projects.ProjectList'

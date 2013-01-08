@@ -25,8 +25,6 @@ define [
 			United.JST.Hb.registerHelper 'formatDate', @formatDate
 			@start = @model.get 'start_date'
 			@end = @model.get 'end_date'
-			@model.get('project')?.on 'change:code', @render, @
-			@model.get('project')?.get('client')?.on 'change:name', @render, @
 			@model.on 'change:color', @updateColor, @
 			@model.on 'change:name change:percentage', @render, @
 			if United.Models.Users.Session.isAdmin() and @options.demo? isnt true
@@ -37,6 +35,8 @@ define [
 				@model.on 'change:end_date', @updatePositions, @
 				@model.on 'change:start_date', @updatePositions, @
 				@model.on 'change:track', @updatePositions, @
+				@model.get('project')?.on 'change:code', @render, @
+				@model.get('project')?.get('client')?.on 'change:name', @render, @
 			else if @options.demo? is true
 				@$el.addClass 'selectable'
 				@$el.on 'click', @selectTask

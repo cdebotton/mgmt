@@ -46,14 +46,6 @@
         United.JST.Hb.registerHelper('formatDate', this.formatDate);
         this.start = this.model.get('start_date');
         this.end = this.model.get('end_date');
-        if ((_ref = this.model.get('project')) != null) {
-          _ref.on('change:code', this.render, this);
-        }
-        if ((_ref1 = this.model.get('project')) != null) {
-          if ((_ref2 = _ref1.get('client')) != null) {
-            _ref2.on('change:name', this.render, this);
-          }
-        }
         this.model.on('change:color', this.updateColor, this);
         this.model.on('change:name change:percentage', this.render, this);
         if (United.Models.Users.Session.isAdmin() && (this.options.demo != null) !== true) {
@@ -64,6 +56,14 @@
           this.model.on('change:end_date', this.updatePositions, this);
           this.model.on('change:start_date', this.updatePositions, this);
           this.model.on('change:track', this.updatePositions, this);
+          if ((_ref = this.model.get('project')) != null) {
+            _ref.on('change:code', this.render, this);
+          }
+          if ((_ref1 = this.model.get('project')) != null) {
+            if ((_ref2 = _ref1.get('client')) != null) {
+              _ref2.on('change:name', this.render, this);
+            }
+          }
         } else if ((this.options.demo != null) === true) {
           this.$el.addClass('selectable');
           this.$el.on('click', this.selectTask);

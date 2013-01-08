@@ -46,7 +46,7 @@ define [
 			@model.get('project').set 'code', e.currentTarget.value
 
 		setClient: (e) =>
-			@model.get('project').set 'name', e.currentTarget.value
+			@model.get('project').set 'client_name', e.currentTarget.value
 
 		editTask: (task) ->
 			@taskEditor = new United.Views.Projects.ProjectTaskEdit
@@ -66,6 +66,7 @@ define [
 				el: '#client-search'
 				model: new United.Models.Widgets.LiveSearch
 					sources: window.clients
+			@liveSearch.model.on 'change:value', @setClientId, @
 			@$el.css 'margin-top', -@$el.innerHeight()
 			@$el.animate { 'margin-top': 0 }, 175, 'ease-in'
 			@body.bind 'keyup', @bindEscape
@@ -80,5 +81,7 @@ define [
 
 		bindEscape: (e) => if e.keyCode is 27 then @closeDrawer e
 
+		setClientId: (model, value) =>
+			@model.get('project').set 'client_id', value
 
 		saveProject: (e) =>

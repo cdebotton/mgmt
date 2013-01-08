@@ -8,6 +8,7 @@ define [
 
 	ns 'United.Models.Clients.Client'
 	class United.Models.Clients.Client extends Backbone.RelationalModel
+
 		relations: [{
 			type:				Backbone.HasMany
 			relatedModel: 		United.Models.Projects.Project
@@ -15,7 +16,10 @@ define [
 			key:				'projects'
 			reverseRelation:
 				key:			'client'
+				keySource:		'client_id'
+				keyDestination:	'client_id'
 				type:			Backbone.HasOne
 				includeInJSON:	'id'
 		}]
+
 	United.Models.Clients.Client.setup()

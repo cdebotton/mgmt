@@ -20,9 +20,33 @@ class Api_V1_Projects_Controller extends Controller
 		$project 		= new Project;
 		$project->name 	= $input->name;
 		$project->code 	= $input->code;
+		if ($input->client_id != null) {
+			$project->client_id = $input->client_id;
+		}
+		elseif ($input->client_name != null) {
+			$client = new Client;
+			$client->name = $input->client_name;
+			$client->save();
+			$project->client_id = $client->id;
+		}
 		$project->save();
-		$input->id = $project->id;
-		
-		return Response::json($input);
+		if (isset($input->tasks)) {
+			foreach ($input->tasks as $object) {
+				$task = new Task;
+				$task->name = $object->name;
+				$task->user_id = $object->user_id;
+				$task->author_id = $object->author_id;
+				$task->start_date = $object->start_date;
+				$task->end_date = $object->end_date;
+				$task->project_id = $project->id;
+				$task->save();
+			}
+		}
+
+		$project = Project::with(array('tasks', 'client'))
+			->where_id($project->id)
+			->first();
+
+		return Response::json($project->to_array());
 	}
 }

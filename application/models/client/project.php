@@ -21,6 +21,6 @@ class Project extends Eloquent
 	 */
 	public function tasks()
 	{
-		return $this->has_many('Task');
+		return $this->has_many('Client\\Project\\Task');
 	}
 }
