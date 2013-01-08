@@ -4,7 +4,7 @@
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['backbone', 'jquery', 'ns', 'jst', 'animate', 'views/projects/project-task-edit', 'models/projects/project-task-edit', 'views/projects/project-overview', 'models/projects/project-overview'], function(Backbone, $, ns) {
+  define(['backbone', 'jquery', 'ns', 'jst', 'animate', 'views/projects/project-task-edit', 'models/projects/project-task-edit', 'views/projects/project-overview', 'models/projects/project-overview', 'views/widgets/livesearch-input', 'models/widgets/livesearch'], function(Backbone, $, ns) {
     ns('United.Views.Projects.ProjectEdit');
     return United.Views.Projects.ProjectEdit = (function(_super) {
 
@@ -86,6 +86,12 @@
         this.overview = new United.Views.Projects.ProjectOverview({
           model: new United.Models.Projects.ProjectOverview({
             project: this.model.get('project')
+          })
+        });
+        this.liveSearch = new United.Views.Widgets.LiveSearchInput({
+          el: '#client-search',
+          model: new United.Models.Widgets.LiveSearch({
+            source: window.clients
           })
         });
         this.$el.css('margin-top', -this.$el.innerHeight());

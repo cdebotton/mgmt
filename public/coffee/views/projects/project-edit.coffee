@@ -8,6 +8,8 @@ define [
 	'models/projects/project-task-edit'
 	'views/projects/project-overview'
 	'models/projects/project-overview'
+	'views/widgets/livesearch-input'
+	'models/widgets/livesearch'
 ], (Backbone, $, ns) ->
 
 	ns 'United.Views.Projects.ProjectEdit'
@@ -60,6 +62,10 @@ define [
 			@overview = new United.Views.Projects.ProjectOverview
 				model: new United.Models.Projects.ProjectOverview
 					project: @model.get 'project'
+			@liveSearch = new United.Views.Widgets.LiveSearchInput
+				el: '#client-search'
+				model: new United.Models.Widgets.LiveSearch
+					source: window.clients
 			@$el.css 'margin-top', -@$el.innerHeight()
 			@$el.animate { 'margin-top': 0 }, 175, 'ease-in'
 			@body.bind 'keyup', @bindEscape

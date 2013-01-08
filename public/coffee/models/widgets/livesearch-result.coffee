@@ -6,4 +6,4 @@ define [
 
 	ns 'United.Models.Widgets.LiveSearchResult'
 	class United.Models.Widgets.LiveSearchResult extends Backbone.RelationalModel
-	United.Models.Widths.LiveSearchResult.setup()
+	United.Models.Widgets.LiveSearchResult.setup()

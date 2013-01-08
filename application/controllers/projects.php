@@ -14,13 +14,16 @@ class Projects_Controller extends Base_Controller
 
 		$users = User::all();
 
+		$clients = Client::all();
+
 		return View::make('projects.index')
 			->with('projects', eloquent_to_json($projects))
-			->with('users', eloquent_to_json($users));
+			->with('users', eloquent_to_json($users))
+			->with('clients', eloquent_to_json($clients));
 	}
 
 	public function post_index()
 	{
-		
+
 	}
 }

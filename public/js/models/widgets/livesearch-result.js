@@ -16,7 +16,7 @@
       return LiveSearchResult;
 
     })(Backbone.RelationalModel);
-    return United.Models.Widths.LiveSearchResult.setup();
+    return United.Models.Widgets.LiveSearchResult.setup();
   });
 
 }).call(this);

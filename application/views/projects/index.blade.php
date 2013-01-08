@@ -46,8 +46,9 @@
 		</div>
 	</div>
 	<script>
-		var projects, users;
+		var projects, users, clients;
 		projects = <?php echo $projects; ?>;
 		users = <?php echo $users; ?>;
+		clients = <?php echo $clients; ?>;
 	</script>
 @endsection
