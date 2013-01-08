@@ -4,6 +4,7 @@ define [
 	'ns'
 	'views/widgets/livesearch-list'
 	'lib/keycodes'
+	'jst'
 ], (Backbone, _, ns) ->
 
 	ns 'United.Views.Widgets.LiveSearchInput'
@@ -15,6 +16,7 @@ define [
 				'keyup':		'keyUp'
 
 			initialize: ->
+				United.JST.Hb.registerHelper 'printResults', @printResults
 				@model.on 'change:results', @render, @
 
 			keyDown: (e) =>

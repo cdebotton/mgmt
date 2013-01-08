@@ -4,7 +4,7 @@
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['backbone', 'underscore', 'ns', 'views/widgets/livesearch-list', 'lib/keycodes'], function(Backbone, _, ns) {
+  define(['backbone', 'underscore', 'ns', 'views/widgets/livesearch-list', 'lib/keycodes', 'jst'], function(Backbone, _, ns) {
     ns('United.Views.Widgets.LiveSearchInput');
     return United.Views.Widgets.LiveSearchInput = (function(_super) {
       var LIST_VISIBLE;
@@ -31,6 +31,7 @@
       };
 
       LiveSearchInput.prototype.initialize = function() {
+        United.JST.Hb.registerHelper('printResults', this.printResults);
         return this.model.on('change:results', this.render, this);
       };
 
