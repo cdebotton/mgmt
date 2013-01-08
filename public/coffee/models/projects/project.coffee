@@ -30,7 +30,6 @@ define [
 			client_name:	null
 
 		initialize: ->
-			@on 'change:id', => console.log @
 
 		parse: ->
 			@get('tasks').each (task, key) ->

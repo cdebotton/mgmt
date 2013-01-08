@@ -43,7 +43,7 @@ class Api_V1_Projects_Controller extends Controller
 			}
 		}
 
-		$project = Project::with(array('tasks', 'client'))
+		$project = Project::with(array('tasks'))
 			->where_id($project->id)
 			->first();
 

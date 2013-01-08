@@ -160,6 +160,12 @@ define [
 				silent: true
 				success: (project, attrs, status) =>
 					project.set 'id', attrs.id
+					if attrs.tasks?.length > 0
+						for task, i in attrs.tasks
+							task.start_date = new Date task.start_date
+							task.end_date = new Date task.end_date
+					project.set 'tasks', attrs.tasks
+					project.set 'client_id', attrs.client_id
 					@animateOut()
 					@modal.closeModal()
 				}

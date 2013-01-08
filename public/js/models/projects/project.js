@@ -39,12 +39,7 @@
         client_name: null
       };
 
-      Project.prototype.initialize = function() {
-        var _this = this;
-        return this.on('change:id', function() {
-          return console.log(_this);
-        });
-      };
+      Project.prototype.initialize = function() {};
 
       Project.prototype.parse = function() {
         return this.get('tasks').each(function(task, key) {
