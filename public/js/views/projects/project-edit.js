@@ -91,7 +91,7 @@
         this.liveSearch = new United.Views.Widgets.LiveSearchInput({
           el: '#client-search',
           model: new United.Models.Widgets.LiveSearch({
-            source: window.clients
+            sources: window.clients
           })
         });
         this.$el.css('margin-top', -this.$el.innerHeight());

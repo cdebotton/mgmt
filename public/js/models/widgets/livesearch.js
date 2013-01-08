@@ -3,7 +3,7 @@
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['backbone', 'underscore', 'ns', 'relational', 'models/widgets/livesearch-result', 'collections/widgets/livesearch-results'], function(Backbone, _, ns) {
+  define(['backbone', 'underscore', 'ns', 'relational', 'models/widgets/livesearch-source', 'collections/widgets/livesearch-sources'], function(Backbone, _, ns) {
     ns('United.Models.Widgets.LiveSearch');
     United.Models.Widgets.LiveSearch = (function(_super) {
 
@@ -16,19 +16,9 @@
       LiveSearch.prototype.relations = [
         {
           type: Backbone.HasMany,
-          key: 'results',
-          relatedModel: United.Models.Widgets.LiveSearchResult,
-          collectionType: United.Collections.Widgets.LiveSearchResults,
-          reverseRelation: {
-            type: Backbone.HasOne,
-            key: 'search',
-            includeInJSON: false
-          }
-        }, {
-          type: Backbone.HasMany,
-          key: 'source',
-          relatedModel: United.Models.Widgets.LiveSearchResult,
-          collectionType: United.Collections.Widgets.LiveSearchResults,
+          key: 'sources',
+          relatedModel: United.Models.Widgets.LiveSearchSource,
+          collectionType: United.Collections.Widgets.LiveSearchSources,
           reverseRelation: {
             type: Backbone.HasOne,
             key: 'search',
@@ -36,18 +26,6 @@
           }
         }
       ];
-
-      LiveSearch.prototype.query = function(string) {
-        var i, result, results, _i, _len;
-        results = this.get('source').filter(function(src, key) {
-          return ~src.get('name').toLowerCase().indexOf(string.toLowerCase());
-        });
-        for (i = _i = 0, _len = results.length; _i < _len; i = ++_i) {
-          result = results[i];
-          console.log(result.get('name'));
-        }
-        return console.log('----');
-      };
 
       return LiveSearch;
 

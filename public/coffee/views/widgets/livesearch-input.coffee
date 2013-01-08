@@ -15,7 +15,7 @@ define [
 				'keyup':		'keyUp'
 
 			initialize: ->
-				@model.on 'query:complete', => console.log @model.get('results').toJSON()
+				@model.on 'change:results', @render, @
 
 			keyDown: (e) =>
 				@suppressKeyPressRepeat = _.indexOf([40,38,9,13,27], e.keyCode) > 0
@@ -47,7 +47,18 @@ define [
 
 			select: ->
 
-			lookup: -> @model.query @$el.val()
+			lookup: ->
+				string = @$el.val()
+				results = @model.get('sources').filter (source, key) ->
+					~source.get('name').toLowerCase().indexOf string.toLowerCase()
+				@model.set {
+					string: string
+					results: new Backbone.Collection results
+				}
+
+
+			render: ->
+				console.log @model.get('results').toJSON()
 
 			hide: ->
 

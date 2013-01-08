@@ -65,7 +65,7 @@ define [
 			@liveSearch = new United.Views.Widgets.LiveSearchInput
 				el: '#client-search'
 				model: new United.Models.Widgets.LiveSearch
-					source: window.clients
+					sources: window.clients
 			@$el.css 'margin-top', -@$el.innerHeight()
 			@$el.animate { 'margin-top': 0 }, 175, 'ease-in'
 			@body.bind 'keyup', @bindEscape

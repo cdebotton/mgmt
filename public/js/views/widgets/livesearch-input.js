@@ -31,10 +31,7 @@
       };
 
       LiveSearchInput.prototype.initialize = function() {
-        var _this = this;
-        return this.model.on('query:complete', function() {
-          return console.log(_this.model.get('results').toJSON());
-        });
+        return this.model.on('change:results', this.render, this);
       };
 
       LiveSearchInput.prototype.keyDown = function(e) {
@@ -89,7 +86,19 @@
       LiveSearchInput.prototype.select = function() {};
 
       LiveSearchInput.prototype.lookup = function() {
-        return this.model.query(this.$el.val());
+        var results, string;
+        string = this.$el.val();
+        results = this.model.get('sources').filter(function(source, key) {
+          return ~source.get('name').toLowerCase().indexOf(string.toLowerCase());
+        });
+        return this.model.set({
+          string: string,
+          results: new Backbone.Collection(results)
+        });
+      };
+
+      LiveSearchInput.prototype.render = function() {
+        return console.log(this.model.get('results').toJSON());
       };
 
       LiveSearchInput.prototype.hide = function() {};
