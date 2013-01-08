@@ -1,4 +1,4 @@
-define ['ns'], ->
+define ['ns'], (ns) ->
 
 	ns 'United.Keyboard'
 	United.Keyboard = {

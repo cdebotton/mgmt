@@ -4,7 +4,7 @@
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['backbone', 'ns', 'views/widgets/livesearch-list', 'lib/keycodes'], function(Backbone, ns) {
+  define(['backbone', 'underscore', 'ns', 'views/widgets/livesearch-list', 'lib/keycodes'], function(Backbone, _, ns) {
     ns('United.Views.Widgets.LiveSearchInput');
     return United.Views.Widgets.LiveSearchInput = (function(_super) {
       var LIST_VISIBLE;
@@ -30,7 +30,12 @@
         'keyup': 'keyUp'
       };
 
-      LiveSearchInput.prototype.initialize = function() {};
+      LiveSearchInput.prototype.initialize = function() {
+        var _this = this;
+        return this.model.on('query:complete', function() {
+          return console.log(_this.model.get('results').toJSON());
+        });
+      };
 
       LiveSearchInput.prototype.keyDown = function(e) {
         this.suppressKeyPressRepeat = _.indexOf([40, 38, 9, 13, 27], e.keyCode) > 0;
@@ -83,13 +88,15 @@
 
       LiveSearchInput.prototype.select = function() {};
 
-      LiveSearchInput.prototype.lookup = function() {};
+      LiveSearchInput.prototype.lookup = function() {
+        return this.model.query(this.$el.val());
+      };
 
       LiveSearchInput.prototype.hide = function() {};
 
       LiveSearchInput.prototype.move = function(e) {
         if (!LIST_VISIBLE) {
-          return false;
+          return;
         }
         switch (e.keyCode) {
           case United.Keyboard.TAB:

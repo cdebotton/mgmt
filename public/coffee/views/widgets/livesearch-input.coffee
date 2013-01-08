@@ -1,9 +1,10 @@
 define [
 	'backbone'
+	'underscore'
 	'ns'
 	'views/widgets/livesearch-list'
 	'lib/keycodes'
-], (Backbone, ns) ->
+], (Backbone, _, ns) ->
 
 	ns 'United.Views.Widgets.LiveSearchInput'
 	class United.Views.Widgets.LiveSearchInput extends Backbone.View
@@ -14,6 +15,7 @@ define [
 				'keyup':		'keyUp'
 
 			initialize: ->
+				@model.on 'query:complete', => console.log @model.get('results').toJSON()
 
 			keyDown: (e) =>
 				@suppressKeyPressRepeat = _.indexOf([40,38,9,13,27], e.keyCode) > 0
@@ -45,12 +47,12 @@ define [
 
 			select: ->
 
-			lookup: ->
+			lookup: -> @model.query @$el.val()
 
 			hide: ->
 
 			move: (e) =>
-				if not LIST_VISIBLE then return false
+				if not LIST_VISIBLE then return
 				switch e.keyCode
 					when United.Keyboard.TAB then e.preventDefault()
 					when United.Keyboard.ENTER then e.preventDefault()
