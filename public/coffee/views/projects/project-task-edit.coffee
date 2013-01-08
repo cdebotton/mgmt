@@ -48,7 +48,6 @@ define [
 			@$el.animate {
 				height:		h
 			}, 175, 'ease-in'
-			@model.get('task').on 'change', (task) -> console.log task.cid
 			@
 
 		animateOut: =>

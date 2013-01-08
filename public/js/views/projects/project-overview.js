@@ -21,6 +21,8 @@
 
       ProjectOverview.prototype.el = '#project-overview';
 
+      ProjectOverview.prototype.viewportHeight = 20;
+
       ProjectOverview.prototype.initialize = function() {
         this.model.get('project').get('tasks').on('add', this.addAll, this);
         this.model.get('project').get('tasks').on('change', this.addAll, this);
@@ -29,6 +31,7 @@
 
       ProjectOverview.prototype.addAll = function() {
         var _this = this;
+        this.viewportHeight = 20;
         this.generateRange();
         _.each(this.tasks, function(task, key) {
           task.remove();
@@ -36,11 +39,12 @@
         });
         this.tasks = [];
         this.$el.html('');
-        return this.model.get('project').get('tasks').each(this.addOne);
+        this.model.get('project').get('tasks').each(this.addOne);
+        return this.$el.css('height', this.viewportHeight + 35);
       };
 
       ProjectOverview.prototype.addOne = function(task, key) {
-        var dx, dy, e, el, s, view, width;
+        var comp, compend, compstart, dx, dy, e, el, end, s, siblings, start, view, width, _i, _len;
         view = new United.Views.Tasks.TaskElement({
           model: task,
           demo: true
@@ -52,16 +56,20 @@
         dx = 10 + ((s - this.start) * this.scale);
         width = (e - s) * this.scale;
         dy = 15;
-        _.each(this.tasks, function(comp, key) {
-          var compend, compstart, end, start;
+        siblings = _.without(this.tasks, task);
+        for (key = _i = 0, _len = siblings.length; _i < _len; key = ++_i) {
+          comp = siblings[key];
           start = task.get('start_date');
           end = task.get('end_date');
           compstart = comp.model.get('start_date');
           compend = comp.model.get('end_date');
           if (start < compend && end > compstart && comp.options.dy === dy) {
-            return dy += 60;
+            dy += 60;
+            if (dy > this.viewportHeight) {
+              this.viewportHeight = dy;
+            }
           }
-        });
+        }
         el.css({
           left: dx,
           top: dy,
@@ -69,7 +77,6 @@
         });
         view.options.dy = dy;
         this.tasks.push(view);
-        this.$el.css('height', dy + 35);
         return this.$el.append(el);
       };
 

@@ -9,6 +9,7 @@ define [
 	class United.Views.Projects.ProjectOverview extends Backbone.View
 		tasks: []
 		el: '#project-overview'
+		viewportHeight: 20
 
 		initialize: ->
 			@model.get('project').get('tasks').on 'add', @addAll, @
@@ -16,6 +17,7 @@ define [
 			@addAll()
 
 		addAll: () =>
+			@viewportHeight = 20
 			@generateRange()
 			_.each @tasks, (task, key) =>
 				task.remove()
@@ -23,6 +25,7 @@ define [
 			@tasks = []
 			@$el.html ''
 			@model.get('project').get('tasks').each @addOne
+			@$el.css 'height', @viewportHeight+35
 
 		addOne: (task, key) =>
 			view = new United.Views.Tasks.TaskElement
@@ -35,13 +38,15 @@ define [
 			dx = 10 + ((s - @start) * @scale)
 			width = (e - s) * @scale
 			dy = 15
-			_.each @tasks, (comp, key) ->
+			siblings = _.without @tasks, task
+			for comp, key in siblings
 				start = task.get('start_date')
 				end = task.get('end_date')
 				compstart = comp.model.get('start_date')
 				compend = comp.model.get('end_date')
 				if start < compend and end > compstart and comp.options.dy is dy
 					dy += 60
+					if dy > @viewportHeight then @viewportHeight = dy
 			el.css {
 				left:	dx
 				top:	dy
@@ -49,7 +54,6 @@ define [
 			}
 			view.options.dy = dy
 			@tasks.push view
-			@$el.css 'height', dy+35
 			@$el.append el
 
 		generateRange: ->

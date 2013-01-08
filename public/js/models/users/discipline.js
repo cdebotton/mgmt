@@ -5,7 +5,7 @@
 
   define(['backbone', 'ns', 'relational'], function(Backbone, ns) {
     ns('United.Models.Users.Discipline');
-    return United.Models.Users.Discipline = (function(_super) {
+    United.Models.Users.Discipline = (function(_super) {
 
       __extends(Discipline, _super);
 
@@ -16,6 +16,7 @@
       return Discipline;
 
     })(Backbone.RelationalModel);
+    return United.Models.Users.Discipline.setup();
   });
 
 }).call(this);

@@ -4,8 +4,8 @@ define [
 	'ns'
 	'relational'
 ], (Backbone, _, ns) ->
-	
-	d = new Date()	
+
+	d = new Date()
 	t = new Date d.getFullYear(), d.getMonth(), d.getDate(), 0, 0, 0
 	n = new Date d.getFullYear(), d.getMonth(), d.getDate(), 0, 0, 0
 	n.setDate n.getDate() + 14
@@ -42,7 +42,7 @@ define [
 			if status?.silent isnt true
 				conflicts = @findConflicts attrs, status
 				if conflicts?.length > 0 then return 'Collision conflict.'
-				if attrs.track < 0 then return 'Track error.'	
+				if attrs.track < 0 then return 'Track error.'
 
 		parse: =>
 			@attributes?['start_date'] = new Date @attributes?['start_date']

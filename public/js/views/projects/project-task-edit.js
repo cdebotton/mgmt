@@ -87,9 +87,6 @@
         this.$el.animate({
           height: h
         }, 175, 'ease-in');
-        this.model.get('task').on('change', function(task) {
-          return console.log(task.cid);
-        });
         return this;
       };
 

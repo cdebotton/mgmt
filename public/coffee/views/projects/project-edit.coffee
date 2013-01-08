@@ -52,7 +52,6 @@ define [
 					task: task
 			@taskHolder.html @taskEditor.render().$el
 
-
 		newTask: (e) =>
 			@model.get('project').get('tasks').add {}
 			e.preventDefault()

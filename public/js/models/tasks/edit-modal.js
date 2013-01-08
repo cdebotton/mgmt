@@ -13,18 +13,6 @@
         return EditModal.__super__.constructor.apply(this, arguments);
       }
 
-      EditModal.prototype.relations = [
-        {
-          type: Backbone.HasOne,
-          key: 'task',
-          relatedModel: United.Models.Tasks.Task,
-          reverseRelation: {
-            key: 'modal',
-            includeInJSON: false
-          }
-        }
-      ];
-
       return EditModal;
 
     })(Backbone.RelationalModel);

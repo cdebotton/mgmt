@@ -6,3 +6,4 @@ define [
 
 	ns 'United.Models.Users.Discipline'
 	class United.Models.Users.Discipline extends Backbone.RelationalModel
+	United.Models.Users.Discipline.setup()
