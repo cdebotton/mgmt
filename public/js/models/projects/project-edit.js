@@ -9,19 +9,6 @@
 
       __extends(ProjectEdit, _super);
 
-      /*
-      		relations: [{
-      			type:				Backbone.HasOne
-      			relatedModel:		United.Models.Projects.Project
-      			key:				'project'
-      			reverseRelation:
-      				type:			Backbone.HasOne
-      				key:			'drawer'
-      				includeInJSON:	false
-      		}]
-      */
-
-
       function ProjectEdit() {
         return ProjectEdit.__super__.constructor.apply(this, arguments);
       }

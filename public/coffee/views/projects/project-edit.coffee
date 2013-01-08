@@ -21,7 +21,7 @@ define [
 		events:
 			'click button[type="submit"]':		'saveProject'
 			'click .add-task-to-project':		'newTask'
-			'click .icon-remove':				'closeDrawer'
+			'click #close-project-drawer':		'closeDrawer'
 			'keyup input[name="project-name"]':	'setName'
 			'keyup input[name="code"]':			'setCode'
 			'keyup input[name="client"]':		'setClient'
@@ -72,6 +72,8 @@ define [
 
 		closeDrawer: (e) =>
 			@$el.animate { 'margin-top': -@$el.innerHeight() }, 175, 'ease-out', =>
+				@taskHolder.remove()
+				@liveSearch.remove()
 				@remove()
 				United.EventBus.trigger 'close-project-drawer'
 			e.preventDefault()

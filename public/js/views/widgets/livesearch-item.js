@@ -13,6 +13,30 @@
         return LiveSearchItem.__super__.constructor.apply(this, arguments);
       }
 
+      LiveSearchItem.prototype.tagName = 'li';
+
+      LiveSearchItem.prototype.initialize = function() {
+        return this.model.on('change:active', this.highlight, this);
+      };
+
+      LiveSearchItem.prototype.render = function() {
+        var query, string;
+        query = this.model.get('query').replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&');
+        string = this.model.get('name').replace(new RegExp('(' + query + ')', 'ig'), function($1, match) {
+          return '<strong>' + match + '</strong>';
+        });
+        this.$el.html(string);
+        return this;
+      };
+
+      LiveSearchItem.prototype.highlight = function(model, active, status) {
+        if (active === true) {
+          return this.$el.addClass('active');
+        } else {
+          return this.$el.removeClass('active');
+        }
+      };
+
       return LiveSearchItem;
 
     })(Backbone.View);

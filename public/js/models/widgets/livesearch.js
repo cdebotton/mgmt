@@ -27,6 +27,27 @@
         }
       ];
 
+      LiveSearch.prototype.initialize = function() {
+        return this.on('change:currentIndex', this.controlCurrentIndex, this);
+      };
+
+      LiveSearch.prototype.controlCurrentIndex = function(model, index, status) {
+        if (index !== void 0) {
+          if (index < 0) {
+            index = this.get('results').length - 1;
+          } else if (index >= this.get('results').length) {
+            index = 0;
+          }
+          this.attributes['currentIndex'] = index;
+          return this.get('results').each(function(result, key) {
+            result.unset('active');
+            if (key === index) {
+              return result.set('active', true);
+            }
+          });
+        }
+      };
+
       return LiveSearch;
 
     })(Backbone.RelationalModel);

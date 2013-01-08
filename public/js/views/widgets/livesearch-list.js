@@ -3,9 +3,10 @@
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['backbone', 'ns'], function(Backbone, ns) {
+  define(['backbone', 'underscore', 'ns', 'animate', 'views/widgets/livesearch-item'], function(Backbone, _, ns) {
     ns('United.Views.Widgets.LiveSearchList');
     return United.Views.Widgets.LiveSearchList = (function(_super) {
+      var EXPOSED;
 
       __extends(LiveSearchList, _super);
 
@@ -13,11 +14,61 @@
         return LiveSearchList.__super__.constructor.apply(this, arguments);
       }
 
+      EXPOSED = false;
+
       LiveSearchList.prototype.tagName = 'ul';
 
-      LiveSearchList.prototype.clasName = 'livesearch-list';
+      LiveSearchList.prototype.className = 'livesearch-list';
 
-      LiveSearchList.prototype.initialize = function() {};
+      LiveSearchList.prototype.initialize = function() {
+        United.EventBus.on('search-results-found', this.render, this);
+        return United.EventBus.on('live-search-hide', this.hide, this);
+      };
+
+      LiveSearchList.prototype.render = function(query, results, src) {
+        var _this = this;
+        if (src !== this.options.listenTo) {
+          return;
+        }
+        if (!EXPOSED) {
+          this.expose();
+        }
+        this.$el.html('');
+        return results.each(function(result, key) {
+          var html, view;
+          result.set('query', query);
+          view = new United.Views.Widgets.LiveSearchItem({
+            model: result
+          });
+          html = view.render().$el;
+          return _this.$el.append(html);
+        });
+      };
+
+      LiveSearchList.prototype.expose = function() {
+        EXPOSED = true;
+        this.$el.css({
+          opacity: 0,
+          display: 'block'
+        });
+        return this.$el.animate({
+          opacity: 1
+        }, 175, 'ease-in');
+      };
+
+      LiveSearchList.prototype.hide = function(src) {
+        var _this = this;
+        if (src !== this.options.listenTo || !EXPOSED) {
+          return;
+        }
+        EXPOSED = false;
+        return this.$el.animate({
+          opacity: 0
+        }, 175, 'ease-out', function() {
+          _this.$el.html('');
+          return _this.$el.css('display', 'none');
+        });
+      };
 
       return LiveSearchList;
 

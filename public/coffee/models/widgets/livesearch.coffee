@@ -20,5 +20,18 @@ define [
 				includeInJSON:	false
 		}]
 
+		initialize: ->
+			@on 'change:currentIndex', @controlCurrentIndex, @
+
+		controlCurrentIndex: (model, index, status) ->
+			if index isnt undefined
+				if index < 0 then index = @get('results').length - 1
+				else if index >= @get('results').length
+					index = 0
+				@attributes['currentIndex'] = index
+				@get('results').each (result, key) ->
+					result.unset 'active'
+					if key is index then result.set 'active', true
+
 	United.Models.Widgets.LiveSearch.setup()
 

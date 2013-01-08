@@ -34,7 +34,7 @@
       ProjectEdit.prototype.events = {
         'click button[type="submit"]': 'saveProject',
         'click .add-task-to-project': 'newTask',
-        'click .icon-remove': 'closeDrawer',
+        'click #close-project-drawer': 'closeDrawer',
         'keyup input[name="project-name"]': 'setName',
         'keyup input[name="code"]': 'setCode',
         'keyup input[name="client"]': 'setClient'
@@ -106,6 +106,8 @@
         this.$el.animate({
           'margin-top': -this.$el.innerHeight()
         }, 175, 'ease-out', function() {
+          _this.taskHolder.remove();
+          _this.liveSearch.remove();
           _this.remove();
           return United.EventBus.trigger('close-project-drawer');
         });

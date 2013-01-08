@@ -4,7 +4,6 @@ define [
 	'ns'
 	'views/widgets/livesearch-list'
 	'lib/keycodes'
-	'jst'
 ], (Backbone, _, ns) ->
 
 	ns 'United.Views.Widgets.LiveSearchInput'
@@ -16,9 +15,14 @@ define [
 				'keyup':		'keyUp'
 
 			initialize: ->
-				United.JST.Hb.registerHelper 'printResults', @printResults
 				@list = new United.Views.Widgets.LiveSearchList
+					listenTo: @cid
 				@model.on 'change:results', @render, @
+				@$el.wrap '<span class="live-search"></span>'
+				@wrapper = @$el.parent '.live-search'
+				@wrapper.append @list.$el
+				@icons = $ '<span class="add-on"><i class="icon icon-search"></i><i class="icon icon-remove"></i></span>'
+				@$el.after @icons
 
 			keyDown: (e) =>
 				@suppressKeyPressRepeat = _.indexOf([40,38,9,13,27], e.keyCode) > 0
@@ -48,26 +52,6 @@ define [
 				e.stopPropagation()
 				e.preventDefault()
 
-			select: ->
-
-			lookup: ->
-				string = @$el.val()
-				results = @model.get('sources').filter (source, key) ->
-					~source.get('name').toLowerCase().indexOf string.toLowerCase()
-				@model.set {
-					string: string
-					results: new Backbone.Collection results
-				}
-
-
-			render: ->
-				if @model.get('results').length > 0
-					return
-				else
-					return
-
-			hide: ->
-
 			move: (e) =>
 				if not LIST_VISIBLE then return
 				switch e.keyCode
@@ -82,6 +66,49 @@ define [
 						@next()
 				e.stopPropagation()
 
-			previous: ->
+			lookup: ->
+				@model.unset 'currentIndex'
+				@model.unset 'results'
+				query = @$el.val()
+				results = @model.get('sources').filter (source, key) ->
+					~source.get('name').toLowerCase().indexOf query.toLowerCase()
+				if results.length > 0 and query isnt ''
+					LIST_VISIBLE = true
+					results = new Backbone.Collection @sorter results, query
+					United.EventBus.trigger 'search-results-found', query, results, @cid
+					@model.set 'results', results
+					@model.set 'currentIndex', 0
+				else @hide()
 
-			next: ->
+			sorter: (results, query) ->
+				beginsWith = []
+				caseSensitive = []
+				caseInsensitive = []
+				while (item = results.shift())
+					if not item.get('name').toLowerCase().indexOf query.toLowerCase() then beginsWith.push item
+					else if ~item.get('name').indexOf query then caseSensitive.push item
+					else caseInsensitive.push item
+				beginsWith.concat caseSensitive, caseInsensitive
+
+			hide: ->
+				LIST_VISIBLE = false
+				United.EventBus.trigger 'live-search-hide', @cid
+
+			previous: -> @model.set 'currentIndex', @model.get('currentIndex') - 1
+
+			next: -> @model.set 'currentIndex', @model.get('currentIndex') + 1
+
+			select: ->
+				selection = @model.get('results').at @model.get 'currentIndex'
+				@$el.val selection.get 'name'
+				@$el.attr 'disabled', true
+				@icons.on 'click', _.bind @deselect, @
+				@hide()
+
+			deselect: (e) ->
+				@icons.off 'click', _.bind @deselect, @
+				@$el.removeAttr 'disabled'
+				@$el.val ''
+				@model.unset 'results'
+				@model.unset 'currentIndex'
+				e.preventDefault()

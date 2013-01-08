@@ -685,8 +685,82 @@ $modal-width: 480px
 	.project-drawer
 		padding: 20px 0
 		@include background(linear-gradient(top, #333, #111))
-		//@include box-shadow(0 0 30px rgba(0, 0, 0, 0.75), 0 1px 3px rgba(0, 0, 0, 0.85))
+		@include box-shadow(0 0 30px rgba(0, 0, 0, 0.75), 0 1px 3px rgba(0, 0, 0, 0.85))
 		color: #eee
+		.live-search
+			overflow: visible
+			position: relative
+			display: block
+			#client-search
+				width: 338px
+				float: left
+				&+.add-on
+					border-top-right-radius: 3px
+					border-bottom-right-radius: 3px
+					.icon-remove
+						display: none
+					.icon-search
+						display: inline-block
+				&[disabled]
+					cursor: default
+					&+.add-on
+						cursor: pointer
+						border-color: #CC0000
+						@include background(linear-gradient(top, #CC0000, #AA0000))
+						.icon-remove
+							display: inline-block
+						.icon-search
+							display: none
+			.livesearch-list
+				background-color: rgba(255, 255, 255, 0.9)
+				width: 100%
+				min-height: 20px
+				position: absolute
+				top: 40px
+				border-radius: 4px
+				border: 1px solid #777
+				color: #333
+				@include box-shadow(0 0 30px rgba(0, 0, 0, 0.25))
+				left: 0
+				padding: 0
+				margin: 0
+				z-index: 10
+				@include opacity(0)
+				display: none
+				overflow: visible
+				font-size: 14px
+				&:before
+					position: absolute
+					display: inline-block
+					border-bottom: 8px solid rgba(0, 0, 0, 0.9)
+					border-left: 8px solid transparent
+					border-right: 8px solid transparent
+					right: 9px
+					top: -8px
+					content: ''
+				&:after
+					position: absolute
+					display: inline-block
+					border-bottom: 7px solid rgba(255, 255, 255, 0.9)
+					border-left: 7px solid transparent
+					border-right: 7px solid transparent
+					right: 10px
+					top: -7px
+					content: ''
+				li
+					padding: 1px 15px
+					margin: 4px 0
+					border-top: 1px solid transparent
+					border-bottom: 1px solid transparent
+					@include transition-property('background-color, border')
+					@include transition-duration('75ms')
+					@include transition-timing-function('ease-in')
+					&+.li
+						border-top: 1px solid #ccc
+					&.active
+						background-color: #D0FFFF
+						border-top: 1px solid #70FFFF
+						border-bottom: 1px solid #70FFFF
 		.project-drawer-header
 			overflow: hidden
 			display: block

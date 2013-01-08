@@ -1,7 +1,7 @@
 <div class="container">
 	<header class="project-drawer-header">
 		<h3 class="pull-left">{{ name}} <small>Project Settings</small></h3>
-		<a href="#" class="pull-right"><i class="icon icon-remove icon-white"></i></a>
+		<a href="#" class="pull-right"><i id="close-project-drawer" class="icon icon-remove icon-white"></i></a>
 	</header>
 	<form class="form-horizontal">
 		<div class="form-element project-name">
@@ -17,7 +17,10 @@
 			</div>
 		</div>
 		<div class="form-element client-name">
-			<input type="text" name="client" id="client-search" value="{{ client }}">
+			<div class="input-append">
+				<input type="text" name="client" id="client-search" value="{{ client }}">
+
+			</div>
 			<div class="meta">
 				<label class="form-label">Client</label>
 			</div>

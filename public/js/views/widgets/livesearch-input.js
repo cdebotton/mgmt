@@ -4,7 +4,7 @@
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['backbone', 'underscore', 'ns', 'views/widgets/livesearch-list', 'lib/keycodes', 'jst'], function(Backbone, _, ns) {
+  define(['backbone', 'underscore', 'ns', 'views/widgets/livesearch-list', 'lib/keycodes'], function(Backbone, _, ns) {
     ns('United.Views.Widgets.LiveSearchInput');
     return United.Views.Widgets.LiveSearchInput = (function(_super) {
       var LIST_VISIBLE;
@@ -31,9 +31,15 @@
       };
 
       LiveSearchInput.prototype.initialize = function() {
-        United.JST.Hb.registerHelper('printResults', this.printResults);
-        this.list = new United.Views.Widgets.LiveSearchList;
-        return this.model.on('change:results', this.render, this);
+        this.list = new United.Views.Widgets.LiveSearchList({
+          listenTo: this.cid
+        });
+        this.model.on('change:results', this.render, this);
+        this.$el.wrap('<span class="live-search"></span>');
+        this.wrapper = this.$el.parent('.live-search');
+        this.wrapper.append(this.list.$el);
+        this.icons = $('<span class="add-on"><i class="icon icon-search"></i><i class="icon icon-remove"></i></span>');
+        return this.$el.after(this.icons);
       };
 
       LiveSearchInput.prototype.keyDown = function(e) {
@@ -85,30 +91,6 @@
         return e.preventDefault();
       };
 
-      LiveSearchInput.prototype.select = function() {};
-
-      LiveSearchInput.prototype.lookup = function() {
-        var results, string;
-        string = this.$el.val();
-        results = this.model.get('sources').filter(function(source, key) {
-          return ~source.get('name').toLowerCase().indexOf(string.toLowerCase());
-        });
-        return this.model.set({
-          string: string,
-          results: new Backbone.Collection(results)
-        });
-      };
-
-      LiveSearchInput.prototype.render = function() {
-        if (this.model.get('results').length > 0) {
-
-        } else {
-
-        }
-      };
-
-      LiveSearchInput.prototype.hide = function() {};
-
       LiveSearchInput.prototype.move = function(e) {
         if (!LIST_VISIBLE) {
           return;
@@ -134,9 +116,72 @@
         return e.stopPropagation();
       };
 
-      LiveSearchInput.prototype.previous = function() {};
+      LiveSearchInput.prototype.lookup = function() {
+        var query, results;
+        this.model.unset('currentIndex');
+        this.model.unset('results');
+        query = this.$el.val();
+        results = this.model.get('sources').filter(function(source, key) {
+          return ~source.get('name').toLowerCase().indexOf(query.toLowerCase());
+        });
+        if (results.length > 0 && query !== '') {
+          LIST_VISIBLE = true;
+          results = new Backbone.Collection(this.sorter(results, query));
+          United.EventBus.trigger('search-results-found', query, results, this.cid);
+          this.model.set('results', results);
+          return this.model.set('currentIndex', 0);
+        } else {
+          return this.hide();
+        }
+      };
 
-      LiveSearchInput.prototype.next = function() {};
+      LiveSearchInput.prototype.sorter = function(results, query) {
+        var beginsWith, caseInsensitive, caseSensitive, item;
+        beginsWith = [];
+        caseSensitive = [];
+        caseInsensitive = [];
+        while ((item = results.shift())) {
+          if (!item.get('name').toLowerCase().indexOf(query.toLowerCase())) {
+            beginsWith.push(item);
+          } else if (~item.get('name').indexOf(query)) {
+            caseSensitive.push(item);
+          } else {
+            caseInsensitive.push(item);
+          }
+        }
+        return beginsWith.concat(caseSensitive, caseInsensitive);
+      };
+
+      LiveSearchInput.prototype.hide = function() {
+        LIST_VISIBLE = false;
+        return United.EventBus.trigger('live-search-hide', this.cid);
+      };
+
+      LiveSearchInput.prototype.previous = function() {
+        return this.model.set('currentIndex', this.model.get('currentIndex') - 1);
+      };
+
+      LiveSearchInput.prototype.next = function() {
+        return this.model.set('currentIndex', this.model.get('currentIndex') + 1);
+      };
+
+      LiveSearchInput.prototype.select = function() {
+        var selection;
+        selection = this.model.get('results').at(this.model.get('currentIndex'));
+        this.$el.val(selection.get('name'));
+        this.$el.attr('disabled', true);
+        this.icons.on('click', _.bind(this.deselect, this));
+        return this.hide();
+      };
+
+      LiveSearchInput.prototype.deselect = function(e) {
+        this.icons.off('click', _.bind(this.deselect, this));
+        this.$el.removeAttr('disabled');
+        this.$el.val('');
+        this.model.unset('results');
+        this.model.unset('currentIndex');
+        return e.preventDefault();
+      };
 
       return LiveSearchInput;
 
