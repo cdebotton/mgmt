@@ -6,6 +6,8 @@
   define(['backbone', 'underscore', 'ns', 'views/tasks/schedule-manager', 'views/projects/project-list'], function(Backbone, _, ns) {
     ns('United.EventBus');
     United.EventBus = _.extend({}, Backbone.Events);
+    United.EventUID = 0;
+    United.Event = {};
     ns('United.Views.App');
     return United.Views.App = (function(_super) {
 

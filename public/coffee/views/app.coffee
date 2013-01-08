@@ -4,15 +4,16 @@ define [
 	'ns'
 	'views/tasks/schedule-manager'
 	'views/projects/project-list'
-	
+
 ], (Backbone, _, ns) ->
-	
+
 	ns 'United.EventBus'
 	United.EventBus = _.extend {}, Backbone.Events
+	United.EventUID = 0
+	United.Event = {}
 
 	ns 'United.Views.App'
 	class United.Views.App extends Backbone.View
-
 		initialize: ->
 			@model.get('session').on 'change:id', @authed, @
 			@model.get('session').fetch()

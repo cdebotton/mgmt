@@ -79,6 +79,7 @@
         ctx.end_year = e.getFullYear();
         ctx.users = window.users;
         html = United.JST.ProjectTaskDrawer(ctx);
+        this.$el.css('height', 'auto');
         this.$el.html(html);
         h = this.$el.innerHeight();
         this.$el.css({
@@ -96,6 +97,7 @@
         return this.$el.animate({
           height: 0
         }, 175, 'ease-out', function() {
+          United.EventBus.trigger('close-project-task-drawer');
           return _this.remove;
         });
       };

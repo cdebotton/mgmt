@@ -7,7 +7,6 @@ define [
 
 	ns 'United.Views.Projects.ProjectTaskEdit'
 	class United.Views.Projects.ProjectTaskEdit extends Backbone.View
-
 		el: '#project-task-holder'
 
 		events:
@@ -41,6 +40,7 @@ define [
 			ctx.end_year = e.getFullYear()
 			ctx.users = window.users
 			html = United.JST.ProjectTaskDrawer ctx
+			@$el.css 'height', 'auto'
 			@$el.html html
 			h = @$el.innerHeight()
 			@$el.css {
@@ -55,7 +55,9 @@ define [
 		animateOut: =>
 			@$el.animate {
 				height: 0
-			}, 175, 'ease-out', => @remove
+			}, 175, 'ease-out', =>
+				United.EventBus.trigger 'close-project-task-drawer'
+				@remove
 
 		updateTaskName: (e) =>
 			@model.get('task').set 'name', e.currentTarget.value

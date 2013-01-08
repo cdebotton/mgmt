@@ -7,7 +7,6 @@
   define(['backbone', 'jquery', 'ns', 'jst', 'animate', 'views/projects/project-task-edit', 'models/projects/project-task-edit', 'views/projects/project-overview', 'models/projects/project-overview'], function(Backbone, $, ns) {
     ns('United.Views.Projects.ProjectEdit');
     return United.Views.Projects.ProjectEdit = (function(_super) {
-      var TASK_DRAWER_OPEN;
 
       __extends(ProjectEdit, _super);
 
@@ -27,8 +26,6 @@
         this.setName = __bind(this.setName, this);
         return ProjectEdit.__super__.constructor.apply(this, arguments);
       }
-
-      TASK_DRAWER_OPEN = false;
 
       ProjectEdit.prototype.tagName = 'section';
 

@@ -12,8 +12,6 @@ define [
 
 	ns 'United.Views.Projects.ProjectEdit'
 	class United.Views.Projects.ProjectEdit extends Backbone.View
-		TASK_DRAWER_OPEN = false
-
 		tagName:	'section'
 
 		className:	'project-drawer'

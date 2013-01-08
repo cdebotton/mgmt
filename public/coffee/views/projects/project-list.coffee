@@ -41,5 +41,4 @@ define [
 			@$el.prepend @drawer.render().$el
 			United.EventBus.trigger 'animate-drawer-in'
 
-		drawerClosed: ->
-			DRAWER_OPEN = false
+		drawerClosed: -> DRAWER_OPEN = false
