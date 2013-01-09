@@ -58,7 +58,7 @@ define [
 			@model.get('project').get('tasks').add {}
 			e.preventDefault()
 
-		animateIn: () ->
+		setup: ->
 			@overview = new United.Views.Projects.ProjectOverview
 				model: new United.Models.Projects.ProjectOverview
 					project: @model.get 'project'
@@ -66,6 +66,8 @@ define [
 				el: '#client-search'
 				model: new United.Models.Widgets.LiveSearch
 					sources: window.clients
+
+		animateIn: () ->
 			@liveSearch.$el.on 'keyup', @setClient
 			@liveSearch.model.on 'change:value', @setClientId, @
 			@liveSearch.model.on 'change:client_name', @setClientName, @

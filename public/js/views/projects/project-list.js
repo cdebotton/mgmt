@@ -72,7 +72,6 @@
         if ((_ref = this.drawer) != null) {
           _ref.remove();
         }
-        DRAWER_OPEN = true;
         params = {};
         params['users'] = this.model.get('users');
         if (project !== null) {
@@ -82,7 +81,11 @@
           model: new United.Models.Projects.ProjectEdit(params)
         });
         this.$el.prepend(this.drawer.render().$el);
-        return United.EventBus.trigger('animate-drawer-in');
+        this.drawer.setup();
+        if (!DRAWER_OPEN) {
+          DRAWER_OPEN = true;
+          return United.EventBus.trigger('animate-drawer-in');
+        }
       };
 
       ProjectList.prototype.drawerClosed = function() {

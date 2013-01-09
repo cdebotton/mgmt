@@ -47,13 +47,16 @@ define [
 			if not United.Models.Users.Session.isAdmin()
 				return false
 			@drawer?.remove()
-			DRAWER_OPEN = true
+
 			params = {}
 			params['users'] = @model.get('users')
 			if project isnt null then params['project'] = project
 			@drawer = new United.Views.Projects.ProjectEdit
 				model: new United.Models.Projects.ProjectEdit params
 			@$el.prepend @drawer.render().$el
-			United.EventBus.trigger 'animate-drawer-in'
+			@drawer.setup()
+			if not DRAWER_OPEN
+				DRAWER_OPEN = true
+				United.EventBus.trigger 'animate-drawer-in'
 
 		drawerClosed: -> DRAWER_OPEN = false

@@ -87,6 +87,10 @@ require ['views/app', 'models/app'], ->
 		for key2, task of user.tasks
 			task.start_date = new Date task.start_date
 			task.end_date = new Date task.end_date
+	for key, user of window.projects
+		for key2, task of user.tasks
+			task.start_date = new Date task.start_date
+			task.end_date = new Date task.end_date
 
 	window.BUScheduler = new United.Views.App
 		model: new United.Models.App

@@ -86,18 +86,21 @@
         return e.preventDefault();
       };
 
-      ProjectEdit.prototype.animateIn = function() {
+      ProjectEdit.prototype.setup = function() {
         this.overview = new United.Views.Projects.ProjectOverview({
           model: new United.Models.Projects.ProjectOverview({
             project: this.model.get('project')
           })
         });
-        this.liveSearch = new United.Views.Widgets.LiveSearchInput({
+        return this.liveSearch = new United.Views.Widgets.LiveSearchInput({
           el: '#client-search',
           model: new United.Models.Widgets.LiveSearch({
             sources: window.clients
           })
         });
+      };
+
+      ProjectEdit.prototype.animateIn = function() {
         this.liveSearch.$el.on('keyup', this.setClient);
         this.liveSearch.model.on('change:value', this.setClientId, this);
         this.liveSearch.model.on('change:client_name', this.setClientName, this);
