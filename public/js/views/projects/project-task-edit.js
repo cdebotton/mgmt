@@ -237,29 +237,24 @@
       };
 
       ProjectTaskEdit.prototype.saveProjectModal = function(e) {
-        var task,
-          _this = this;
-        task = this.model.get('task');
-        this.model.get('task').get('project').save(null, {
-          wait: true,
-          silent: true,
-          success: function(project, attrs, status) {
-            var i, _i, _len, _ref, _ref1;
-            project.set('id', attrs.id);
-            if (((_ref = attrs.tasks) != null ? _ref.length : void 0) > 0) {
-              _ref1 = attrs.tasks;
-              for (i = _i = 0, _len = _ref1.length; _i < _len; i = ++_i) {
-                task = _ref1[i];
-                task.start_date = new Date(task.start_date);
-                task.end_date = new Date(task.end_date);
-              }
-            }
-            project.set('tasks', attrs.tasks);
-            project.set('client_id', attrs.client_id);
-            _this.animateOut();
-            return _this.modal.closeModal();
-          }
-        });
+        console.log(this.model.get('project').toJSON());
+        /*
+        			@model.get('task').get('project').save null, {
+        				wait: true
+        				silent: true
+        				success: (project, attrs, status) =>
+        					project.set 'id', attrs.id
+        					if attrs.tasks?.length > 0
+        						for task, i in attrs.tasks
+        							task.start_date = new Date task.start_date
+        							task.end_date = new Date task.end_date
+        					project.set 'tasks', attrs.tasks
+        					project.set 'client_id', attrs.client_id
+        					@animateOut()
+        					@modal.closeModal()
+        				}
+        */
+
         return e.preventDefault();
       };
 

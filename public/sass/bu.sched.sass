@@ -748,7 +748,7 @@ $modal-width: 480px
 					top: -7px
 					content: ''
 				li
-					padding: 1px 15px
+					padding: 1px 15px 1px 5px
 					margin: 4px 0
 					border-top: 1px solid transparent
 					border-bottom: 1px solid transparent
@@ -757,8 +757,12 @@ $modal-width: 480px
 					@include transition-timing-function('ease-in')
 					cursor: pointer
 					.icon-chevron-right
-						display: none
-						margin-right: 5px
+						visibility: hidden
+						margin-right: 0
+						@include transition-property('margin-right')
+						@include transition-duration('100ms')
+						@include transition-timing-function('ease-in')
+						@include opacity(0.5)
 					&+.li
 						border-top: 1px solid #ccc
 					&.active
@@ -766,14 +770,16 @@ $modal-width: 480px
 						border-top: 1px solid #70FFFF
 						border-bottom: 1px solid #70FFFF
 						.icon-chevron-right
-							display: inline-block
+							visibility: visible
+							margin-right: 8px
 					&:hover
 						background-color: #F7FFFF
 						border-top: 1px solid #E0FFFF
 						border-bottom: 1px solid #E0FFFF
 						.icon-chevron-right
-							display: inline-block
-							@include opacity(0.5)
+							visibility: visible
+							@include opacity(0.25)
+							margin-right: 4px
 		.project-drawer-header
 			overflow: hidden
 			display: block
