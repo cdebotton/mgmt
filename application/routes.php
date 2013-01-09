@@ -4,14 +4,13 @@
  */
 Asset::add('styles', 'css/bu.sched.css');
 
-
 /**
  * Handle all non-standard routes once logged in.
  */
 Route::group(array('before' => 'admin-auth|page-title'), function ()
 {
 	Route::controller(Controller::detect());
-	Route::get('/', 'dashboard@index');	
+	Route::get('/', 'dashboard@index');
 	Route::get('profile', 'users@profile');
 });
 
@@ -52,7 +51,7 @@ Route::get('logout', function ()
 /**
  * Route filters.
  */
- 
+
 Route::filter('admin-auth', function ()
 {
 	if(Auth::guest()) return Redirect::to('login');

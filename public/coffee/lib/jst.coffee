@@ -12,7 +12,8 @@ define [
 	'text!templates/edit-project-drawer.html'
 	'text!templates/edit-project-task-drawer.html'
 	'text!templates/option-modal.html'
-], (ns, Handlebars, _, UserBadge, UserTimeline, GraphTimeline, TaskElement, EditModal, OverageTemplate, UserCalendar, ProjectDrawer, ProjectTaskDrawer, OptionModal) ->
+	'text!templates/project-item.html'
+], (ns, Handlebars, _, UserBadge, UserTimeline, GraphTimeline, TaskElement, EditModal, OverageTemplate, UserCalendar, ProjectDrawer, ProjectTaskDrawer, OptionModal, ProjectItem) ->
 
 	ns 'United.JST'
 	United.JST =
@@ -33,6 +34,7 @@ define [
 		### Project Management ###
 		ProjectDrawer:		Handlebars.compile ProjectDrawer
 		ProjectTaskDrawer:	Handlebars.compile ProjectTaskDrawer
+		ProjectItem:		Handlebars.compile ProjectItem
 
 		### Dashboard ###
 		UserCalendar:		Handlebars.compile UserCalendar

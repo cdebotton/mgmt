@@ -154,7 +154,6 @@ define [
 			@model.get('task').set 'percentage', parseInt e.currentTarget.value
 
 		saveProjectModal: (e) =>
-			task = @model.get 'task'
 			@model.get('task').get('project').save null, {
 				wait: true
 				silent: true

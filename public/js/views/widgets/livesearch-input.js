@@ -173,6 +173,7 @@
         this.$el.attr('disabled', true);
         this.icons.on('click', _.bind(this.deselect, this));
         this.model.set('value', selection.get('id'));
+        this.model.set('client_name', selection.get('name'));
         return this.hide();
       };
 

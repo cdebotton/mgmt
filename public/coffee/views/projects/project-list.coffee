@@ -2,13 +2,11 @@ define [
 	'backbone'
 	'jquery'
 	'ns'
-	'jst'
 	'animate'
 	'views/projects/project-edit'
 	'models/projects/project-edit'
 	'models/clients/client'
-	#'models/projects/project'
-	#'models/tasks/task'
+	'views/projects/project-item'
 ], (Backbone, $, ns) ->
 
 	ns 'United.Views.Projects.ProjectList'
@@ -24,15 +22,31 @@ define [
 		initialize: ->
 			United.EventBus.on 'close-project-drawer', @drawerClosed, @
 			United.Models.Users.Session = @model.get 'session'
+			United.EventBus.on 'open-project', @dropDrawer, @
+			@model.on 'add:projects', @addOne, @
+			@model.on 'reset:projects', @addAll, @
+			@projectList = @$ '#project-list'
+			@addAll()
+
+		addOne: (project) =>
+			view = new United.Views.Projects.ProjectItem
+				model: project
+			@projectList.prepend view.render().$el
+
+		addAll: (projects) =>
+			@projectList.html ''
+			@model.get('projects').each @addOne
 
 		createNewProject: (e) =>
 			project = new United.Models.Projects.Project
+			@model.get('projects').add project
 			@dropDrawer project
 			e.preventDefault()
 
 		dropDrawer: (project = null) =>
-			if DRAWER_OPEN or not United.Models.Users.Session.isAdmin()
+			if not United.Models.Users.Session.isAdmin()
 				return false
+			@drawer?.remove()
 			DRAWER_OPEN = true
 			params = {}
 			params['users'] = @model.get('users')

@@ -15,6 +15,10 @@
 
       Projects.prototype.model = United.Models.Projects.Project;
 
+      Projects.prototype.comparator = function(project) {
+        return new Date(project.get('created_at')).getTime();
+      };
+
       return Projects;
 
     })(Backbone.Collection);

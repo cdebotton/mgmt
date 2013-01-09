@@ -18,8 +18,6 @@ define [
 			key:				'tasks'
 			reverseRelation:
 				key:			'project'
-				keyDestination:	'project_id'
-				keySource:		'project_id'
 				includeInJSON:	'id'
 		}]
 
@@ -31,7 +29,8 @@ define [
 
 		initialize: ->
 
-		parse: ->
+		parse: =>
+			if not @attributes then return
 			@get('tasks').each (task, key) ->
 				task.set 'start_date', new Date task.get 'start_date'
 				task.set 'end_date', new Date task.get 'end_date'

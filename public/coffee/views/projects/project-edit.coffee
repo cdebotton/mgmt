@@ -66,12 +66,16 @@ define [
 				el: '#client-search'
 				model: new United.Models.Widgets.LiveSearch
 					sources: window.clients
+			@liveSearch.$el.on 'keyup', @setClient
 			@liveSearch.model.on 'change:value', @setClientId, @
+			@liveSearch.model.on 'change:client_name', @setClientName, @
 			@$el.css 'margin-top', -@$el.innerHeight()
 			@$el.animate { 'margin-top': 0 }, 175, 'ease-in'
 			@body.bind 'keyup', @bindEscape
 
 		closeDrawer: (e) =>
+			if @model.get('project').isNew()
+				@model.get('project').destroy()
 			@$el.animate { 'margin-top': -@$el.innerHeight() }, 175, 'ease-out', =>
 				@taskHolder.remove()
 				@liveSearch.remove()
@@ -83,5 +87,8 @@ define [
 
 		setClientId: (model, value) =>
 			@model.get('project').set 'client_id', value
+
+		setClientId: (model, value) =>
+			@model.get('project').set 'client_name', name
 
 		saveProject: (e) =>

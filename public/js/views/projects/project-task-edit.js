@@ -237,14 +237,12 @@
       };
 
       ProjectTaskEdit.prototype.saveProjectModal = function(e) {
-        var task,
-          _this = this;
-        task = this.model.get('task');
+        var _this = this;
         this.model.get('task').get('project').save(null, {
           wait: true,
           silent: true,
           success: function(project, attrs, status) {
-            var i, _i, _len, _ref, _ref1;
+            var i, task, _i, _len, _ref, _ref1;
             project.set('id', attrs.id);
             if (((_ref = attrs.tasks) != null ? _ref.length : void 0) > 0) {
               _ref1 = attrs.tasks;

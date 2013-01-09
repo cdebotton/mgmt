@@ -705,8 +705,8 @@ $modal-width: 480px
 					cursor: default
 					&+.add-on
 						cursor: pointer
-						border-color: #CC0000
-						@include background(linear-gradient(top, #CC0000, #AA0000))
+						border-color: #990000
+						@include background(linear-gradient(top, #AA0000, #770000))
 						.icon-remove
 							display: inline-block
 						.icon-search
@@ -724,7 +724,7 @@ $modal-width: 480px
 				left: 0
 				padding: 0
 				margin: 0
-				z-index: 10
+				z-index: 1000
 				@include opacity(0)
 				display: none
 				overflow: visible
@@ -748,7 +748,7 @@ $modal-width: 480px
 					top: -7px
 					content: ''
 				li
-					padding: 1px 15px
+					padding: 1px 15px 1px 5px
 					margin: 4px 0
 					border-top: 1px solid transparent
 					border-bottom: 1px solid transparent
@@ -756,16 +756,33 @@ $modal-width: 480px
 					@include transition-duration('75ms')
 					@include transition-timing-function('ease-in')
 					cursor: pointer
+					color: #555
+					strong
+						color: #000
+					.icon-chevron-right
+						visibility: hidden
+						margin-right: 0
+						@include transition-property('margin-right')
+						@include transition-duration('100ms')
+						@include transition-timing-function('ease-in')
+						@include opacity(0.5)
 					&+.li
 						border-top: 1px solid #ccc
 					&.active
 						background-color: #D0FFFF
 						border-top: 1px solid #70FFFF
 						border-bottom: 1px solid #70FFFF
+						.icon-chevron-right
+							visibility: visible
+							margin-right: 8px
 					&:hover
 						background-color: #F7FFFF
 						border-top: 1px solid #E0FFFF
 						border-bottom: 1px solid #E0FFFF
+						.icon-chevron-right
+							visibility: visible
+							@include opacity(0.25)
+							margin-right: 4px
 		.project-drawer-header
 			overflow: hidden
 			display: block
@@ -877,3 +894,27 @@ $modal-width: 480px
 					resize: none
 					width: 450px
 					height: 75px
+#project-list
+	@include grid-container
+	padding-top: 25px
+	.project-item
+		@include grid(3)
+		height: 220px
+		cursor: pointer
+		border: 1px solid #ccc
+		@include background(linear-gradient(-45deg, #fff, #eee))
+		@include border-radius(4px)
+		@include box-shadow(0 0 5px rgba(0, 0, 0, 0.25))
+		margin-bottom: 25px
+		&:nth-child(4n+1)
+			@include alpha
+		@:nth-child(4n+4)
+			@include omega
+		h5
+			text-align: center
+			padding: 5px 0 0
+			margin-bottom: 0
+		h6
+			margin-top: 0
+			text-align: center
+			color: #bbb

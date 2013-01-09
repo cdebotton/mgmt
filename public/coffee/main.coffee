@@ -92,3 +92,4 @@ require ['views/app', 'models/app'], ->
 		model: new United.Models.App
 			users: window.users
 			controller: window.controller
+			projects: window.projects

@@ -21,8 +21,6 @@
           key: 'projects',
           reverseRelation: {
             key: 'client',
-            keySource: 'client_id',
-            keyDestination: 'client_id',
             type: Backbone.HasOne,
             includeInJSON: 'id'
           }

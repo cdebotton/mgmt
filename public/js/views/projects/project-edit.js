@@ -15,6 +15,8 @@
 
         this.setClientId = __bind(this.setClientId, this);
 
+        this.setClientId = __bind(this.setClientId, this);
+
         this.bindEscape = __bind(this.bindEscape, this);
 
         this.closeDrawer = __bind(this.closeDrawer, this);
@@ -96,7 +98,9 @@
             sources: window.clients
           })
         });
+        this.liveSearch.$el.on('keyup', this.setClient);
         this.liveSearch.model.on('change:value', this.setClientId, this);
+        this.liveSearch.model.on('change:client_name', this.setClientName, this);
         this.$el.css('margin-top', -this.$el.innerHeight());
         this.$el.animate({
           'margin-top': 0
@@ -106,6 +110,9 @@
 
       ProjectEdit.prototype.closeDrawer = function(e) {
         var _this = this;
+        if (this.model.get('project').isNew()) {
+          this.model.get('project').destroy();
+        }
         this.$el.animate({
           'margin-top': -this.$el.innerHeight()
         }, 175, 'ease-out', function() {
@@ -125,6 +132,10 @@
 
       ProjectEdit.prototype.setClientId = function(model, value) {
         return this.model.get('project').set('client_id', value);
+      };
+
+      ProjectEdit.prototype.setClientId = function(model, value) {
+        return this.model.get('project').set('client_name', name);
       };
 
       ProjectEdit.prototype.saveProject = function(e) {};
