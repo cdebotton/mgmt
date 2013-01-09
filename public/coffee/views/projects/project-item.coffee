@@ -31,7 +31,7 @@ define [
 		tileClicked: (e) =>
 			e.preventDefault()
 			e.stopPropagation()
-			console.log @model
+			United.EventBus.trigger 'open-project', @model
 
 		destroy: (model) ->
 			@$el.animate {

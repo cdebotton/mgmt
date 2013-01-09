@@ -46,7 +46,7 @@
       ProjectItem.prototype.tileClicked = function(e) {
         e.preventDefault();
         e.stopPropagation();
-        return console.log(this.model);
+        return United.EventBus.trigger('open-project', this.model);
       };
 
       ProjectItem.prototype.destroy = function(model) {

@@ -33,6 +33,7 @@
       ProjectList.prototype.initialize = function() {
         United.EventBus.on('close-project-drawer', this.drawerClosed, this);
         United.Models.Users.Session = this.model.get('session');
+        United.EventBus.on('open-project', this.dropDrawer, this);
         this.model.on('add:projects', this.addOne, this);
         this.model.on('reset:projects', this.addAll, this);
         this.projectList = this.$('#project-list');
@@ -44,7 +45,7 @@
         view = new United.Views.Projects.ProjectItem({
           model: project
         });
-        return this.projectList.append(view.render().$el);
+        return this.projectList.prepend(view.render().$el);
       };
 
       ProjectList.prototype.addAll = function(projects) {
@@ -61,12 +62,15 @@
       };
 
       ProjectList.prototype.dropDrawer = function(project) {
-        var params;
+        var params, _ref;
         if (project == null) {
           project = null;
         }
-        if (DRAWER_OPEN || !United.Models.Users.Session.isAdmin()) {
+        if (!United.Models.Users.Session.isAdmin()) {
           return false;
+        }
+        if ((_ref = this.drawer) != null) {
+          _ref.remove();
         }
         DRAWER_OPEN = true;
         params = {};

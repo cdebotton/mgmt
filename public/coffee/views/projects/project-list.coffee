@@ -22,6 +22,7 @@ define [
 		initialize: ->
 			United.EventBus.on 'close-project-drawer', @drawerClosed, @
 			United.Models.Users.Session = @model.get 'session'
+			United.EventBus.on 'open-project', @dropDrawer, @
 			@model.on 'add:projects', @addOne, @
 			@model.on 'reset:projects', @addAll, @
 			@projectList = @$ '#project-list'
@@ -30,7 +31,7 @@ define [
 		addOne: (project) =>
 			view = new United.Views.Projects.ProjectItem
 				model: project
-			@projectList.append view.render().$el
+			@projectList.prepend view.render().$el
 
 		addAll: (projects) =>
 			@projectList.html ''
@@ -43,8 +44,9 @@ define [
 			e.preventDefault()
 
 		dropDrawer: (project = null) =>
-			if DRAWER_OPEN or not United.Models.Users.Session.isAdmin()
+			if not United.Models.Users.Session.isAdmin()
 				return false
+			@drawer?.remove()
 			DRAWER_OPEN = true
 			params = {}
 			params['users'] = @model.get('users')
