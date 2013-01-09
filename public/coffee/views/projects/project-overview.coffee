@@ -18,8 +18,17 @@ define [
 			@addAll()
 
 		findConflicts: (task, previousTask) ->
-			task.start_date < previousTask.end_date and
+			overlap = task.start_date < previousTask.end_date and
 				previousTask.end_date > task.start_date
+			name = task.name
+			adjacent = task['_o-track'] is previousTask['_o-track']
+			console.group()
+			console.log "#{task.name} ~ #{previousTask.name}:"
+			console.log "Overlaps: #{overlap}"
+			console.log "Adjacent: #{adjacent}"
+			console.log "Conflict: #{overlap and adjacent}"
+			console.groupEnd()
+			overlap and adjacent
 
 		generateTracks: ->
 			tasks = @model.get('project').get('tasks').models
@@ -28,13 +37,12 @@ define [
 				if i is 0 then continue
 				track = task.get '_o-track'
 				conflicts = true
-				console.log task.get 'name'
 				for previous, j in tasks[0..i-1]
-					if (@findConflicts task.attributes, previous.attributes) is true
-						track++
-				task.set '_o-track', track
-
-			#console.log "#{task.get 'name'}: #{task.get '_o-track'}" for task, i in tasks
+					while conflicts is true and track < 1000
+						if(conflicts = @findConflicts(task.attributes, previous.attributes)) is true
+							task.set '_o-track', ++track
+					task.set '_o-track', track
+			console.log "#{task.get 'name'}: #{task.get '_o-track'}" for task, i in tasks
 
 		addAll: () =>
 			@viewportHeight = 20
