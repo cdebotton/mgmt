@@ -17,7 +17,7 @@ define [
 			query = @model.get('query').replace /[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&'
 			string = @model.get('name').replace new RegExp('(' + query + ')', 'ig'), ($1, match) ->
 				'<strong>' + match + '</strong>'
-			@$el.html string
+			@$el.html "<icon class=\"icon icon-chevron-right\"></icon>#{string}"
 			@
 
 		highlight: (model, active, status) ->

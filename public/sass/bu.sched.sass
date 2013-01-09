@@ -756,16 +756,24 @@ $modal-width: 480px
 					@include transition-duration('75ms')
 					@include transition-timing-function('ease-in')
 					cursor: pointer
+					.icon-chevron-right
+						display: none
+						margin-right: 5px
 					&+.li
 						border-top: 1px solid #ccc
 					&.active
 						background-color: #D0FFFF
 						border-top: 1px solid #70FFFF
 						border-bottom: 1px solid #70FFFF
+						.icon-chevron-right
+							display: inline-block
 					&:hover
 						background-color: #F7FFFF
 						border-top: 1px solid #E0FFFF
 						border-bottom: 1px solid #E0FFFF
+						.icon-chevron-right
+							display: inline-block
+							@include opacity(0.5)
 		.project-drawer-header
 			overflow: hidden
 			display: block

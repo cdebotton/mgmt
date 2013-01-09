@@ -31,7 +31,7 @@
         string = this.model.get('name').replace(new RegExp('(' + query + ')', 'ig'), function($1, match) {
           return '<strong>' + match + '</strong>';
         });
-        this.$el.html(string);
+        this.$el.html("<icon class=\"icon icon-chevron-right\"></icon>" + string);
         return this;
       };
 
