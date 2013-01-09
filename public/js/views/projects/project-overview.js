@@ -26,7 +26,43 @@
       ProjectOverview.prototype.initialize = function() {
         this.model.get('project').get('tasks').on('add', this.addAll, this);
         this.model.get('project').get('tasks').on('change', this.addAll, this);
+        if (this.model.get('project').get('tasks').length > 0) {
+          this.generateTracks();
+        }
         return this.addAll();
+      };
+
+      ProjectOverview.prototype.findConflicts = function(task, previousTask) {
+        return task.start_date < previousTask.end_date && previousTask.end_date > task.start_date;
+      };
+
+      ProjectOverview.prototype.generateTracks = function() {
+        var conflicts, i, j, previous, task, tasks, track, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _results;
+        tasks = this.model.get('project').get('tasks').models;
+        for (i = _i = 0, _len = tasks.length; _i < _len; i = ++_i) {
+          task = tasks[i];
+          task.set('_o-track', 0);
+        }
+        _ref = tasks.slice(0, +tasks.length + 1 || 9e9);
+        _results = [];
+        for (i = _j = 0, _len1 = _ref.length; _j < _len1; i = ++_j) {
+          task = _ref[i];
+          if (i === 0) {
+            continue;
+          }
+          track = task.get('_o-track');
+          conflicts = true;
+          console.log(task.get('name'));
+          _ref1 = tasks.slice(0, +(i - 1) + 1 || 9e9);
+          for (j = _k = 0, _len2 = _ref1.length; _k < _len2; j = ++_k) {
+            previous = _ref1[j];
+            if ((this.findConflicts(task.attributes, previous.attributes)) === true) {
+              track++;
+            }
+          }
+          _results.push(task.set('_o-track', track));
+        }
+        return _results;
       };
 
       ProjectOverview.prototype.addAll = function() {
@@ -44,7 +80,7 @@
       };
 
       ProjectOverview.prototype.addOne = function(task, key) {
-        var comp, compend, compstart, dx, dy, e, el, end, s, siblings, start, view, width, _i, _len;
+        var dx, dy, e, el, s, siblings, view, width;
         view = new United.Views.Tasks.TaskElement({
           model: task,
           demo: true
@@ -55,27 +91,24 @@
         e = view.model.get('end_date').getTime();
         dx = 10 + ((s - this.start) * this.scale);
         width = (e - s) * this.scale;
-        dy = 15;
+        dy = 15 + (task.get('_o-track') * 60);
         siblings = _.without(this.tasks, task);
-        for (key = _i = 0, _len = siblings.length; _i < _len; key = ++_i) {
-          comp = siblings[key];
-          start = task.get('start_date');
-          end = task.get('end_date');
-          compstart = comp.model.get('start_date');
-          compend = comp.model.get('end_date');
-          if (start < compend && end > compstart && comp.options.dy === dy) {
-            dy += 60;
-            if (dy > this.viewportHeight) {
-              this.viewportHeight = dy;
-            }
-          }
-        }
+        /*
+        			for comp, key in siblings
+        				start = task.get('start_date')
+        				end = task.get('end_date')
+        				compstart = comp.model.get('start_date')
+        				compend = comp.model.get('end_date')
+        				if start < compend and end > compstart and comp.options.dy is dy
+        					dy += 60
+        					if dy > @viewportHeight then @viewportHeight = dy
+        */
+
         el.css({
           left: dx,
           top: dy,
           width: width
         });
-        view.options.dy = dy;
         this.tasks.push(view);
         return this.$el.append(el);
       };
