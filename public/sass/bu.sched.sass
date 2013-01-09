@@ -904,11 +904,16 @@ $modal-width: 480px
 		border: 1px solid #ccc
 		@include background(linear-gradient(-45deg, #fff, #eee))
 		@include border-radius(4px)
-		@include box-shadow(0 0 15px rgba(0, 0, 0, 0.25))
+		@include box-shadow(0 0 5px rgba(0, 0, 0, 0.25))
+		margin-bottom: 25px
 		&:nth-child(4n+1)
 			@include alpha
 		@:nth-child(4n+4)
 			@include omega
 		h5
 			text-align: center
-			padding: 5px 0
+			padding: 5px 0 0
+			margin-bottom: 0
+		h6
+			margin-top: 0
+			text-align: center
