@@ -132,7 +132,8 @@
     return window.BUScheduler = new United.Views.App({
       model: new United.Models.App({
         users: window.users,
-        controller: window.controller
+        controller: window.controller,
+        projects: window.projects
       })
     });
   });

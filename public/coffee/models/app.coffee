@@ -5,7 +5,6 @@ define [
 	'models/users/user'
 	'collections/users/users'
 	'models/users/session'
-	'models/projects/project'
 	'collections/projects/projects'
 ], (Backbone, ns) ->
 

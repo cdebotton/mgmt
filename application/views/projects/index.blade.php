@@ -44,6 +44,9 @@
 				</ul>
 			</div>
 		</div>
+		<section id="project-list">
+
+		</section>
 	</div>
 	<script>
 		var projects, users, clients;

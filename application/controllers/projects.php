@@ -10,7 +10,7 @@ class Projects_Controller extends Base_Controller
 	public function get_index()
 	{
 		$projects = Project::with(array('client', 'tasks'))
-			->all();
+			->get();
 
 		$users = User::all();
 
