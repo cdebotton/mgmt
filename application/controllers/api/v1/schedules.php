@@ -66,7 +66,11 @@ class Api_V1_Schedules_Controller extends Controller {
 		$task->track 				= $json->track;
 		$task->save();
 
-		return Response::json($task->to_array());
+		$response = Task::with(array('project', 'project.client'))
+			->where_id($id)
+			->first();
+
+		return Response::json($response->to_array());
 	}
 
 	final public function get_read($id)

@@ -62,10 +62,13 @@ define [
 			else
 				@$el.removeClass 'selected'
 
-		render: ->
+		render: =>
 			United.EventBus.trigger 'where-am-i', @cid, @start, @end
 			United.EventBus.trigger 'percentage-changed'
 			ctx = @model.toJSON()
+			if (ctx.project = @model.get('project')?.toJSON())
+				if @model.get('project').get('client')
+					ctx.project.client = @model.get('project').get('client').toJSON()
 			ctx.demo = @options?.demo is true
 			ctx.isAdmin = United.Models.Users.Session.isAdmin()
 			html = United.JST['TaskElement'] ctx
@@ -166,11 +169,3 @@ define [
 
 		updateZoom: (zoom) ->
 			United.EventBus.trigger 'where-am-i', @cid, @model.get('start_date'), @model.get 'end_date'
-
-		projectCode: =>
-			if not @options.demo and @model.has 'project'
-				@model.get('project').get('code') + ' - '
-
-		clientName: =>
-			if not @options.demo and @model.get('project')?.get('client')?
-				new United.JST.Hb.SafeString " (#{@model.get('project').get('client').get('name')})"

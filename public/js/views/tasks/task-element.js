@@ -12,10 +12,6 @@
       __extends(TaskElement, _super);
 
       function TaskElement() {
-        this.clientName = __bind(this.clientName, this);
-
-        this.projectCode = __bind(this.projectCode, this);
-
         this.updateColor = __bind(this.updateColor, this);
 
         this.editModal = __bind(this.editModal, this);
@@ -25,6 +21,8 @@
         this.scrubMove = __bind(this.scrubMove, this);
 
         this.scrubStart = __bind(this.scrubStart, this);
+
+        this.render = __bind(this.render, this);
 
         this.selectTask = __bind(this.selectTask, this);
         return TaskElement.__super__.constructor.apply(this, arguments);
@@ -100,11 +98,16 @@
       };
 
       TaskElement.prototype.render = function() {
-        var ctx, html, _ref;
+        var ctx, html, _ref, _ref1;
         United.EventBus.trigger('where-am-i', this.cid, this.start, this.end);
         United.EventBus.trigger('percentage-changed');
         ctx = this.model.toJSON();
-        ctx.demo = ((_ref = this.options) != null ? _ref.demo : void 0) === true;
+        if ((ctx.project = (_ref = this.model.get('project')) != null ? _ref.toJSON() : void 0)) {
+          if (this.model.get('project').get('client')) {
+            ctx.project.client = this.model.get('project').get('client').toJSON();
+          }
+        }
+        ctx.demo = ((_ref1 = this.options) != null ? _ref1.demo : void 0) === true;
         ctx.isAdmin = United.Models.Users.Session.isAdmin();
         html = United.JST['TaskElement'](ctx);
         this.$el.html(html);
@@ -255,19 +258,6 @@
 
       TaskElement.prototype.updateZoom = function(zoom) {
         return United.EventBus.trigger('where-am-i', this.cid, this.model.get('start_date'), this.model.get('end_date'));
-      };
-
-      TaskElement.prototype.projectCode = function() {
-        if (!this.options.demo && this.model.has('project')) {
-          return this.model.get('project').get('code') + ' - ';
-        }
-      };
-
-      TaskElement.prototype.clientName = function() {
-        var _ref;
-        if (!this.options.demo && (((_ref = this.model.get('project')) != null ? _ref.get('client') : void 0) != null)) {
-          return new United.JST.Hb.SafeString(" (" + (this.model.get('project').get('client').get('name')) + ")");
-        }
       };
 
       return TaskElement;
