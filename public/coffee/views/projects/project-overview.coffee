@@ -14,35 +14,28 @@ define [
 		initialize: ->
 			@model.get('project').get('tasks').on 'add', @addAll, @
 			@model.get('project').get('tasks').on 'change', @addAll, @
-			if @model.get('project').get('tasks').length > 0 then @generateTracks()
+			if @model.get('project').get('tasks').length > 0
+				@model.get('project').get('tasks').each (task) -> task.set '_o-track', 0
+				@generateTracks()
 			@addAll()
 
-		findConflicts: (task, previousTask) ->
-			overlap = task.start_date < previousTask.end_date and
-				previousTask.end_date > task.start_date
-			name = task.name
-			adjacent = task['_o-track'] is previousTask['_o-track']
-			console.group()
-			console.log "#{task.name} ~ #{previousTask.name}:"
-			console.log "Overlaps: #{overlap}"
-			console.log "Adjacent: #{adjacent}"
-			console.log "Conflict: #{overlap and adjacent}"
-			console.groupEnd()
-			overlap and adjacent
+		findConflicts: (task, sibling) ->
+			adjacent = task['_o-track'] is sibling['_o-track']
+			overlap = task.start_date < sibling.end_date and sibling.end_date > task.start_date
+			adjacent and overlap
 
 		generateTracks: ->
 			tasks = @model.get('project').get('tasks').models
-			task.set('_o-track', 0) for task, i in tasks
-			for task, i in tasks[0..tasks.length]
+			for task, i in tasks
 				if i is 0 then continue
-				track = task.get '_o-track'
-				conflicts = true
-				for previous, j in tasks[0..i-1]
-					while conflicts is true and track < 1000
-						if(conflicts = @findConflicts(task.attributes, previous.attributes)) is true
-							task.set '_o-track', ++track
-					task.set '_o-track', track
-			console.log "#{task.get 'name'}: #{task.get '_o-track'}" for task, i in tasks
+				track = 0
+				for j in [0..i-1]
+					sibling = tasks[j]
+					fakeAttrs = _.extend {}, task.attributes, { '_o-track': track }
+					if @findConflicts fakeAttrs, sibling.attributes
+						track++
+				task.set '_o-track', track
+
 
 		addAll: () =>
 			@viewportHeight = 20
@@ -66,17 +59,6 @@ define [
 			dx = 10 + ((s - @start) * @scale)
 			width = (e - s) * @scale
 			dy = 15 + (task.get('_o-track') * 60)
-			siblings = _.without @tasks, task
-			###
-			for comp, key in siblings
-				start = task.get('start_date')
-				end = task.get('end_date')
-				compstart = comp.model.get('start_date')
-				compend = comp.model.get('end_date')
-				if start < compend and end > compstart and comp.options.dy is dy
-					dy += 60
-					if dy > @viewportHeight then @viewportHeight = dy
-			###
 			el.css {
 				left:	dx
 				top:	dy

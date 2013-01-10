@@ -27,55 +27,41 @@
         this.model.get('project').get('tasks').on('add', this.addAll, this);
         this.model.get('project').get('tasks').on('change', this.addAll, this);
         if (this.model.get('project').get('tasks').length > 0) {
+          this.model.get('project').get('tasks').each(function(task) {
+            return task.set('_o-track', 0);
+          });
           this.generateTracks();
         }
         return this.addAll();
       };
 
-      ProjectOverview.prototype.findConflicts = function(task, previousTask) {
-        var adjacent, name, overlap;
-        overlap = task.start_date < previousTask.end_date && previousTask.end_date > task.start_date;
-        name = task.name;
-        adjacent = task['_o-track'] === previousTask['_o-track'];
-        console.group();
-        console.log("" + task.name + " ~ " + previousTask.name + ":");
-        console.log("Overlaps: " + overlap);
-        console.log("Adjacent: " + adjacent);
-        console.log("Conflict: " + (overlap && adjacent));
-        console.groupEnd();
-        return overlap && adjacent;
+      ProjectOverview.prototype.findConflicts = function(task, sibling) {
+        var adjacent, overlap;
+        adjacent = task['_o-track'] === sibling['_o-track'];
+        overlap = task.start_date < sibling.end_date && sibling.end_date > task.start_date;
+        return adjacent && overlap;
       };
 
       ProjectOverview.prototype.generateTracks = function() {
-        var conflicts, i, j, previous, task, tasks, track, _i, _j, _k, _l, _len, _len1, _len2, _len3, _ref, _ref1, _results;
+        var fakeAttrs, i, j, sibling, task, tasks, track, _i, _j, _len, _ref, _results;
         tasks = this.model.get('project').get('tasks').models;
+        _results = [];
         for (i = _i = 0, _len = tasks.length; _i < _len; i = ++_i) {
           task = tasks[i];
-          task.set('_o-track', 0);
-        }
-        _ref = tasks.slice(0, +tasks.length + 1 || 9e9);
-        for (i = _j = 0, _len1 = _ref.length; _j < _len1; i = ++_j) {
-          task = _ref[i];
           if (i === 0) {
             continue;
           }
-          track = task.get('_o-track');
-          conflicts = true;
-          _ref1 = tasks.slice(0, +(i - 1) + 1 || 9e9);
-          for (j = _k = 0, _len2 = _ref1.length; _k < _len2; j = ++_k) {
-            previous = _ref1[j];
-            while (conflicts === true && track < 1000) {
-              if ((conflicts = this.findConflicts(task.attributes, previous.attributes)) === true) {
-                task.set('_o-track', ++track);
-              }
+          track = 0;
+          for (j = _j = 0, _ref = i - 1; 0 <= _ref ? _j <= _ref : _j >= _ref; j = 0 <= _ref ? ++_j : --_j) {
+            sibling = tasks[j];
+            fakeAttrs = _.extend({}, task.attributes, {
+              '_o-track': track
+            });
+            if (this.findConflicts(fakeAttrs, sibling.attributes)) {
+              track++;
             }
-            task.set('_o-track', track);
           }
-        }
-        _results = [];
-        for (i = _l = 0, _len3 = tasks.length; _l < _len3; i = ++_l) {
-          task = tasks[i];
-          _results.push(console.log("" + (task.get('name')) + ": " + (task.get('_o-track'))));
+          _results.push(task.set('_o-track', track));
         }
         return _results;
       };
@@ -95,7 +81,7 @@
       };
 
       ProjectOverview.prototype.addOne = function(task, key) {
-        var dx, dy, e, el, s, siblings, view, width;
+        var dx, dy, e, el, s, view, width;
         view = new United.Views.Tasks.TaskElement({
           model: task,
           demo: true
@@ -107,18 +93,6 @@
         dx = 10 + ((s - this.start) * this.scale);
         width = (e - s) * this.scale;
         dy = 15 + (task.get('_o-track') * 60);
-        siblings = _.without(this.tasks, task);
-        /*
-        			for comp, key in siblings
-        				start = task.get('start_date')
-        				end = task.get('end_date')
-        				compstart = comp.model.get('start_date')
-        				compend = comp.model.get('end_date')
-        				if start < compend and end > compstart and comp.options.dy is dy
-        					dy += 60
-        					if dy > @viewportHeight then @viewportHeight = dy
-        */
-
         el.css({
           left: dx,
           top: dy,
