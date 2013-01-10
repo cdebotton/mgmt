@@ -5,14 +5,11 @@ define [
 	'relational'
 ], (Backbone, _, ns) ->
 
-	d = new Date()
-	t = new Date d.getFullYear(), d.getMonth(), d.getDate(), 0, 0, 0, 0
-	n = new Date d.getFullYear(), d.getMonth(), d.getDate(), 0, 0, 0, 0
+	t = new Date()
+	n = new Date()
 	n.setDate n.getDate() + 14
-	n.setHours 0
-	n.setMinutes 0
-	n.setSeconds 0
-	n.setMilliseconds 0
+	t.setHours 0, 0, 0, 0
+	n.setHours 0, 0, 0, 0
 
 	ns 'United.Models.Tasks.Task'
 	class United.Models.Tasks.Task extends Backbone.RelationalModel

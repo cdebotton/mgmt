@@ -30,6 +30,7 @@ define [
 			if United.Models.Users.Session.isAdmin() and @options.demo? isnt true
 				United.EventBus.on 'start-drag', @setOpacity, @
 				United.EventBus.on 'stop-drag', @unsetOpacity, @
+				United.JST.Hb.registerHelper 'projectCode', @projectCode
 				@body.on 'mousemove', @scrubMove
 				@body.on 'mouseup', @scrubStop
 				@model.on 'change:end_date', @updatePositions, @
@@ -64,7 +65,7 @@ define [
 			United.EventBus.trigger 'where-am-i', @cid, @start, @end
 			United.EventBus.trigger 'percentage-changed'
 			ctx = @model.toJSON()
-			ctx.demo = @options.demo = true
+			ctx.demo = @options?.demo is true
 			ctx.isAdmin = United.Models.Users.Session.isAdmin()
 			html = United.JST['TaskElement'] ctx
 			@$el.html html
@@ -164,3 +165,6 @@ define [
 
 		updateZoom: (zoom) ->
 			United.EventBus.trigger 'where-am-i', @cid, @model.get('start_date'), @model.get 'end_date'
+
+		projectCode: =>
+			@model.get('project').get('code')

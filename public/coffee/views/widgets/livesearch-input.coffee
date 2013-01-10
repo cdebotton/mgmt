@@ -70,16 +70,22 @@ define [
 				@model.unset 'currentIndex'
 				@model.unset 'results'
 				query = @$el.val()
+				if @model.has('queryUri')
+					@model.fetch()
+				else @drawResults()
+
+
+			drawResults: () ->
 				results = @model.get('sources').filter (source, key) ->
-					~source.get('name').toLowerCase().indexOf query.toLowerCase()
-				if results.length > 0 and query isnt ''
-					LIST_VISIBLE = true
-					results = new Backbone.Collection @sorter results, query
-					results.on 'selected', @itemSelected, @
-					United.EventBus.trigger 'search-results-found', query, results, @cid
-					@model.set 'results', results
-					@model.set 'currentIndex', 0
-				else @hide()
+						~source.get('name').toLowerCase().indexOf query.toLowerCase()
+					if results.length > 0 and query isnt ''
+						LIST_VISIBLE = true
+						results = new Backbone.Collection @sorter results, query
+						results.on 'selected', @itemSelected, @
+						United.EventBus.trigger 'search-results-found', query, results, @cid
+						@model.set 'results', results
+						@model.set 'currentIndex', 0
+					else @hide()
 
 			sorter: (results, query) ->
 				beginsWith = []

@@ -4,7 +4,7 @@
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['backbone', 'underscore', 'ns', 'jquery', 'jst', 'animate', 'models/tasks/task'], function(Backbone, _, ns, $) {
+  define(['backbone', 'underscore', 'ns', 'jquery', 'jst', 'animate', 'models/tasks/task', 'views/widgets/livesearch-input', 'models/widgets/livesearch'], function(Backbone, _, ns, $) {
     ns('United.Views.Tasks.EditModal');
     return United.Views.Tasks.EditModal = (function(_super) {
 
@@ -70,6 +70,15 @@
         return this;
       };
 
+      EditModal.prototype.setup = function() {
+        return this.liveSearch = new United.Views.Widgets.LiveSearchInput({
+          el: '#task-search',
+          model: new United.Models.Widgets.LiveSearch({
+            queryUri: '/api/v1/tasks/unassigned'
+          })
+        });
+      };
+
       EditModal.prototype.expose = function() {
         this.body.bind('keyup', this.bindEscape);
         return this.$el.css('opacity', 0).animate({
@@ -78,6 +87,7 @@
       };
 
       EditModal.prototype.dropModal = function() {
+        this.setup();
         return this.$('.edit-modal').delay(150).css({
           top: '50%',
           opacity: 1,

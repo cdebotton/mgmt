@@ -119,10 +119,19 @@
       };
 
       LiveSearchInput.prototype.lookup = function() {
-        var query, results;
+        var query;
         this.model.unset('currentIndex');
         this.model.unset('results');
         query = this.$el.val();
+        if (this.model.has('queryUri')) {
+          return this.model.fetch();
+        } else {
+          return this.drawResults();
+        }
+      };
+
+      LiveSearchInput.prototype.drawResults = function() {
+        var results;
         results = this.model.get('sources').filter(function(source, key) {
           return ~source.get('name').toLowerCase().indexOf(query.toLowerCase());
         });

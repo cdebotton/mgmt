@@ -8,15 +8,11 @@
 	<form class="form-horizontal">
 		<div class="form-row">
 			<div class="form-element slot-8 alpha">
-				<input type="text" name="name" value="{{ name }}">
-				<div class="meta">
-					<label class="form-label">Project Name</label>
+				<div class="input-append">
+					<input type="text" name="name" id="task-search" value="{{ name }}">
 				</div>
-			</div>
-			<div class="form-element slot-4">
-				<input type="text" name="project_code" value="{{ project_code }}">
 				<div class="meta">
-					<label class="form-label">Project Code</label>
+					<label class="form-label">Assignment Name</label>
 				</div>
 			</div>
 		</div>
@@ -74,12 +70,6 @@
 				</article>
 				<div class="meta">
 					<label class="form-label">Percentage</label>
-				</div>
-			</div>
-			<div class="form-element slot-4">
-				<input type="checkbox">
-				<div class="meta">
-					<label class="form-label">Task Complete</label>
 				</div>
 			</div>
 		</div>

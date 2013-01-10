@@ -27,6 +27,12 @@
         }
       ];
 
+      LiveSearch.prototype.url = function() {
+        if (this.model.has('queryUri')) {
+          return this.model.get('queryUri');
+        }
+      };
+
       LiveSearch.prototype.initialize = function() {
         return this.on('change:currentIndex', this.controlCurrentIndex, this);
       };

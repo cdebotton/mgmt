@@ -12,6 +12,8 @@
       __extends(TaskElement, _super);
 
       function TaskElement() {
+        this.projectCode = __bind(this.projectCode, this);
+
         this.updateColor = __bind(this.updateColor, this);
 
         this.editModal = __bind(this.editModal, this);
@@ -51,6 +53,7 @@
         if (United.Models.Users.Session.isAdmin() && (this.options.demo != null) !== true) {
           United.EventBus.on('start-drag', this.setOpacity, this);
           United.EventBus.on('stop-drag', this.unsetOpacity, this);
+          United.JST.Hb.registerHelper('projectCode', this.projectCode);
           this.body.on('mousemove', this.scrubMove);
           this.body.on('mouseup', this.scrubStop);
           this.model.on('change:end_date', this.updatePositions, this);
@@ -94,11 +97,11 @@
       };
 
       TaskElement.prototype.render = function() {
-        var ctx, html;
+        var ctx, html, _ref;
         United.EventBus.trigger('where-am-i', this.cid, this.start, this.end);
         United.EventBus.trigger('percentage-changed');
         ctx = this.model.toJSON();
-        ctx.demo = this.options.demo = true;
+        ctx.demo = ((_ref = this.options) != null ? _ref.demo : void 0) === true;
         ctx.isAdmin = United.Models.Users.Session.isAdmin();
         html = United.JST['TaskElement'](ctx);
         this.$el.html(html);
@@ -249,6 +252,10 @@
 
       TaskElement.prototype.updateZoom = function(zoom) {
         return United.EventBus.trigger('where-am-i', this.cid, this.model.get('start_date'), this.model.get('end_date'));
+      };
+
+      TaskElement.prototype.projectCode = function() {
+        return this.model.get('project').get('code');
       };
 
       return TaskElement;

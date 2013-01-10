@@ -6,6 +6,8 @@ define [
 	'jst'
 	'animate'
 	'models/tasks/task'
+	'views/widgets/livesearch-input'
+	'models/widgets/livesearch'
 ], (Backbone, _, ns, $) ->
 
 	ns 'United.Views.Tasks.EditModal'
@@ -50,6 +52,12 @@ define [
 			@expose()
 			@
 
+		setup: ->
+			@liveSearch = new United.Views.Widgets.LiveSearchInput
+				el: '#task-search'
+				model: new United.Models.Widgets.LiveSearch
+					queryUri: '/api/v1/tasks/unassigned'
+
 		expose: () ->
 			@body.bind 'keyup', @bindEscape
 			@$el.css('opacity', 0).animate {
@@ -57,6 +65,7 @@ define [
 			}, 150, 'ease-in', @dropModal
 
 		dropModal: =>
+			@setup()
 			@$('.edit-modal').delay(150).css({
 				top: '50%'
 				opacity: 1

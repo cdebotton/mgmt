@@ -4,15 +4,12 @@
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   define(['backbone', 'underscore', 'ns', 'relational'], function(Backbone, _, ns) {
-    var d, n, t;
-    d = new Date();
-    t = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 0, 0, 0, 0);
-    n = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 0, 0, 0, 0);
+    var n, t;
+    t = new Date();
+    n = new Date();
     n.setDate(n.getDate() + 14);
-    n.setHours(0);
-    n.setMinutes(0);
-    n.setSeconds(0);
-    n.setMilliseconds(0);
+    t.setHours(0, 0, 0, 0);
+    n.setHours(0, 0, 0, 0);
     ns('United.Models.Tasks.Task');
     United.Models.Tasks.Task = (function(_super) {
 

@@ -28,7 +28,8 @@
 				<h3>Current jobs</h3>
 				<dl>
 				@forelse($user->tasks as $task)
-					<dt>{{ $task->name }} &mdash; {{ $task->client }}</dt>
+					<dt>{{$task->project->name }}</dt>
+					<dt>{{ $task->name }} &mdash; {{ $task->project->client->name }}</dt>
 					<dd>Starts {{ date('F j, Y', strtotime($task->start_date) ) }}</dd>
 					<dd>Ends {{date('F j, Y', strtotime($task->end_date)) }}</dd>
 				@empty

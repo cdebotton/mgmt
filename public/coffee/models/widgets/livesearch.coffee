@@ -20,6 +20,10 @@ define [
 				includeInJSON:	false
 		}]
 
+		url: ->
+			if @model.has 'queryUri'
+				@model.get 'queryUri'
+
 		initialize: ->
 			@on 'change:currentIndex', @controlCurrentIndex, @
 

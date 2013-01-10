@@ -12,7 +12,7 @@ class Authorized_Custom_Users_Table {
 	 */
 	public function up()
 	{
-		Schema::create('users', function($table) 
+		Schema::create('users', function($table)
 		{
 			$table->increments('id');
 			$table->string('email')->unique();
@@ -23,43 +23,43 @@ class Authorized_Custom_Users_Table {
 		});
 
 		User::create(array(
-			'id'       => 1,
-			'email'    => 'debotton@brooklynunited.com',
-			'password' => Hash::make('test'),
+			'id'       		 => 1,
+			'email'    		 => 'debotton@brooklynunited.com',
+			'password' 		 => Hash::make('test'),
 			'first_name'     => 'Christian',
 			'last_name'      => 'de Botton'
 		));
 
 		User::create(array(
-			'id'       => 2,
-			'email'    => 'nilaratna@brooklynunited.com',
-			'password' => Hash::make('test'),
+			'id'       		 => 2,
+			'email'    		 => 'nilaratna@brooklynunited.com',
+			'password' 		 => Hash::make('test'),
 			'first_name'     => 'Pritika',
 			'last_name'      => 'Nilaratna'
 		));
 
 		User::create(array(
-			'id'       => 3,
-			'email'    => 'konovalova@brooklynunited.com',
-			'password' => Hash::make('test'),
+			'id'       		 => 3,
+			'email'    		 => 'konovalova@brooklynunited.com',
+			'password' 		 => Hash::make('test'),
 			'first_name'     => 'Sasha',
 			'last_name'      => 'Konovalova'
 		));
 
 		User::create(array(
-			'id'       => 4,
-			'email'    => 'smolenski@brooklynunited.com',
-			'password' => Hash::make('test'),
+			'id'       		 => 4,
+			'email'    		 => 'smolenski@brooklynunited.com',
+			'password' 		 => Hash::make('test'),
 			'first_name'     => 'Sam',
 			'last_name'      => 'Smolenski'
 		));
 
 		User::create(array(
-			'id'       => 5,
-			'email'    => 'bielefeld@brooklynunited.com',
-			'password' => Hash::make('test'),
-			'first_name'     => 'Shirmung',
-			'last_name'      => 'Bielefeld'
+			'id'       		=> 5,
+			'email'    		=> 'bielefeld@brooklynunited.com',
+			'password' 		=> Hash::make('test'),
+			'first_name'    => 'Shirmung',
+			'last_name'     => 'Bielefeld'
 		));
 
 		Schema::create('roles', function($table)
@@ -73,7 +73,7 @@ class Authorized_Custom_Users_Table {
 			'id'   => 1,
 			'name' => 'Admin'
 		));
-		
+
 		Role::create(array(
 			'id'   => 2,
 			'name' => 'Member'
@@ -83,7 +83,7 @@ class Authorized_Custom_Users_Table {
 			'id'   => 3,
 			'name' => 'Demo'
 		));
-		
+
 		Schema::create('rules', function($table)
 		{
 			$table->increments('id');
@@ -92,49 +92,49 @@ class Authorized_Custom_Users_Table {
 			$table->string('description');
 			$table->timestamps();
 		});
-		
+
 		Rule::create(array(
 			'id'          => 1,
 			'group'       => 'demo',
 			'action'      => '*',
 			'description' => 'Can access Demo all actions.'
 		));
-		
+
 		Rule::create(array(
 			'id'          => 2,
 			'group'       => 'demo',
 			'action'      => 'view',
 			'description' => 'Can view Demo.'
 		));
-		
+
 		Rule::create(array(
 			'id'          => 3,
 			'group'       => 'demo',
 			'action'      => 'create',
 			'description' => 'Can create Demo.'
 		));
-		
+
 		Rule::create(array(
 			'id'          => 4,
 			'group'       => 'demo',
 			'action'      => 'edit',
 			'description' => 'Can edit Demo.'
 		));
-		
+
 		Rule::create(array(
 			'id'          => 5,
 			'group'       => 'demo',
 			'action'      => 'revise',
 			'description' => 'Can revise Demo.'
 		));
-		
+
 		Rule::create(array(
 			'id'          => 6,
 			'group'       => 'demo',
 			'action'      => 'publish',
 			'description' => 'Can publish Demo.'
 		));
-		
+
 		Rule::create(array(
 			'id'          => 7,
 			'group'       => 'demo',
@@ -149,16 +149,16 @@ class Authorized_Custom_Users_Table {
 			$table->integer('rule_id');
 			$table->timestamps();
 		});
-		
+
 		Role::find(1)->rules()->sync(array(1));
 		Role::find(2)->rules()->sync(array(2, 5, 6, 7));
 		Role::find(3)->rules()->sync(array(2, 4, 3));
-		
+
 		Schema::create('role_user', function($table)
 		{
 			$table->increments('id');
-			$table->integer('user_id');	
-			$table->integer('role_id');					
+			$table->integer('user_id');
+			$table->integer('role_id');
 			$table->timestamps();
 		});
 
@@ -169,11 +169,11 @@ class Authorized_Custom_Users_Table {
 		User::find(2)
 			->roles()
 			->attach(2);
-			
+
 		User::find(3)
 			->roles()
 			->attach(2);
-			
+
 		User::find(4)
 			->roles()
 			->attach(2);
