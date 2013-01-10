@@ -1,5 +1,6 @@
 <?php
 
+use Client\Project as Project;
 use Client\Project\Task as Task;
 
 class Api_V1_Schedules_Controller extends Controller {
@@ -67,7 +68,7 @@ class Api_V1_Schedules_Controller extends Controller {
 		$task->project_id			= $json->project_id ?: null;
 		$task->save();
 
-		return Response::json($task);
+		return Response::json($task->to_array());
 	}
 
 	final public function get_read($id)
@@ -84,7 +85,7 @@ class Api_V1_Schedules_Controller extends Controller {
 
 	final public function delete_index($id)
 	{
-
+		Task::delete('id');
 	}
 
 	final public function get_unassigned()
@@ -94,6 +95,7 @@ class Api_V1_Schedules_Controller extends Controller {
 			->get();
 		$response = array('sources' => array());
 		foreach ($tasks as $task) {
+			$task->name = $task->project->code . ' - ' . $task->name;
 			array_push($response['sources'], $task->to_array());
 		}
 		return Response::json($response);

@@ -69,19 +69,14 @@
       };
 
       Task.prototype.parse = function(resp) {
-        if (resp.start_date) {
-          resp.start_date = new Date(resp.start_date);
-          resp.start_date.setHours(0);
-          resp.start_date.setMinutes(0);
-          resp.start_date.setSeconds(0);
+        var parts;
+        if (resp.start_date && (parts = resp.start_date.match(/(\d{4})-(\d{2})-(\d{2})/))) {
+          resp.start_date = new Date(parts[1], parseInt(parts[2]) - 1, parts[3], 0, 0, 0, 0);
         }
-        if (resp.end_date) {
-          resp.end_date = new Date(resp.end_date);
-          resp.end_date.setHours(0);
-          resp.end_date.setMinutes(0);
-          resp.end_date.setSeconds(0);
-          resp.track = parseInt(resp.track);
+        if (resp.end_date && (parts = resp.end_date.match(/(\d{4})-(\d{2})-(\d{2})/))) {
+          resp.end_date = new Date(parts[1], parseInt(parts[2]) - 1, parts[3], 0, 0, 0, 0);
         }
+        resp.track = parseInt(resp.track);
         return resp;
       };
 

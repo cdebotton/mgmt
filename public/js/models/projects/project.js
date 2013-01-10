@@ -39,16 +39,6 @@
 
       Project.prototype.initialize = function() {};
 
-      Project.prototype.parse = function(resp) {
-        if (resp.tasks) {
-          _.each(resp.tasks, function(task, i) {
-            task.start_date = new Date(task.start_date);
-            return task.end_date = new Date(task.end_date);
-          });
-        }
-        return resp;
-      };
-
       return Project;
 
     })(Backbone.RelationalModel);

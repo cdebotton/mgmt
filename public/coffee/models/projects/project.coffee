@@ -30,10 +30,4 @@ define [
 
 		initialize: ->
 
-		parse: (resp) ->
-			if resp.tasks then _.each resp.tasks, (task, i) ->
-				task.start_date = new Date task.start_date
-				task.end_date = new Date task.end_date
-			resp
-
 	United.Models.Projects.Project.setup()
