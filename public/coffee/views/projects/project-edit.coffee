@@ -98,15 +98,7 @@ define [
 			@model.get('project').set 'client_name', name
 
 		saveProject: (e) =>
-			@model.get('project').save null, {
-				wait: true
-				success: (project, attrs) =>
-					if project.isNew() then project.set 'id', attrs.id
-					if attrs.tasks?.length > 0 then for task, i in attrs.tasks
-						task.start_date = new Date task.start_date
-						task.end_date = new Date task.end_date
-					project.set 'client_id', attrs.client_id
-			}
+			@model.get('project').save null, { wait: true }
 			###
 			@modal = new United.Views.Widgets.Modal
 					model: new Backbone.Model
