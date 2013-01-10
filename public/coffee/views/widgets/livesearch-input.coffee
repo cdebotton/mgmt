@@ -99,8 +99,8 @@ define [
 
 			next: -> @model.set 'currentIndex', @model.get('currentIndex') + 1
 
-			select: ->
-				selection = @model.get('results').at @model.get 'currentIndex'
+			select: (selection) ->
+				selection = selection or @model.get('results').at @model.get 'currentIndex'
 				@$el.val selection.get 'name'
 				@$el.attr 'disabled', true
 				@icons.on 'click', _.bind @deselect, @
@@ -121,3 +121,8 @@ define [
 				index = @model.get('results').indexOf model
 				@model.set 'currentIndex', index
 				@select()
+
+			setValue: (property, value) ->
+				target = @model.get('sources').find (src) ->
+					src.get(property) is value
+				@select target

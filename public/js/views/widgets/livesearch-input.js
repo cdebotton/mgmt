@@ -166,9 +166,8 @@
         return this.model.set('currentIndex', this.model.get('currentIndex') + 1);
       };
 
-      LiveSearchInput.prototype.select = function() {
-        var selection;
-        selection = this.model.get('results').at(this.model.get('currentIndex'));
+      LiveSearchInput.prototype.select = function(selection) {
+        selection = selection || this.model.get('results').at(this.model.get('currentIndex'));
         this.$el.val(selection.get('name'));
         this.$el.attr('disabled', true);
         this.icons.on('click', _.bind(this.deselect, this));
@@ -192,6 +191,14 @@
         index = this.model.get('results').indexOf(model);
         this.model.set('currentIndex', index);
         return this.select();
+      };
+
+      LiveSearchInput.prototype.setValue = function(property, value) {
+        var target;
+        target = this.model.get('sources').find(function(src) {
+          return src.get(property) === value;
+        });
+        return this.select(target);
       };
 
       return LiveSearchInput;

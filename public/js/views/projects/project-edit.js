@@ -92,12 +92,15 @@
             project: this.model.get('project')
           })
         });
-        return this.liveSearch = new United.Views.Widgets.LiveSearchInput({
+        this.liveSearch = new United.Views.Widgets.LiveSearchInput({
           el: '#client-search',
           model: new United.Models.Widgets.LiveSearch({
             sources: window.clients
           })
         });
+        if (this.model.get('project').get('client')) {
+          return this.liveSearch.setValue('id', this.model.get('project').get('client').get('id'));
+        }
       };
 
       ProjectEdit.prototype.animateIn = function() {

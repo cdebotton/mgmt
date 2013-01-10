@@ -66,6 +66,8 @@ define [
 				el: '#client-search'
 				model: new United.Models.Widgets.LiveSearch
 					sources: window.clients
+			if @model.get('project').get('client')
+				@liveSearch.setValue 'id', @model.get('project').get('client').get('id')
 
 		animateIn: () ->
 			@liveSearch.$el.on 'keyup', @setClient
