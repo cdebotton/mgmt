@@ -13,9 +13,7 @@
       function ProjectEdit() {
         this.saveProject = __bind(this.saveProject, this);
 
-        this.setClientId = __bind(this.setClientId, this);
-
-        this.setClientId = __bind(this.setClientId, this);
+        this.setClientProps = __bind(this.setClientProps, this);
 
         this.bindEscape = __bind(this.bindEscape, this);
 
@@ -99,14 +97,13 @@
           })
         });
         if (this.model.get('project').get('client')) {
-          return this.liveSearch.setValue('id', this.model.get('project').get('client').get('id'));
+          this.liveSearch.setValue('id', this.model.get('project').get('client').get('id'));
         }
+        this.liveSearch.$el.on('keyup', this.setClient);
+        return this.liveSearch.model.on('change', this.setClientProps);
       };
 
       ProjectEdit.prototype.animateIn = function() {
-        this.liveSearch.$el.on('keyup', this.setClient);
-        this.liveSearch.model.on('change:value', this.setClientId, this);
-        this.liveSearch.model.on('change:client_name', this.setClientName, this);
         this.$el.css('margin-top', -this.$el.innerHeight());
         this.$el.animate({
           'margin-top': 0
@@ -136,12 +133,11 @@
         }
       };
 
-      ProjectEdit.prototype.setClientId = function(model, value) {
-        return this.model.get('project').set('client_id', value);
-      };
-
-      ProjectEdit.prototype.setClientId = function(model, value) {
-        return this.model.get('project').set('client_name', name);
+      ProjectEdit.prototype.setClientProps = function(model) {
+        return this.model.get('project').set({
+          client_id: model.get('value'),
+          client_name: model.get('client_name')
+        });
       };
 
       ProjectEdit.prototype.saveProject = function(e) {

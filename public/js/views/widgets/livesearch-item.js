@@ -44,6 +44,8 @@
       };
 
       LiveSearchItem.prototype.selected = function(e) {
+        e.preventDefault();
+        e.stopPropagation();
         return this.model.trigger('selected', this.model);
       };
 

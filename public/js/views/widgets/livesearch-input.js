@@ -12,6 +12,8 @@
       __extends(LiveSearchInput, _super);
 
       function LiveSearchInput() {
+        this.itemSelected = __bind(this.itemSelected, this);
+
         this.move = __bind(this.move, this);
 
         this.keyUp = __bind(this.keyUp, this);
@@ -167,12 +169,16 @@
       };
 
       LiveSearchInput.prototype.select = function(selection) {
-        selection = selection || this.model.get('results').at(this.model.get('currentIndex'));
+        if (typeof selection === 'undefined') {
+          selection = this.model.get('results').at(this.model.get('currentIndex'));
+        }
         this.$el.val(selection.get('name'));
         this.$el.attr('disabled', true);
         this.icons.on('click', _.bind(this.deselect, this));
-        this.model.set('value', selection.get('id'));
-        this.model.set('client_name', selection.get('name'));
+        this.model.set({
+          value: selection.get('id'),
+          client_name: selection.get('name')
+        });
         return this.hide();
       };
 
@@ -187,10 +193,7 @@
       };
 
       LiveSearchInput.prototype.itemSelected = function(model) {
-        var index;
-        index = this.model.get('results').indexOf(model);
-        this.model.set('currentIndex', index);
-        return this.select();
+        return this.select(model);
       };
 
       LiveSearchInput.prototype.setValue = function(property, value) {

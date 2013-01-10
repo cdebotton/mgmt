@@ -70,11 +70,10 @@ define [
 					sources: window.clients
 			if @model.get('project').get('client')
 				@liveSearch.setValue 'id', @model.get('project').get('client').get('id')
+			@liveSearch.$el.on 'keyup', @setClient
+			@liveSearch.model.on 'change', @setClientProps
 
 		animateIn: () ->
-			@liveSearch.$el.on 'keyup', @setClient
-			@liveSearch.model.on 'change:value', @setClientId, @
-			@liveSearch.model.on 'change:client_name', @setClientName, @
 			@$el.css 'margin-top', -@$el.innerHeight()
 			@$el.animate { 'margin-top': 0 }, 175, 'ease-in'
 			@body.bind 'keyup', @bindEscape
@@ -91,11 +90,11 @@ define [
 
 		bindEscape: (e) => if e.keyCode is 27 then @closeDrawer e
 
-		setClientId: (model, value) =>
-			@model.get('project').set 'client_id', value
-
-		setClientId: (model, value) =>
-			@model.get('project').set 'client_name', name
+		setClientProps: (model) =>
+			@model.get('project').set {
+				client_id: model.get 'value'
+				client_name: model.get 'client_name'
+			}
 
 		saveProject: (e) =>
 			@model.get('project').save null, { wait: true }

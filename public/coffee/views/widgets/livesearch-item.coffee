@@ -25,4 +25,7 @@ define [
 				@$el.addClass 'active'
 			else @$el.removeClass 'active'
 
-		selected: (e) => @model.trigger 'selected', @model
+		selected: (e) =>
+			e.preventDefault()
+			e.stopPropagation()
+			@model.trigger 'selected', @model

@@ -100,12 +100,15 @@ define [
 			next: -> @model.set 'currentIndex', @model.get('currentIndex') + 1
 
 			select: (selection) ->
-				selection = selection or @model.get('results').at @model.get 'currentIndex'
+				if typeof selection is 'undefined'
+					selection = @model.get('results').at @model.get 'currentIndex'
 				@$el.val selection.get 'name'
 				@$el.attr 'disabled', true
 				@icons.on 'click', _.bind @deselect, @
-				@model.set 'value', selection.get 'id'
-				@model.set 'client_name', selection.get 'name'
+				@model.set {
+					value: selection.get 'id'
+					client_name: selection.get 'name'
+				}
 				@hide()
 
 			deselect: (e) ->
@@ -117,10 +120,8 @@ define [
 				@model.set 'value', null
 				e.preventDefault()
 
-			itemSelected: (model) ->
-				index = @model.get('results').indexOf model
-				@model.set 'currentIndex', index
-				@select()
+			itemSelected: (model) =>
+				@select model
 
 			setValue: (property, value) ->
 				target = @model.get('sources').find (src) ->
