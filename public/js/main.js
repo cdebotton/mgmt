@@ -118,27 +118,6 @@
   });
 
   require(['views/app', 'models/app'], function() {
-    var key, key2, task, user, _ref, _ref1, _ref2, _ref3;
-    _ref = window.users;
-    for (key in _ref) {
-      user = _ref[key];
-      _ref1 = user.tasks;
-      for (key2 in _ref1) {
-        task = _ref1[key2];
-        task.start_date = new Date(task.start_date);
-        task.end_date = new Date(task.end_date);
-      }
-    }
-    _ref2 = window.projects;
-    for (key in _ref2) {
-      user = _ref2[key];
-      _ref3 = user.tasks;
-      for (key2 in _ref3) {
-        task = _ref3[key2];
-        task.start_date = new Date(task.start_date);
-        task.end_date = new Date(task.end_date);
-      }
-    }
     return window.BUScheduler = new United.Views.App({
       model: new United.Models.App({
         users: window.users,
