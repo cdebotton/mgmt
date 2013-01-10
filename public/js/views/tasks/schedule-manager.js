@@ -117,6 +117,7 @@
           model: task
         });
         this.$el.append(this.modal.render().$el);
+        this.modal.expose();
         return false;
       };
 

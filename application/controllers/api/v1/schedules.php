@@ -38,7 +38,6 @@ class Api_V1_Schedules_Controller extends Controller {
 		$task->user_id 				= $json->user_id;
 		$task->percentage 			= $json->percentage;
 		$task->track 				= $json->track;
-		$task->project_id			= $json->project_id ?: null;
 		$task->save();
 
 		$json->id = $task->id;
@@ -65,7 +64,6 @@ class Api_V1_Schedules_Controller extends Controller {
 		$task->user_id 				= $json->user_id;
 		$task->percentage 			= $json->percentage;
 		$task->track 				= $json->track;
-		$task->project_id			= $json->project_id ?: null;
 		$task->save();
 
 		return Response::json($task->to_array());

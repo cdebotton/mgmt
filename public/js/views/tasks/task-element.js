@@ -12,6 +12,8 @@
       __extends(TaskElement, _super);
 
       function TaskElement() {
+        this.clientName = __bind(this.clientName, this);
+
         this.projectCode = __bind(this.projectCode, this);
 
         this.updateColor = __bind(this.updateColor, this);
@@ -46,6 +48,7 @@
         var _ref, _ref1, _ref2;
         this.body = $('body');
         United.JST.Hb.registerHelper('formatDate', this.formatDate);
+        United.JST.Hb.registerHelper('clientName', this.clientName);
         this.start = this.model.get('start_date');
         this.end = this.model.get('end_date');
         this.model.on('change:color', this.updateColor, this);
@@ -255,7 +258,16 @@
       };
 
       TaskElement.prototype.projectCode = function() {
-        return this.model.get('project').get('code');
+        if (!this.options.demo && this.model.has('project')) {
+          return this.model.get('project').get('code') + ' - ';
+        }
+      };
+
+      TaskElement.prototype.clientName = function() {
+        var _ref;
+        if (!this.options.demo && (((_ref = this.model.get('project')) != null ? _ref.get('client') : void 0) != null)) {
+          return new United.JST.Hb.SafeString(" (" + (this.model.get('project').get('client').get('name')) + ")");
+        }
       };
 
       return TaskElement;

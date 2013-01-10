@@ -7,6 +7,7 @@
   define(['backbone', 'underscore', 'ns', 'jquery', 'jst', 'animate', 'models/clients/client', 'views/widgets/livesearch-input', 'models/widgets/livesearch', 'relational'], function(Backbone, _, ns, $) {
     ns('United.Views.Tasks.EditTask');
     return United.Views.Tasks.EditTask = (function(_super) {
+      var EXPOSED;
 
       __extends(EditTask, _super);
 
@@ -19,17 +20,49 @@
 
         this.bindEscape = __bind(this.bindEscape, this);
 
+        this.setColor = __bind(this.setColor, this);
+
+        this.setPercentage = __bind(this.setPercentage, this);
+
+        this.setEndDay = __bind(this.setEndDay, this);
+
+        this.setEndMonth = __bind(this.setEndMonth, this);
+
+        this.setEndYear = __bind(this.setEndYear, this);
+
+        this.setStartDay = __bind(this.setStartDay, this);
+
+        this.setStartMonth = __bind(this.setStartMonth, this);
+
+        this.setStartYear = __bind(this.setStartYear, this);
+
+        this.setUser = __bind(this.setUser, this);
+
+        this.setName = __bind(this.setName, this);
+
         this.closeModal = __bind(this.closeModal, this);
 
         this.dropModal = __bind(this.dropModal, this);
         return EditTask.__super__.constructor.apply(this, arguments);
       }
 
+      EXPOSED = false;
+
       EditTask.prototype.tagName = 'section';
 
       EditTask.prototype.className = 'striped-cheech';
 
       EditTask.prototype.events = {
+        'change [name="name"]': 'setName',
+        'change [name="developer_id"]': 'setUser',
+        'change [name="start_year"]': 'setStartYear',
+        'change [name="start_month"]': 'setStartMonth',
+        'change [name="start_day"]': 'setStartDay',
+        'change [name="end_year"]': 'setEndYear',
+        'change [name="end_month"]': 'setEndMonth',
+        'change [name="end_day"]': 'setEndDay',
+        'change [name="percentage"]': 'setPercentage',
+        'change [name="color"]': 'setColor',
         'click .icon-remove': 'closeModal',
         'click button[type="submit"]': 'saveTask'
       };
@@ -51,7 +84,6 @@
         html = United.JST.EditModal(ctx);
         this.$el.html(html);
         this.$user = this.$('[name="developer_id"]');
-        this.expose();
         return this;
       };
 
@@ -75,8 +107,9 @@
       };
 
       EditTask.prototype.expose = function() {
+        EXPOSED = true;
         this.body.bind('keyup', this.bindEscape);
-        return this.$el.css('opacity', 0).animate({
+        return this.$el.animate({
           opacity: 1
         }, 150, 'ease-in', this.dropModal);
       };
@@ -94,6 +127,10 @@
 
       EditTask.prototype.closeModal = function(e) {
         var _this = this;
+        if (!EXPOSED) {
+          return;
+        }
+        EXPOSED = false;
         this.$('.edit-modal').animate({
           marginTop: -($(window).height() + 250)
         }, function() {
@@ -108,6 +145,55 @@
         return e.preventDefault();
       };
 
+      EditTask.prototype.setName = function(e) {
+        return this.model.set('name', e.currentTarget.value);
+      };
+
+      EditTask.prototype.setUser = function(e) {
+        return this.model.set('user', e.currentTarget.value);
+      };
+
+      EditTask.prototype.setStartYear = function(e) {
+        var d, t;
+        d = this.model.get('start_date');
+        t = new Date(e.currentTarget.value, d.getMonth(), d.getDate(), 0, 0, 0, 0);
+        return this.model.set('start_date', t);
+      };
+
+      EditTask.prototype.setStartMonth = function(e) {
+        var d, t;
+        d = this.model.get('start_date');
+        t = new Date(d.getFullYear(), parseInt(e.currentTarget.value) - 1, d.getDate(), 0, 0, 0, 0);
+        return this.model.set('start_date', t);
+      };
+
+      EditTask.prototype.setStartDay = function(e) {
+        var d, t;
+        d = this.model.get('start_date');
+        t = new Date(d.getFullYear(), d.getMonth(), e.currentTarget.value, 0, 0, 0, 0);
+        return this.model.set('start_date', t);
+      };
+
+      EditTask.prototype.setEndYear = function(e) {
+        return this.model.set('end_date', this.model.get('end_date').setFullYear(e.currentTarget.value));
+      };
+
+      EditTask.prototype.setEndMonth = function(e) {
+        return this.model.set('end_date', this.model.get('end_date').setMonth(parseInt(e.currentTarget.value) - 1));
+      };
+
+      EditTask.prototype.setEndDay = function(e) {
+        return this.model.set('end_date', this.model.get('end_date').setDate(e.currentTarget.value));
+      };
+
+      EditTask.prototype.setPercentage = function(e) {
+        return this.model.set('percentage', e.currentTarget.value);
+      };
+
+      EditTask.prototype.setColor = function(e) {
+        return this.model.set('color', e.currentTarget.value);
+      };
+
       EditTask.prototype.bindEscape = function(e) {
         if (e.keyCode === 27) {
           return this.closeModal(e);
@@ -115,32 +201,13 @@
       };
 
       EditTask.prototype.saveTask = function(e) {
-        var attr, attrs, key, task;
-        attrs = {
-          'author_id': window.author_id,
-          'name': this.$name.val(),
-          'client': this.$client.val(),
-          'start_date': new Date(this.$start_year.val(), parseInt(this.$start_month.val()) - 1, this.$start_day.val()),
-          'end_date': new Date(this.$end_year.val(), parseInt(this.$end_month.val()) - 1, this.$end_day.val()),
-          'color': this.$color.val(),
-          'track': 0,
-          'percentage': this.$percentage.val(),
-          'user': {
-            'id': parseInt(this.$user.val())
+        var _this = this;
+        this.model.save(null, {
+          wait: true,
+          success: function() {
+            return _this.closeModal(e);
           }
-        };
-        if (this.model.has('task')) {
-          for (attr in attrs) {
-            key = attrs[attr];
-            this.model.get('task').set(attr, key);
-          }
-          this.model.get('task').save();
-        } else {
-          task = new United.Models.Tasks.Task(attrs);
-          task.save(null, {
-            wait: true
-          });
-        }
+        });
         return this.closeModal(e);
       };
 

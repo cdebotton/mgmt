@@ -13,11 +13,22 @@ define [
 
 	ns 'United.Views.Tasks.EditTask'
 	class United.Views.Tasks.EditTask extends Backbone.View
+		EXPOSED = false
 		tagName:	'section'
 
 		className:	'striped-cheech'
 
 		events:
+			'change [name="name"]':			'setName'
+			'change [name="developer_id"]':	'setUser'
+			'change [name="start_year"]':	'setStartYear'
+			'change [name="start_month"]':	'setStartMonth'
+			'change [name="start_day"]':	'setStartDay'
+			'change [name="end_year"]':		'setEndYear'
+			'change [name="end_month"]':	'setEndMonth'
+			'change [name="end_day"]':		'setEndDay'
+			'change [name="percentage"]':	'setPercentage'
+			'change [name="color"]':		'setColor'
 			'click .icon-remove':			'closeModal'
 			'click button[type="submit"]':	'saveTask'
 
@@ -36,7 +47,6 @@ define [
 			html = United.JST.EditModal ctx
 			@$el.html html
 			@$user 			= @$ '[name="developer_id"]'
-			@expose()
 			@
 
 		setup: ->
@@ -54,8 +64,9 @@ define [
 			@$client.val task.get('project').get('client').get('name')
 
 		expose: () ->
+			EXPOSED = true
 			@body.bind 'keyup', @bindEscape
-			@$el.css('opacity', 0).animate {
+			@$el.animate {
 				opacity: 1
 			}, 150, 'ease-in', @dropModal
 
@@ -70,6 +81,8 @@ define [
 			}
 
 		closeModal: (e) =>
+			if not EXPOSED then return
+			EXPOSED = false
 			@$('.edit-modal').animate {
 				marginTop: -($(window).height()+250)
 			}, => @$el.animate { opacity: 0 }, => @$el.remove()
@@ -77,29 +90,49 @@ define [
 			United.EventBus.trigger 'modal-closed'
 			e.preventDefault()
 
+		setName: (e) =>
+			@model.set 'name', e.currentTarget.value
+
+		setUser: (e) =>
+			@model.set 'user', e.currentTarget.value
+
+		setStartYear: (e) =>
+			d = @model.get 'start_date'
+			t = new Date e.currentTarget.value, d.getMonth(), d.getDate(), 0, 0, 0 ,0
+			@model.set 'start_date', t
+
+		setStartMonth: (e) =>
+			d = @model.get 'start_date'
+			t = new Date d.getFullYear(), parseInt(e.currentTarget.value) - 1, d.getDate(), 0, 0, 0, 0
+			@model.set 'start_date', t
+
+		setStartDay: (e) =>
+			d = @model.get 'start_date'
+			t = new Date d.getFullYear(), d.getMonth(), e.currentTarget.value, 0, 0, 0, 0
+			@model.set 'start_date', t
+
+		setEndYear: (e) =>
+			@model.set 'end_date', @model.get('end_date').setFullYear e.currentTarget.value
+
+		setEndMonth: (e) =>
+			@model.set 'end_date', @model.get('end_date').setMonth (parseInt(e.currentTarget.value) - 1)
+
+		setEndDay: (e) =>
+			@model.set 'end_date', @model.get('end_date').setDate e.currentTarget.value
+
+		setPercentage: (e) =>
+			@model.set 'percentage', e.currentTarget.value
+
+		setColor: (e) =>
+			@model.set 'color', e.currentTarget.value
+
 		bindEscape: (e) => if e.keyCode is 27 then @closeModal e
 
 		saveTask: (e) =>
-			attrs = {
-				'author_id':		window.author_id
-				'name':				@$name.val()
-				'client':			@$client.val()
-				'start_date':		new Date @$start_year.val(), parseInt(@$start_month.val()) - 1, @$start_day.val()
-				'end_date':			new Date @$end_year.val(), parseInt(@$end_month.val()) - 1, @$end_day.val()
-				'color':			@$color.val()
-				'track':			0
-				'percentage':		@$percentage.val()
-				'user':				{ 'id': parseInt @$user.val() }
+			@model.save null, {
+				wait: true
+				success: => @closeModal e
 			}
-
-			if @model.has 'task'
-				for attr, key of attrs
-					@model.get('task').set attr, key
-				@model.get('task').save()
-			else
-				task = new United.Models.Tasks.Task attrs
-				task.save null, { wait: true }
-
 			@closeModal e
 
 		printUsers: (array, opts) =>

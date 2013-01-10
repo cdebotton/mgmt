@@ -23,6 +23,7 @@ define [
 		initialize: ->
 			@body = $ 'body'
 			United.JST.Hb.registerHelper 'formatDate', @formatDate
+			United.JST.Hb.registerHelper 'clientName', @clientName
 			@start = @model.get 'start_date'
 			@end = @model.get 'end_date'
 			@model.on 'change:color', @updateColor, @
@@ -167,4 +168,9 @@ define [
 			United.EventBus.trigger 'where-am-i', @cid, @model.get('start_date'), @model.get 'end_date'
 
 		projectCode: =>
-			@model.get('project').get('code')
+			if not @options.demo and @model.has 'project'
+				@model.get('project').get('code') + ' - '
+
+		clientName: =>
+			if not @options.demo and @model.get('project')?.get('client')?
+				new United.JST.Hb.SafeString " (#{@model.get('project').get('client').get('name')})"

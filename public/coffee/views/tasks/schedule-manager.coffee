@@ -92,6 +92,7 @@ define [
 			@modal = new United.Views.Tasks.EditTask
 				model: task
 			@$el.append @modal.render().$el
+			@modal.expose()
 			return false
 
 		modalClosed: -> MODAL_OPEN = false
