@@ -12,11 +12,11 @@ define [
 		viewportHeight: 20
 
 		initialize: ->
-			@model.get('project').get('tasks').on 'add', @addAll, @
-			@model.get('project').get('tasks').on 'change', @addAll, @
-			if @model.get('project').get('tasks').length > 0
-				@model.get('project').get('tasks').each (task) -> task.set '_o-track', 0
-				@generateTracks()
+			@model.get('project').get('tasks').on 'add change', @generateTracks, @
+			@model.get('project').get('tasks').on 'add change', @generateRange, @
+			@model.get('project').get('tasks').on 'add change', @addAll, @
+			@generateRange()
+			@generateTracks()
 			@addAll()
 
 		findConflicts: (task, sibling) ->
@@ -25,7 +25,9 @@ define [
 			adjacent and overlap
 
 		generateTracks: ->
+			@model.get('project').get('tasks').each (task) -> task.attributes['_o-track'] = 0
 			tasks = @model.get('project').get('tasks').models
+			highestTrack = 0
 			for task, i in tasks
 				if i is 0 then continue
 				track = 0
@@ -34,19 +36,19 @@ define [
 					fakeAttrs = _.extend {}, task.attributes, { '_o-track': track }
 					if @findConflicts fakeAttrs, sibling.attributes
 						track++
-				task.set '_o-track', track
-
+				if track > highestTrack then highestTrack = track
+				task.attributes['_o-track'] = track
+			@$el.css {
+					height: ((highestTrack+1) * 50) + ((highestTrack) * 10)
+				}
 
 		addAll: () =>
-			@viewportHeight = 20
-			@generateRange()
 			_.each @tasks, (task, key) =>
 				task.remove()
 				delete @tasks[key]
 			@tasks = []
 			@$el.html ''
 			@model.get('project').get('tasks').each @addOne
-			@$el.css 'height', @viewportHeight+35
 
 		addOne: (task, key) =>
 			view = new United.Views.Tasks.TaskElement
@@ -82,6 +84,3 @@ define [
 				@end = end.getTime()
 				diff = end - start
 				@scale = 910 / diff
-				@$el.css {
-					height: tasks.length * 50 + ((tasks.length - 1) * 10)
-				}

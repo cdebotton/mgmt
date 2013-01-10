@@ -24,14 +24,11 @@
       ProjectOverview.prototype.viewportHeight = 20;
 
       ProjectOverview.prototype.initialize = function() {
-        this.model.get('project').get('tasks').on('add', this.addAll, this);
-        this.model.get('project').get('tasks').on('change', this.addAll, this);
-        if (this.model.get('project').get('tasks').length > 0) {
-          this.model.get('project').get('tasks').each(function(task) {
-            return task.set('_o-track', 0);
-          });
-          this.generateTracks();
-        }
+        this.model.get('project').get('tasks').on('add change', this.generateTracks, this);
+        this.model.get('project').get('tasks').on('add change', this.generateRange, this);
+        this.model.get('project').get('tasks').on('add change', this.addAll, this);
+        this.generateRange();
+        this.generateTracks();
         return this.addAll();
       };
 
@@ -43,9 +40,12 @@
       };
 
       ProjectOverview.prototype.generateTracks = function() {
-        var fakeAttrs, i, j, sibling, task, tasks, track, _i, _j, _len, _ref, _results;
+        var fakeAttrs, highestTrack, i, j, sibling, task, tasks, track, _i, _j, _len, _ref;
+        this.model.get('project').get('tasks').each(function(task) {
+          return task.attributes['_o-track'] = 0;
+        });
         tasks = this.model.get('project').get('tasks').models;
-        _results = [];
+        highestTrack = 0;
         for (i = _i = 0, _len = tasks.length; _i < _len; i = ++_i) {
           task = tasks[i];
           if (i === 0) {
@@ -61,23 +61,25 @@
               track++;
             }
           }
-          _results.push(task.set('_o-track', track));
+          if (track > highestTrack) {
+            highestTrack = track;
+          }
+          task.attributes['_o-track'] = track;
         }
-        return _results;
+        return this.$el.css({
+          height: ((highestTrack + 1) * 50) + (highestTrack * 10)
+        });
       };
 
       ProjectOverview.prototype.addAll = function() {
         var _this = this;
-        this.viewportHeight = 20;
-        this.generateRange();
         _.each(this.tasks, function(task, key) {
           task.remove();
           return delete _this.tasks[key];
         });
         this.tasks = [];
         this.$el.html('');
-        this.model.get('project').get('tasks').each(this.addOne);
-        return this.$el.css('height', this.viewportHeight + 35);
+        return this.model.get('project').get('tasks').each(this.addOne);
       };
 
       ProjectOverview.prototype.addOne = function(task, key) {
@@ -123,10 +125,7 @@
           this.start = start.getTime();
           this.end = end.getTime();
           diff = end - start;
-          this.scale = 910 / diff;
-          return this.$el.css({
-            height: tasks.length * 50 + ((tasks.length - 1) * 10)
-          });
+          return this.scale = 910 / diff;
         }
       };
 
