@@ -75,9 +75,9 @@ Route::filter('page-title', function ()
 
 Route::filter('deny-non-async', function ()
 {
-	#if (!Request::ajax() || Auth::guest() || !Auth::user()->has_role('admin')) {
-	#	return Response::error('500');
-	#}
+	if (!Request::ajax() || Auth::guest() || !Auth::user()->has_role('admin')) {
+		return Response::error('500');
+	}
 });
 
 /*

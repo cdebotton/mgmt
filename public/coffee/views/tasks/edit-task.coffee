@@ -5,7 +5,6 @@ define [
 	'jquery'
 	'jst'
 	'animate'
-	'models/clients/client'
 	'views/widgets/livesearch-input'
 	'models/widgets/livesearch'
 	'relational'
@@ -46,7 +45,6 @@ define [
 			ctx.user_list = window.users
 			html = United.JST.EditModal ctx
 			@$el.html html
-			@$user 			= @$ '[name="developer_id"]'
 			@
 
 		setup: ->
@@ -58,10 +56,10 @@ define [
 
 		updateTask: (search) ->
 			result = search.get('result')
-			task = new United.Models.Tasks.Task
-			ctx = task.parse result.attributes
-			task.set ctx
-			@$client.val task.get('project').get('client').get('name')
+			ctx = @model.parse result.attributes
+			@model.set ctx
+			@$('.edit-modal').css 'opacity', 1
+			#@$client.val task.get('project').get('client').get('name')
 
 		expose: () ->
 			EXPOSED = true

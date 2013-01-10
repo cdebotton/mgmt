@@ -4,7 +4,7 @@
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['backbone', 'underscore', 'ns', 'jquery', 'jst', 'animate', 'models/clients/client', 'views/widgets/livesearch-input', 'models/widgets/livesearch', 'relational'], function(Backbone, _, ns, $) {
+  define(['backbone', 'underscore', 'ns', 'jquery', 'jst', 'animate', 'views/widgets/livesearch-input', 'models/widgets/livesearch', 'relational'], function(Backbone, _, ns, $) {
     ns('United.Views.Tasks.EditTask');
     return United.Views.Tasks.EditTask = (function(_super) {
       var EXPOSED;
@@ -83,7 +83,6 @@
         ctx.user_list = window.users;
         html = United.JST.EditModal(ctx);
         this.$el.html(html);
-        this.$user = this.$('[name="developer_id"]');
         return this;
       };
 
@@ -98,12 +97,11 @@
       };
 
       EditTask.prototype.updateTask = function(search) {
-        var ctx, result, task;
+        var ctx, result;
         result = search.get('result');
-        task = new United.Models.Tasks.Task;
-        ctx = task.parse(result.attributes);
-        task.set(ctx);
-        return this.$client.val(task.get('project').get('client').get('name'));
+        ctx = this.model.parse(result.attributes);
+        this.model.set(ctx);
+        return this.$('.edit-modal').css('opacity', 1);
       };
 
       EditTask.prototype.expose = function() {

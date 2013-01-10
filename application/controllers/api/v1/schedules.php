@@ -97,7 +97,9 @@ class Api_V1_Schedules_Controller extends Controller {
 			->get();
 		$response = array('sources' => array());
 		foreach ($tasks as $task) {
-			$task->name = $task->project->code . ' - ' . $task->name;
+			if (isset($task->project) && isset($task->project->name)) {
+				$task->name = $task->project->code . ' - ' . $task->name;
+			}
 			array_push($response['sources'], $task->to_array());
 		}
 		return Response::json($response);
