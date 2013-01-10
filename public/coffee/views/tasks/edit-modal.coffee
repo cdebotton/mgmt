@@ -11,9 +11,9 @@ define [
 	ns 'United.Views.Tasks.EditModal'
 	class United.Views.Tasks.EditModal extends Backbone.View
 		tagName:	'section'
-		
+
 		className:	'striped-cheech'
-		
+
 		events:
 			'click .icon-remove':			'closeModal'
 			'click button[type="submit"]':	'saveTask'
@@ -95,10 +95,7 @@ define [
 				@model.get('task').save()
 			else
 				task = new United.Models.Tasks.Task attrs
-				task.save null, {
-					wait: true
-					success: (task, attrs, status) -> task.set 'id', attrs.id
-				}
+				task.save null, { wait: true }
 
 			@closeModal e
 

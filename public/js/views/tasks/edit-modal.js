@@ -134,10 +134,7 @@
         } else {
           task = new United.Models.Tasks.Task(attrs);
           task.save(null, {
-            wait: true,
-            success: function(task, attrs, status) {
-              return task.set('id', attrs.id);
-            }
+            wait: true
           });
         }
         return this.closeModal(e);
