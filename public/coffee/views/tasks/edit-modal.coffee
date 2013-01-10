@@ -56,7 +56,7 @@ define [
 			@liveSearch = new United.Views.Widgets.LiveSearchInput
 				el: '#task-search'
 				model: new United.Models.Widgets.LiveSearch
-					queryUri: '/api/v1/tasks/unassigned'
+					queryUri: '/api/v1/schedules/unassigned'
 
 		expose: () ->
 			@body.bind 'keyup', @bindEscape

@@ -69,31 +69,30 @@ define [
 			lookup: ->
 				@model.unset 'currentIndex'
 				@model.unset 'results'
-				query = @$el.val()
-				if @model.has('queryUri')
-					@model.fetch()
+				@query = @$el.val()
+				if @model.has('queryUri') then @model.fetch { success: @drawResults }
 				else @drawResults()
 
 
-			drawResults: () ->
-				results = @model.get('sources').filter (source, key) ->
-						~source.get('name').toLowerCase().indexOf query.toLowerCase()
-					if results.length > 0 and query isnt ''
+			drawResults: =>
+				results = @model.get('sources').filter (source, key) =>
+						~source.get('name').toLowerCase().indexOf @query.toLowerCase()
+					if results.length > 0 and @query isnt ''
 						LIST_VISIBLE = true
-						results = new Backbone.Collection @sorter results, query
+						results = new Backbone.Collection @sorter results
 						results.on 'selected', @itemSelected, @
-						United.EventBus.trigger 'search-results-found', query, results, @cid
+						United.EventBus.trigger 'search-results-found', @query, results, @cid
 						@model.set 'results', results
 						@model.set 'currentIndex', 0
 					else @hide()
 
-			sorter: (results, query) ->
+			sorter: (results) =>
 				beginsWith = []
 				caseSensitive = []
 				caseInsensitive = []
 				while (item = results.shift())
-					if not item.get('name').toLowerCase().indexOf query.toLowerCase() then beginsWith.push item
-					else if ~item.get('name').indexOf query then caseSensitive.push item
+					if not item.get('name').toLowerCase().indexOf @query.toLowerCase() then beginsWith.push item
+					else if ~item.get('name').indexOf @query then caseSensitive.push item
 					else caseInsensitive.push item
 				beginsWith.concat caseSensitive, caseInsensitive
 

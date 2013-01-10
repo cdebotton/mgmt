@@ -21,8 +21,7 @@ define [
 		}]
 
 		url: ->
-			if @model.has 'queryUri'
-				@model.get 'queryUri'
+			if @has 'queryUri' then @get 'queryUri'
 
 		initialize: ->
 			@on 'change:currentIndex', @controlCurrentIndex, @

@@ -14,6 +14,10 @@
       function LiveSearchInput() {
         this.itemSelected = __bind(this.itemSelected, this);
 
+        this.sorter = __bind(this.sorter, this);
+
+        this.drawResults = __bind(this.drawResults, this);
+
         this.move = __bind(this.move, this);
 
         this.keyUp = __bind(this.keyUp, this);
@@ -119,27 +123,29 @@
       };
 
       LiveSearchInput.prototype.lookup = function() {
-        var query;
         this.model.unset('currentIndex');
         this.model.unset('results');
-        query = this.$el.val();
+        this.query = this.$el.val();
         if (this.model.has('queryUri')) {
-          return this.model.fetch();
+          return this.model.fetch({
+            success: this.drawResults
+          });
         } else {
           return this.drawResults();
         }
       };
 
       LiveSearchInput.prototype.drawResults = function() {
-        var results;
+        var results,
+          _this = this;
         results = this.model.get('sources').filter(function(source, key) {
-          return ~source.get('name').toLowerCase().indexOf(query.toLowerCase());
+          return ~source.get('name').toLowerCase().indexOf(_this.query.toLowerCase());
         });
-        if (results.length > 0 && query !== '') {
+        if (results.length > 0 && this.query !== '') {
           LIST_VISIBLE = true;
-          results = new Backbone.Collection(this.sorter(results, query));
+          results = new Backbone.Collection(this.sorter(results));
           results.on('selected', this.itemSelected, this);
-          United.EventBus.trigger('search-results-found', query, results, this.cid);
+          United.EventBus.trigger('search-results-found', this.query, results, this.cid);
           this.model.set('results', results);
           return this.model.set('currentIndex', 0);
         } else {
@@ -147,15 +153,15 @@
         }
       };
 
-      LiveSearchInput.prototype.sorter = function(results, query) {
+      LiveSearchInput.prototype.sorter = function(results) {
         var beginsWith, caseInsensitive, caseSensitive, item;
         beginsWith = [];
         caseSensitive = [];
         caseInsensitive = [];
         while ((item = results.shift())) {
-          if (!item.get('name').toLowerCase().indexOf(query.toLowerCase())) {
+          if (!item.get('name').toLowerCase().indexOf(this.query.toLowerCase())) {
             beginsWith.push(item);
-          } else if (~item.get('name').indexOf(query)) {
+          } else if (~item.get('name').indexOf(this.query)) {
             caseSensitive.push(item);
           } else {
             caseInsensitive.push(item);

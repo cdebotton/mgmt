@@ -87,17 +87,15 @@ class Api_V1_Schedules_Controller extends Controller {
 
 	}
 
-	final public function get_test($id, $user_id)
+	final public function get_unassigned()
 	{
-		$user = Task::find($id)
-			->users()
-			->where_user_id($user_id)
-			->first();
-
-		$user->pivot->percentage = 75;
-		$user->pivot->save();
-
-
-		return json_encode($user);
+		$tasks = Task::with(array('project', 'project.client'))
+			->where_null('user_id')
+			->get();
+		$response = array('sources' => array());
+		foreach ($tasks as $task) {
+			array_push($response['sources'], $task->to_array());
+		}
+		return Response::json($response);
 	}
 }

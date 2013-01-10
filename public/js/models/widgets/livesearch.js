@@ -28,8 +28,8 @@
       ];
 
       LiveSearch.prototype.url = function() {
-        if (this.model.has('queryUri')) {
-          return this.model.get('queryUri');
+        if (this.has('queryUri')) {
+          return this.get('queryUri');
         }
       };
 
