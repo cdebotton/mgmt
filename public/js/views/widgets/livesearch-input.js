@@ -191,8 +191,7 @@
         this.$el.attr('disabled', true);
         this.icons.on('click', _.bind(this.deselect, this));
         this.model.set({
-          value: selection.get('id'),
-          client_name: selection.get('name')
+          result: selection
         });
         return this.hide();
       };

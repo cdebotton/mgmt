@@ -20,8 +20,7 @@ define [
 				includeInJSON:	false
 		}]
 
-		url: ->
-			if @has 'queryUri' then @get 'queryUri'
+		url: -> if @has 'queryUri' then @get 'queryUri'
 
 		initialize: ->
 			@on 'change:currentIndex', @controlCurrentIndex, @

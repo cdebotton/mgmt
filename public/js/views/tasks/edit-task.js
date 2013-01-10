@@ -4,13 +4,13 @@
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['backbone', 'underscore', 'ns', 'jquery', 'jst', 'animate', 'models/tasks/task', 'views/widgets/livesearch-input', 'models/widgets/livesearch'], function(Backbone, _, ns, $) {
-    ns('United.Views.Tasks.EditModal');
-    return United.Views.Tasks.EditModal = (function(_super) {
+  define(['backbone', 'underscore', 'ns', 'jquery', 'jst', 'animate', 'models/clients/client', 'views/widgets/livesearch-input', 'models/widgets/livesearch', 'relational'], function(Backbone, _, ns, $) {
+    ns('United.Views.Tasks.EditTask');
+    return United.Views.Tasks.EditTask = (function(_super) {
 
-      __extends(EditModal, _super);
+      __extends(EditTask, _super);
 
-      function EditModal() {
+      function EditTask() {
         this.printColors = __bind(this.printColors, this);
 
         this.printUsers = __bind(this.printUsers, this);
@@ -22,71 +22,66 @@
         this.closeModal = __bind(this.closeModal, this);
 
         this.dropModal = __bind(this.dropModal, this);
-        return EditModal.__super__.constructor.apply(this, arguments);
+        return EditTask.__super__.constructor.apply(this, arguments);
       }
 
-      EditModal.prototype.tagName = 'section';
+      EditTask.prototype.tagName = 'section';
 
-      EditModal.prototype.className = 'striped-cheech';
+      EditTask.prototype.className = 'striped-cheech';
 
-      EditModal.prototype.events = {
+      EditTask.prototype.events = {
         'click .icon-remove': 'closeModal',
         'click button[type="submit"]': 'saveTask'
       };
 
-      EditModal.prototype.initialize = function() {
+      EditTask.prototype.initialize = function() {
         United.JST.Hb.registerHelper('printUsers', this.printUsers);
-        return United.JST.Hb.registerHelper('printColors', this.printColors);
+        United.JST.Hb.registerHelper('printColors', this.printColors);
+        United.JST.Hb.registerHelper('printMonth', this.printMonth);
+        United.JST.Hb.registerHelper('printDay', this.printDay);
+        United.JST.Hb.registerHelper('printYear', this.printYear);
+        return this.model.on('change:client change:start_date change:end_date', this.render, this);
       };
 
-      EditModal.prototype.render = function() {
-        var ctx, html, task, today;
+      EditTask.prototype.render = function() {
+        var ctx, html;
         this.body = $('body');
-        if (this.model.has('task')) {
-          task = this.model.get('task');
-          ctx = this.model.get('task').toJSON();
-          ctx.user_list = window.users;
-          ctx.start_month = task.get('start_date').getMonth() + 1;
-          ctx.start_day = task.get('start_date').getDate();
-          ctx.start_year = task.get('start_date').getFullYear();
-          ctx.end_month = task.get('end_date').getMonth() + 1;
-          ctx.end_day = task.get('end_date').getDate();
-          ctx.end_year = task.get('end_date').getFullYear();
-        } else {
-          today = new Date;
-          ctx = {
-            start_month: today.getMonth() + 1,
-            start_day: today.getDate(),
-            start_year: today.getFullYear(),
-            end_month: today.getMonth() + 1,
-            end_day: today.getDate(),
-            end_year: today.getFullYear(),
-            user_list: window.users
-          };
-        }
+        ctx = this.model.toJSON();
+        ctx.user_list = window.users;
         html = United.JST.EditModal(ctx);
         this.$el.html(html);
+        this.$user = this.$('[name="developer_id"]');
         this.expose();
         return this;
       };
 
-      EditModal.prototype.setup = function() {
-        return this.liveSearch = new United.Views.Widgets.LiveSearchInput({
+      EditTask.prototype.setup = function() {
+        this.liveSearch = new United.Views.Widgets.LiveSearchInput({
           el: '#task-search',
           model: new United.Models.Widgets.LiveSearch({
             queryUri: '/api/v1/schedules/unassigned'
           })
         });
+        return this.liveSearch.model.on('change:result', this.updateTask, this);
       };
 
-      EditModal.prototype.expose = function() {
+      EditTask.prototype.updateTask = function(search) {
+        var ctx, result, task;
+        result = search.get('result');
+        task = new United.Models.Tasks.Task;
+        ctx = task.parse(result.attributes);
+        task.set(ctx);
+        return this.$client.val(task.get('project').get('client').get('name'));
+      };
+
+      EditTask.prototype.expose = function() {
         this.body.bind('keyup', this.bindEscape);
         return this.$el.css('opacity', 0).animate({
           opacity: 1
         }, 150, 'ease-in', this.dropModal);
       };
 
-      EditModal.prototype.dropModal = function() {
+      EditTask.prototype.dropModal = function() {
         this.setup();
         return this.$('.edit-modal').delay(150).css({
           top: '50%',
@@ -97,7 +92,7 @@
         });
       };
 
-      EditModal.prototype.closeModal = function(e) {
+      EditTask.prototype.closeModal = function(e) {
         var _this = this;
         this.$('.edit-modal').animate({
           marginTop: -($(window).height() + 250)
@@ -113,26 +108,25 @@
         return e.preventDefault();
       };
 
-      EditModal.prototype.bindEscape = function(e) {
+      EditTask.prototype.bindEscape = function(e) {
         if (e.keyCode === 27) {
           return this.closeModal(e);
         }
       };
 
-      EditModal.prototype.saveTask = function(e) {
+      EditTask.prototype.saveTask = function(e) {
         var attr, attrs, key, task;
         attrs = {
           'author_id': window.author_id,
-          'name': this.$('[name="name"]').val(),
-          'project_code': this.$('[name="project_code"]').val(),
-          'client': this.$('[name="client"]').val(),
-          'start_date': new Date(this.$('[name="start_year"]').val(), parseInt(this.$('[name="start_month"]').val()) - 1, this.$('[name="start_day"]').val()),
-          'end_date': new Date(this.$('[name="end_year"]').val(), parseInt(this.$('[name="end_month"]').val()) - 1, this.$('[name="end_day"]').val()),
-          'color': this.$('[name="color"]').val(),
+          'name': this.$name.val(),
+          'client': this.$client.val(),
+          'start_date': new Date(this.$start_year.val(), parseInt(this.$start_month.val()) - 1, this.$start_day.val()),
+          'end_date': new Date(this.$end_year.val(), parseInt(this.$end_month.val()) - 1, this.$end_day.val()),
+          'color': this.$color.val(),
           'track': 0,
-          'percentage': $('[name="percentage"]').val(),
+          'percentage': this.$percentage.val(),
           'user': {
-            'id': parseInt(this.$('[name="developer_id"]').val())
+            'id': parseInt(this.$user.val())
           }
         };
         if (this.model.has('task')) {
@@ -150,7 +144,7 @@
         return this.closeModal(e);
       };
 
-      EditModal.prototype.printUsers = function(array, opts) {
+      EditTask.prototype.printUsers = function(array, opts) {
         var buffer, item, key, user, _i, _len, _ref;
         if (array != null ? array.length : void 0) {
           buffer = '';
@@ -169,7 +163,7 @@
         }
       };
 
-      EditModal.prototype.printColors = function(opts) {
+      EditTask.prototype.printColors = function(opts) {
         var buffer, color, colors, id, _ref;
         colors = {
           blue: 'Blue',
@@ -189,7 +183,19 @@
         return buffer;
       };
 
-      return EditModal;
+      EditTask.prototype.printMonth = function(date) {
+        return date.getMonth() + 1;
+      };
+
+      EditTask.prototype.printDay = function(date) {
+        return date.getDate();
+      };
+
+      EditTask.prototype.printYear = function(date) {
+        return date.getFullYear();
+      };
+
+      return EditTask;
 
     })(Backbone.View);
   });

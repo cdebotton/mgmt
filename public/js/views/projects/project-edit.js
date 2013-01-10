@@ -135,8 +135,7 @@
 
       ProjectEdit.prototype.setClientProps = function(model) {
         return this.model.get('project').set({
-          client_id: model.get('value'),
-          client_name: model.get('client_name')
+          result: model
         });
       };
 

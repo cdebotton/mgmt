@@ -111,8 +111,7 @@ define [
 				@$el.attr 'disabled', true
 				@icons.on 'click', _.bind @deselect, @
 				@model.set {
-					value: selection.get 'id'
-					client_name: selection.get 'name'
+					result: selection
 				}
 				@hide()
 

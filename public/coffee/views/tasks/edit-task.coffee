@@ -5,13 +5,14 @@ define [
 	'jquery'
 	'jst'
 	'animate'
-	'models/tasks/task'
+	'models/clients/client'
 	'views/widgets/livesearch-input'
 	'models/widgets/livesearch'
+	'relational'
 ], (Backbone, _, ns, $) ->
 
-	ns 'United.Views.Tasks.EditModal'
-	class United.Views.Tasks.EditModal extends Backbone.View
+	ns 'United.Views.Tasks.EditTask'
+	class United.Views.Tasks.EditTask extends Backbone.View
 		tagName:	'section'
 
 		className:	'striped-cheech'
@@ -23,32 +24,18 @@ define [
 		initialize: ->
 			United.JST.Hb.registerHelper 'printUsers', @printUsers
 			United.JST.Hb.registerHelper 'printColors', @printColors
+			United.JST.Hb.registerHelper 'printMonth', @printMonth
+			United.JST.Hb.registerHelper 'printDay', @printDay
+			United.JST.Hb.registerHelper 'printYear', @printYear
+			@model.on 'change:client change:start_date change:end_date', @render, @
 
 		render: ->
 			@body = $ 'body'
-			if @model.has('task')
-				task = @model.get 'task'
-				ctx = @model.get('task').toJSON()
-				ctx.user_list = window.users
-				ctx.start_month = task.get('start_date').getMonth() + 1
-				ctx.start_day = task.get('start_date').getDate()
-				ctx.start_year = task.get('start_date').getFullYear()
-				ctx.end_month = task.get('end_date').getMonth() + 1
-				ctx.end_day = task.get('end_date').getDate()
-				ctx.end_year = task.get('end_date').getFullYear()
-			else
-				today = new Date
-				ctx = {
-					start_month: today.getMonth() + 1
-					start_day: today.getDate()
-					start_year: today.getFullYear()
-					end_month: today.getMonth() + 1
-					end_day: today.getDate()
-					end_year: today.getFullYear()
-					user_list: window.users
-				}
+			ctx = @model.toJSON()
+			ctx.user_list = window.users
 			html = United.JST.EditModal ctx
 			@$el.html html
+			@$user 			= @$ '[name="developer_id"]'
 			@expose()
 			@
 
@@ -57,6 +44,14 @@ define [
 				el: '#task-search'
 				model: new United.Models.Widgets.LiveSearch
 					queryUri: '/api/v1/schedules/unassigned'
+			@liveSearch.model.on 'change:result', @updateTask, @
+
+		updateTask: (search) ->
+			result = search.get('result')
+			task = new United.Models.Tasks.Task
+			ctx = task.parse result.attributes
+			task.set ctx
+			@$client.val task.get('project').get('client').get('name')
 
 		expose: () ->
 			@body.bind 'keyup', @bindEscape
@@ -87,15 +82,14 @@ define [
 		saveTask: (e) =>
 			attrs = {
 				'author_id':		window.author_id
-				'name':				@$('[name="name"]').val()
-				'project_code':		@$('[name="project_code"]').val()
-				'client':			@$('[name="client"]').val()
-				'start_date':		new Date @$('[name="start_year"]').val(), parseInt(@$('[name="start_month"]').val()) - 1, @$('[name="start_day"]').val()
-				'end_date':			new Date @$('[name="end_year"]').val(), parseInt(@$('[name="end_month"]').val()) - 1, @$('[name="end_day"]').val()
-				'color':			@$('[name="color"]').val()
+				'name':				@$name.val()
+				'client':			@$client.val()
+				'start_date':		new Date @$start_year.val(), parseInt(@$start_month.val()) - 1, @$start_day.val()
+				'end_date':			new Date @$end_year.val(), parseInt(@$end_month.val()) - 1, @$end_day.val()
+				'color':			@$color.val()
 				'track':			0
-				'percentage':		$('[name="percentage"]').val()
-				'user':				{ 'id': parseInt @$('[name="developer_id"]').val() }
+				'percentage':		@$percentage.val()
+				'user':				{ 'id': parseInt @$user.val() }
 			}
 
 			if @model.has 'task'
@@ -131,3 +125,9 @@ define [
 					selected: if @model.get('task')?.get('color') is id then ' SELECTED' else ''
 				}
 			return buffer
+
+		printMonth: (date) -> date.getMonth() + 1
+
+		printDay: (date) -> date.getDate()
+
+		printYear: (date) -> date.getFullYear()

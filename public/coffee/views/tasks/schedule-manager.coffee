@@ -8,8 +8,7 @@ define [
 	'views/tasks/task-timeline'
 	'views/tasks/graph-timeline'
 	'views/tasks/date-guides'
-	'views/tasks/edit-modal'
-	'models/tasks/edit-modal'
+	'views/tasks/edit-task'
 	'models/tasks/task'
 	'views/tasks/scale-controller'
 	'models/tasks/scale-controller'
@@ -56,7 +55,7 @@ define [
 										model: @model
 				taskTimeline:		new United.Views.Tasks.TaskTimeline
 										model: @model
-				#dateGuides: 		new United.Views.Tasks.DateGuides	
+				#dateGuides: 		new United.Views.Tasks.DateGuides
 			}
 			@calendar_views = _.extend {}, {
 				calendarView:		new United.Views.Tasks.CalendarView
@@ -83,19 +82,15 @@ define [
 			United.EventBus.trigger 'adjust', w, h
 
 		createNewTask: (e) =>
-			@openModal()
+			@openModal new United.Models.Tasks.Task
 			e.preventDefault()
 
-		openModal: (task = null) =>
-			if MODAL_OPEN
-				return false
-			MODAL_OPEN = true
+		openModal: (task) =>
 			if not United.Models.Users.Session.isAdmin() then return false
-			params = {}
-			params['users'] = @model.get('users')
-			if task isnt null then params['task'] = task
-			@modal = new United.Views.Tasks.EditModal
-				model: new United.Models.Tasks.EditModal params
+			if MODAL_OPEN then return false
+			MODAL_OPEN = true
+			@modal = new United.Views.Tasks.EditTask
+				model: task
 			@$el.append @modal.render().$el
 			return false
 

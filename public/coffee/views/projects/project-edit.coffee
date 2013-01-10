@@ -93,8 +93,7 @@ define [
 
 		setClientProps: (model) =>
 			@model.get('project').set {
-				client_id: model.get 'value'
-				client_name: model.get 'client_name'
+				result: model
 			}
 
 		saveProject: (e) =>

@@ -4,7 +4,7 @@
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['backbone', 'jquery', 'underscore', 'ns', 'mousetrap', 'views/tasks/profile-palette', 'views/tasks/task-timeline', 'views/tasks/graph-timeline', 'views/tasks/date-guides', 'views/tasks/edit-modal', 'models/tasks/edit-modal', 'models/tasks/task', 'views/tasks/scale-controller', 'models/tasks/scale-controller', 'views/tasks/graph-filters', 'models/tasks/graph-filters', 'views/tasks/view-selector', 'models/tasks/view-selector', 'views/tasks/calendar'], function(Backbone, $, _, ns, Mousetrap) {
+  define(['backbone', 'jquery', 'underscore', 'ns', 'mousetrap', 'views/tasks/profile-palette', 'views/tasks/task-timeline', 'views/tasks/graph-timeline', 'views/tasks/date-guides', 'views/tasks/edit-task', 'models/tasks/task', 'views/tasks/scale-controller', 'models/tasks/scale-controller', 'views/tasks/graph-filters', 'models/tasks/graph-filters', 'views/tasks/view-selector', 'models/tasks/view-selector', 'views/tasks/calendar'], function(Backbone, $, _, ns, Mousetrap) {
     ns('United.Views.Tasks.ScheduleManager');
     return United.Views.Tasks.ScheduleManager = (function(_super) {
       var MODAL_OPEN;
@@ -101,29 +101,20 @@
       };
 
       ScheduleManager.prototype.createNewTask = function(e) {
-        this.openModal();
+        this.openModal(new United.Models.Tasks.Task);
         return e.preventDefault();
       };
 
       ScheduleManager.prototype.openModal = function(task) {
-        var params;
-        if (task == null) {
-          task = null;
+        if (!United.Models.Users.Session.isAdmin()) {
+          return false;
         }
         if (MODAL_OPEN) {
           return false;
         }
         MODAL_OPEN = true;
-        if (!United.Models.Users.Session.isAdmin()) {
-          return false;
-        }
-        params = {};
-        params['users'] = this.model.get('users');
-        if (task !== null) {
-          params['task'] = task;
-        }
-        this.modal = new United.Views.Tasks.EditModal({
-          model: new United.Models.Tasks.EditModal(params)
+        this.modal = new United.Views.Tasks.EditTask({
+          model: task
         });
         this.$el.append(this.modal.render().$el);
         return false;
