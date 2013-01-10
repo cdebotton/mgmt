@@ -196,6 +196,22 @@
         return this.hide();
       };
 
+      LiveSearchInput.prototype.populate = function(item, _idAttribute, _nameAttribute) {
+        if (_idAttribute == null) {
+          _idAttribute = 'id';
+        }
+        if (_nameAttribute == null) {
+          _nameAttribute = 'name';
+        }
+        this.$el.val(item.get(_nameAttribute));
+        this.$el.attr('disabled', true);
+        this.icons.on('click', _.bind(this.deselect, this));
+        this.model.set({
+          result: item
+        });
+        return this.hide();
+      };
+
       LiveSearchInput.prototype.deselect = function(e) {
         this.icons.off('click', _.bind(this.deselect, this));
         this.$el.removeAttr('disabled');

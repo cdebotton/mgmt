@@ -24,7 +24,7 @@
 			<div class="form-element task-assigned-to">
 				<select name="user_id">
 					<option value="null">Unassigned</option>
-					{{#printUsers users}}
+					{{#printUsers users user_id}}
 						<option value="{{ id }}"{{ selected }}>{{ email }}</option>
 					{{/printUsers}}
 				</select>

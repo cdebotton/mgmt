@@ -80,6 +80,12 @@
         var ctx, html;
         this.body = $('body');
         ctx = this.model.toJSON();
+        if (this.model.get('project')) {
+          ctx.project = this.model.get('project').toJSON();
+          if (this.model.get('project').get('client')) {
+            ctx.project.client = this.model.get('project').get('client').toJSON();
+          }
+        }
         ctx.user_list = window.users;
         html = United.JST.EditModal(ctx);
         this.$el.html(html);
@@ -93,6 +99,9 @@
             queryUri: '/api/v1/schedules/unassigned'
           })
         });
+        if (this.model.get('project')) {
+          this.liveSearch.populate(this.model.get('project'));
+        }
         return this.liveSearch.model.on('change:result', this.updateTask, this);
       };
 
@@ -209,8 +218,8 @@
         return this.closeModal(e);
       };
 
-      EditTask.prototype.printUsers = function(array, opts) {
-        var buffer, item, key, user, _i, _len, _ref;
+      EditTask.prototype.printUsers = function(array, user_id, opts) {
+        var buffer, item, key, user, _i, _len;
         if (array != null ? array.length : void 0) {
           buffer = '';
           for (key = _i = 0, _len = array.length; _i < _len; key = ++_i) {
@@ -218,7 +227,7 @@
             item = {
               id: user.id,
               email: user.email,
-              selected: ((_ref = this.model.get('task')) != null ? _ref.has('user') : void 0) && +user.id === +this.model.get('task').get('user').get('id') ? ' SELECTED' : ''
+              selected: user_id && +user.id === +user_id ? ' SELECTED' : ''
             };
             buffer += opts.fn(item);
           }

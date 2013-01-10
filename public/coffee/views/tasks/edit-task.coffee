@@ -42,6 +42,10 @@ define [
 		render: ->
 			@body = $ 'body'
 			ctx = @model.toJSON()
+			if (@model.get('project'))
+				ctx.project = @model.get('project').toJSON()
+				if (@model.get('project').get('client'))
+					ctx.project.client = @model.get('project').get('client').toJSON()
 			ctx.user_list = window.users
 			html = United.JST.EditModal ctx
 			@$el.html html
@@ -52,6 +56,8 @@ define [
 				el: '#task-search'
 				model: new United.Models.Widgets.LiveSearch
 					queryUri: '/api/v1/schedules/unassigned'
+			if @model.get('project')
+				@liveSearch.populate @model.get('project')
 			@liveSearch.model.on 'change:result', @updateTask, @
 
 		updateTask: (search) ->
@@ -59,7 +65,6 @@ define [
 			ctx = @model.parse result.attributes
 			@model.set ctx
 			@$('.edit-modal').css 'opacity', 1
-			#@$client.val task.get('project').get('client').get('name')
 
 		expose: () ->
 			EXPOSED = true
@@ -133,14 +138,14 @@ define [
 			}
 			@closeModal e
 
-		printUsers: (array, opts) =>
+		printUsers: (array, user_id, opts) =>
 			if array?.length
 				buffer = ''
 				for user, key in array
 					item = {
 						id: user.id
 						email: user.email
-						selected: if @model.get('task')?.has('user') and +user.id is +@model.get('task').get('user').get('id') then ' SELECTED' else ''
+						selected: if user_id and +user.id is +user_id then ' SELECTED' else ''
 					}
 					buffer += opts.fn item
 				return buffer

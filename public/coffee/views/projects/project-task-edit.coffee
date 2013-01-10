@@ -33,6 +33,8 @@ define [
 			s = task.get 'start_date'
 			e = task.get 'end_date'
 			ctx = task.toJSON()
+			if task.get('user')
+				ctx.user_id = task.get('user').get('id')
 			ctx.start_month = s.getMonth()+1
 			ctx.start_day = s.getDate()
 			ctx.start_year = s.getFullYear()
@@ -152,14 +154,14 @@ define [
 		updatePercentage: (e) =>
 			@model.get('task').set 'percentage', parseInt e.currentTarget.value
 
-		printUsers: (array, opts) =>
+		printUsers: (array, user_id, opts) =>
 			if array?.length
 				buffer = ''
 				for user, key in array
 					item = {
 						id: user.id
 						email: user.email
-						selected: if @model.get('task')?.has('user') and +user.id is +@model.get('task').get('user').get('id') then ' SELECTED' else ''
+						selected: if user_id and +user.id is +user_id then ' SELECTED' else ''
 					}
 					buffer += opts.fn item
 				return buffer

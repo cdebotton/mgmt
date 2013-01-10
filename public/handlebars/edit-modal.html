@@ -26,7 +26,7 @@
 			<div class="form-element slot-7">
 				<select name="developer_id">
 					<option value="null">Unassigned</option>
-					{{#printUsers user_list}}
+					{{#printUsers user_list user_id}}
 						<option value="{{ id }}"{{ selected }}>{{ email }}</option>
 					{{/printUsers}}
 				</select>

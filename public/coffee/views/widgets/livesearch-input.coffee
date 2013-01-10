@@ -115,6 +115,15 @@ define [
 				}
 				@hide()
 
+			populate: (item, _idAttribute='id', _nameAttribute='name') ->
+				@$el.val item.get _nameAttribute
+				@$el.attr 'disabled', true
+				@icons.on 'click', _.bind @deselect, @
+				@model.set {
+					result: item
+				}
+				@hide()
+
 			deselect: (e) ->
 				@icons.off 'click', _.bind @deselect, @
 				@$el.removeAttr 'disabled'

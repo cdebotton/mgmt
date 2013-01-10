@@ -69,6 +69,9 @@
         s = task.get('start_date');
         e = task.get('end_date');
         ctx = task.toJSON();
+        if (task.get('user')) {
+          ctx.user_id = task.get('user').get('id');
+        }
         ctx.start_month = s.getMonth() + 1;
         ctx.start_day = s.getDate();
         ctx.start_year = s.getFullYear();
@@ -232,8 +235,8 @@
         return this.model.get('task').set('percentage', parseInt(e.currentTarget.value));
       };
 
-      ProjectTaskEdit.prototype.printUsers = function(array, opts) {
-        var buffer, item, key, user, _i, _len, _ref;
+      ProjectTaskEdit.prototype.printUsers = function(array, user_id, opts) {
+        var buffer, item, key, user, _i, _len;
         if (array != null ? array.length : void 0) {
           buffer = '';
           for (key = _i = 0, _len = array.length; _i < _len; key = ++_i) {
@@ -241,7 +244,7 @@
             item = {
               id: user.id,
               email: user.email,
-              selected: ((_ref = this.model.get('task')) != null ? _ref.has('user') : void 0) && +user.id === +this.model.get('task').get('user').get('id') ? ' SELECTED' : ''
+              selected: user_id && +user.id === +user_id ? ' SELECTED' : ''
             };
             buffer += opts.fn(item);
           }
