@@ -185,7 +185,7 @@ return array(
 		'Response'   	=> 'Laravel\\Response',
 		'Route'      	=> 'Laravel\\Routing\\Route',
 		'Router'     	=> 'Laravel\\Routing\\Router',
-		'Schema'     	=> 'Laravel\\Database\\Schema',
+		'Schema'     	=> 'SchemaEnhanced\\Database\\Schema',
 		'Section'    	=> 'Laravel\\Section',
 		'Session'    	=> 'Laravel\\Session',
 		'Str'        	=> 'Laravel\\Str',
@@ -212,7 +212,7 @@ return array(
 		'SplitDropdownButton'   => 'Bootstrapper\\SplitDropdownButton',
 		'Tabbable'              => 'Bootstrapper\\Tabbable',
 		'Tables'                => 'Bootstrapper\\Tables',
-		'Typeahead'             => 'Bootstrapper\\Typeahead', 
+		'Typeahead'             => 'Bootstrapper\\Typeahead',
 	),
 
 );

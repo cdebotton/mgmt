@@ -105,7 +105,6 @@ define [
 						for task, i in attrs.tasks
 							task.start_date = new Date task.start_date
 							task.end_date = new Date task.end_date
-					project.unset 'tasks'
 					project.set 'tasks', attrs.tasks
 					project.set 'client_id', attrs.client_id
 			}

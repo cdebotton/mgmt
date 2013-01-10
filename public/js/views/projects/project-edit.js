@@ -160,7 +160,6 @@
                 task.end_date = new Date(task.end_date);
               }
             }
-            project.unset('tasks');
             project.set('tasks', attrs.tasks);
             return project.set('client_id', attrs.client_id);
           }

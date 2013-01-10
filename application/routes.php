@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Add assets to containers.
  */
