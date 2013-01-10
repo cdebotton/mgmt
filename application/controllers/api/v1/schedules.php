@@ -55,8 +55,6 @@ class Api_V1_Schedules_Controller extends Controller {
 		if(preg_match('/^(\d{4}\-\d{2}\-\d{2})/', $json->end_date, $matches)) {
 			$json->end_date = $matches[1];
 		}
-		$json->start_date = preg_replace('/(\d{4})\-\(d{2})\-\(d{2})(.+)/', '$1-$2-$3 00:00:00', $json->start_date);
-		$json->end_date = preg_replace('/(\d{4}\-\d{2}\-\d{2})(.+)/', '$1-$2-$3 00:00:00', $json->end_date);
 
 		$task->author_id			= $json->author_id;
 		$task->end_date				= $json->end_date;
