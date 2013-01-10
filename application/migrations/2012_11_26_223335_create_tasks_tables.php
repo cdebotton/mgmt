@@ -8,7 +8,7 @@ class Create_Tasks_Tables {
 	 */
 	public function up()
 	{
-		Schema::create('tasks', function ($table)
+		SchemaEnhanced::create('tasks', function ($table)
 		{
 			$table->increments('id');
 			$table->integer('author_id');
