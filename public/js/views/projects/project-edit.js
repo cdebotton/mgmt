@@ -4,7 +4,7 @@
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['backbone', 'jquery', 'ns', 'jst', 'animate', 'views/projects/project-task-edit', 'models/projects/project-task-edit', 'views/projects/project-overview', 'models/projects/project-overview', 'views/widgets/livesearch-input', 'models/widgets/livesearch'], function(Backbone, $, ns) {
+  define(['backbone', 'jquery', 'underscore', 'ns', 'jst', 'animate', 'models/clients/client', 'views/projects/project-task-edit', 'models/projects/project-task-edit', 'views/projects/project-overview', 'models/projects/project-overview', 'views/widgets/livesearch-input', 'models/widgets/livesearch'], function(Backbone, $, _, ns) {
     ns('United.Views.Projects.ProjectEdit');
     return United.Views.Projects.ProjectEdit = (function(_super) {
 
@@ -145,6 +145,7 @@
       };
 
       ProjectEdit.prototype.saveProject = function(e) {
+        var _this = this;
         return this.model.get('project').save(null, {
           wait: true,
           success: function(project, attrs) {
@@ -160,7 +161,6 @@
                 task.end_date = new Date(task.end_date);
               }
             }
-            project.set('tasks', attrs.tasks);
             return project.set('client_id', attrs.client_id);
           }
         });

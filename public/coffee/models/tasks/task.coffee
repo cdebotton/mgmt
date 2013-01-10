@@ -48,16 +48,19 @@ define [
 				if conflicts?.length > 0 then return 'Collision conflict.'
 				if attrs.track < 0 then return 'Track error.'
 
-		parse: =>
-			@attributes?['start_date'] = new Date @attributes?['start_date']
-			@attributes?['start_date'].setHours 0
-			@attributes?['start_date'].setMinutes 0
-			@attributes?['start_date'].setSeconds 0
-			@attributes?['end_date'] = new Date @attributes?['end_date']
-			@attributes?['end_date'].setHours 0
-			@attributes?['end_date'].setMinutes 0
-			@attributes?['end_date'].setSeconds 0
-			@attributes?['track'] = parseInt @attributes['track']
+		parse: (resp) ->
+			if resp.start_date
+				resp.start_date = new Date resp.start_date
+				resp.start_date.setHours 0
+				resp.start_date.setMinutes 0
+				resp.start_date.setSeconds 0
+			if resp.end_date
+				resp.end_date = new Date resp.end_date
+				resp.end_date.setHours 0
+				resp.end_date.setMinutes 0
+				resp.end_date.setSeconds 0
+				resp.track = parseInt resp.track
+			resp
 
 		locateTrack: ->
 			track = 0

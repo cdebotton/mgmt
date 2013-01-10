@@ -1,10 +1,11 @@
 define [
 	'backbone'
+	'underscore'
 	'ns'
 	'relational'
 	'models/tasks/task'
 	'collections/tasks/tasks'
-], (Backbone, ns) ->
+], (Backbone, _, ns) ->
 
 	ns 'United.Models.Projects.Project'
 	class United.Models.Projects.Project extends Backbone.RelationalModel
@@ -29,10 +30,10 @@ define [
 
 		initialize: ->
 
-		parse: =>
-			if not @attributes then return
-			@get('tasks').each (task, key) ->
-				task.set 'start_date', new Date task.get 'start_date'
-				task.set 'end_date', new Date task.get 'end_date'
+		parse: (resp) ->
+			if resp.tasks then _.each resp.tasks, (task, i) ->
+				task.start_date = new Date task.start_date
+				task.end_date = new Date task.end_date
+			resp
 
 	United.Models.Projects.Project.setup()

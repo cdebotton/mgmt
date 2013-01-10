@@ -1,16 +1,18 @@
 define [
 	'backbone'
 	'jquery'
+	'underscore'
 	'ns'
 	'jst'
 	'animate'
+	'models/clients/client'
 	'views/projects/project-task-edit'
 	'models/projects/project-task-edit'
 	'views/projects/project-overview'
 	'models/projects/project-overview'
 	'views/widgets/livesearch-input'
 	'models/widgets/livesearch'
-], (Backbone, $, ns) ->
+], (Backbone, $, _, ns) ->
 
 	ns 'United.Views.Projects.ProjectEdit'
 	class United.Views.Projects.ProjectEdit extends Backbone.View
@@ -98,14 +100,11 @@ define [
 		saveProject: (e) =>
 			@model.get('project').save null, {
 				wait: true
-				success: (project, attrs) ->
-					if project.isNew()
-						project.set 'id', attrs.id
-					if attrs.tasks?.length > 0
-						for task, i in attrs.tasks
-							task.start_date = new Date task.start_date
-							task.end_date = new Date task.end_date
-					project.set 'tasks', attrs.tasks
+				success: (project, attrs) =>
+					if project.isNew() then project.set 'id', attrs.id
+					if attrs.tasks?.length > 0 then for task, i in attrs.tasks
+						task.start_date = new Date task.start_date
+						task.end_date = new Date task.end_date
 					project.set 'client_id', attrs.client_id
 			}
 			###
