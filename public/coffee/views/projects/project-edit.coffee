@@ -19,7 +19,7 @@ define [
 		className:	'project-drawer'
 
 		events:
-			'click button[type="submit"]':		'saveProject'
+			'click #save-project':			'saveProject'
 			'click .add-task-to-project':		'newTask'
 			'click #close-project-drawer':		'closeDrawer'
 			'keyup input[name="project-name"]':	'setName'
@@ -96,3 +96,25 @@ define [
 			@model.get('project').set 'client_name', name
 
 		saveProject: (e) =>
+			@model.get('project').save null, {
+				wait: true
+				success: (project, attrs) ->
+					if project.isNew()
+						project.set 'id', attrs.id
+					if attrs.tasks?.length > 0
+						for task, i in attrs.tasks
+							task.start_date = new Date task.start_date
+							task.end_date = new Date task.end_date
+					project.unset 'tasks'
+					project.set 'tasks', attrs.tasks
+					project.set 'client_id', attrs.client_id
+			}
+			###
+			@modal = new United.Views.Widgets.Modal
+					model: new Backbone.Model
+						title: 'Unsaved Project!'
+						msg: '<p>The project must be saved before child tasks can be added.</p>'
+						options:
+							'Save Project': @saveProjectModal
+							'Cancel': United.Views.Widgets.Modal.prototype.closeModal
+			###

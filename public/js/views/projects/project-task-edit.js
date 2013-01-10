@@ -15,10 +15,6 @@
 
         this.printUsers = __bind(this.printUsers, this);
 
-        this.saveTask = __bind(this.saveTask, this);
-
-        this.saveProjectModal = __bind(this.saveProjectModal, this);
-
         this.updatePercentage = __bind(this.updatePercentage, this);
 
         this.updateUserId = __bind(this.updateUserId, this);
@@ -44,7 +40,7 @@
       }
 
       ProjectTaskEdit.prototype.events = {
-        'click #save-task': 'saveTask',
+        'click #task-done': 'animateOut',
         'keyup input[name="task-name"]': 'updateTaskName',
         'keyup input[name="start_year"]': 'updateStartYear',
         'keyup input[name="start_month"]': 'updateStartMonth',
@@ -234,55 +230,6 @@
 
       ProjectTaskEdit.prototype.updatePercentage = function(e) {
         return this.model.get('task').set('percentage', parseInt(e.currentTarget.value));
-      };
-
-      ProjectTaskEdit.prototype.saveProjectModal = function(e) {
-        var _this = this;
-        this.model.get('task').get('project').save(null, {
-          wait: true,
-          silent: true,
-          success: function(project, attrs, status) {
-            var i, task, _i, _len, _ref, _ref1;
-            project.set('id', attrs.id);
-            if (((_ref = attrs.tasks) != null ? _ref.length : void 0) > 0) {
-              _ref1 = attrs.tasks;
-              for (i = _i = 0, _len = _ref1.length; _i < _len; i = ++_i) {
-                task = _ref1[i];
-                task.start_date = new Date(task.start_date);
-                task.end_date = new Date(task.end_date);
-              }
-            }
-            project.set('tasks', attrs.tasks);
-            project.set('client_id', attrs.client_id);
-            _this.animateOut();
-            return _this.modal.closeModal();
-          }
-        });
-        return e.preventDefault();
-      };
-
-      ProjectTaskEdit.prototype.saveTask = function(e) {
-        var _this = this;
-        if (this.model.get('task').get('project').isNew()) {
-          return this.modal = new United.Views.Widgets.Modal({
-            model: new Backbone.Model({
-              title: 'Unsaved Project!',
-              msg: '<p>The project must be saved before child tasks can be added.</p>',
-              options: {
-                'Save Project': this.saveProjectModal,
-                'Cancel': United.Views.Widgets.Modal.prototype.closeModal
-              }
-            })
-          });
-        } else {
-          return this.model.get('task').save(null, {
-            wait: true,
-            success: function(task, attrs, status) {
-              _this.model.get('task').set('id', attrs.id);
-              return _this.animateOut();
-            }
-          });
-        }
       };
 
       ProjectTaskEdit.prototype.printUsers = function(array, opts) {

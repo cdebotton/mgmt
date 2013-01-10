@@ -8,7 +8,7 @@ define [
 	ns 'United.Views.Projects.ProjectTaskEdit'
 	class United.Views.Projects.ProjectTaskEdit extends Backbone.View
 		events:
-			'click #save-task':					'saveTask'
+			'click #task-done':					'animateOut'
 			'keyup input[name="task-name"]':	'updateTaskName'
 			'keyup input[name="start_year"]':	'updateStartYear'
 			'keyup input[name="start_month"]':	'updateStartMonth'
@@ -152,40 +152,6 @@ define [
 
 		updatePercentage: (e) =>
 			@model.get('task').set 'percentage', parseInt e.currentTarget.value
-
-		saveProjectModal: (e) =>
-			@model.get('task').get('project').save null, {
-				wait: true
-				silent: true
-				success: (project, attrs, status) =>
-					project.set 'id', attrs.id
-					if attrs.tasks?.length > 0
-						for task, i in attrs.tasks
-							task.start_date = new Date task.start_date
-							task.end_date = new Date task.end_date
-					project.set 'tasks', attrs.tasks
-					project.set 'client_id', attrs.client_id
-					@animateOut()
-					@modal.closeModal()
-				}
-			e.preventDefault()
-
-		saveTask: (e) =>
-			if @model.get('task').get('project').isNew()
-				@modal = new United.Views.Widgets.Modal
-					model: new Backbone.Model
-						title: 'Unsaved Project!'
-						msg: '<p>The project must be saved before child tasks can be added.</p>'
-						options:
-							'Save Project': @saveProjectModal
-							'Cancel': United.Views.Widgets.Modal.prototype.closeModal
-			else @model.get('task').save null, {
-				wait: true
-				success: (task, attrs, status) =>
-					@model.get('task').set 'id', attrs.id
-					@animateOut()
-			}
-
 
 		printUsers: (array, opts) =>
 			if array?.length

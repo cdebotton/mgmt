@@ -36,7 +36,7 @@
       ProjectEdit.prototype.className = 'project-drawer';
 
       ProjectEdit.prototype.events = {
-        'click button[type="submit"]': 'saveProject',
+        'click #save-project': 'saveProject',
         'click .add-task-to-project': 'newTask',
         'click #close-project-drawer': 'closeDrawer',
         'keyup input[name="project-name"]': 'setName',
@@ -144,7 +144,38 @@
         return this.model.get('project').set('client_name', name);
       };
 
-      ProjectEdit.prototype.saveProject = function(e) {};
+      ProjectEdit.prototype.saveProject = function(e) {
+        return this.model.get('project').save(null, {
+          wait: true,
+          success: function(project, attrs) {
+            var i, task, _i, _len, _ref, _ref1;
+            if (project.isNew()) {
+              project.set('id', attrs.id);
+            }
+            if (((_ref = attrs.tasks) != null ? _ref.length : void 0) > 0) {
+              _ref1 = attrs.tasks;
+              for (i = _i = 0, _len = _ref1.length; _i < _len; i = ++_i) {
+                task = _ref1[i];
+                task.start_date = new Date(task.start_date);
+                task.end_date = new Date(task.end_date);
+              }
+            }
+            project.unset('tasks');
+            project.set('tasks', attrs.tasks);
+            return project.set('client_id', attrs.client_id);
+          }
+        });
+        /*
+        			@modal = new United.Views.Widgets.Modal
+        					model: new Backbone.Model
+        						title: 'Unsaved Project!'
+        						msg: '<p>The project must be saved before child tasks can be added.</p>'
+        						options:
+        							'Save Project': @saveProjectModal
+        							'Cancel': United.Views.Widgets.Modal.prototype.closeModal
+        */
+
+      };
 
       return ProjectEdit;
 
