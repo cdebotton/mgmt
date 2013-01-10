@@ -2,7 +2,6 @@ define [
 	'backbone'
 	'ns'
 	'jst'
-	'views/widgets/modal'
 ], (Backbone, ns) ->
 
 	ns 'United.Views.Projects.ProjectTaskEdit'

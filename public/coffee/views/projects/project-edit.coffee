@@ -12,6 +12,7 @@ define [
 	'models/projects/project-overview'
 	'views/widgets/livesearch-input'
 	'models/widgets/livesearch'
+	'views/widgets/modal'
 ], (Backbone, $, _, ns) ->
 
 	ns 'United.Views.Projects.ProjectEdit'
@@ -98,12 +99,9 @@ define [
 
 		saveProject: (e) =>
 			@model.get('project').save null, { wait: true }
-			###
 			@modal = new United.Views.Widgets.Modal
 					model: new Backbone.Model
 						title: 'Unsaved Project!'
-						msg: '<p>The project must be saved before child tasks can be added.</p>'
+						msg: "<p>#{@model.get('project').get('name')} and its tasks have been saved.</p>"
 						options:
-							'Save Project': @saveProjectModal
-							'Cancel': United.Views.Widgets.Modal.prototype.closeModal
-			###
+							'Great!': United.Views.Widgets.Modal.prototype.closeModal

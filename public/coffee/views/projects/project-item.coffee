@@ -17,7 +17,6 @@ define [
 		initialize: ->
 			United.JST.Hb.registerHelper 'printClient', @printClient
 			@model.on 'change', @render, @
-			@model.on 'change:client', @render, @
 			@model.on 'destroy', @destroy, @
 
 		render: ->

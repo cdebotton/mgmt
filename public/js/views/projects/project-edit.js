@@ -4,7 +4,7 @@
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['backbone', 'jquery', 'underscore', 'ns', 'jst', 'animate', 'models/clients/client', 'views/projects/project-task-edit', 'models/projects/project-task-edit', 'views/projects/project-overview', 'models/projects/project-overview', 'views/widgets/livesearch-input', 'models/widgets/livesearch'], function(Backbone, $, _, ns) {
+  define(['backbone', 'jquery', 'underscore', 'ns', 'jst', 'animate', 'models/clients/client', 'views/projects/project-task-edit', 'models/projects/project-task-edit', 'views/projects/project-overview', 'models/projects/project-overview', 'views/widgets/livesearch-input', 'models/widgets/livesearch', 'views/widgets/modal'], function(Backbone, $, _, ns) {
     ns('United.Views.Projects.ProjectEdit');
     return United.Views.Projects.ProjectEdit = (function(_super) {
 
@@ -141,19 +141,18 @@
       };
 
       ProjectEdit.prototype.saveProject = function(e) {
-        return this.model.get('project').save(null, {
+        this.model.get('project').save(null, {
           wait: true
         });
-        /*
-        			@modal = new United.Views.Widgets.Modal
-        					model: new Backbone.Model
-        						title: 'Unsaved Project!'
-        						msg: '<p>The project must be saved before child tasks can be added.</p>'
-        						options:
-        							'Save Project': @saveProjectModal
-        							'Cancel': United.Views.Widgets.Modal.prototype.closeModal
-        */
-
+        return this.modal = new United.Views.Widgets.Modal({
+          model: new Backbone.Model({
+            title: 'Unsaved Project!',
+            msg: "<p>" + (this.model.get('project').get('name')) + " and its tasks have been saved.</p>",
+            options: {
+              'Great!': United.Views.Widgets.Modal.prototype.closeModal
+            }
+          })
+        });
       };
 
       return ProjectEdit;

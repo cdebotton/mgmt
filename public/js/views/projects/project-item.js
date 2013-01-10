@@ -28,7 +28,6 @@
       ProjectItem.prototype.initialize = function() {
         United.JST.Hb.registerHelper('printClient', this.printClient);
         this.model.on('change', this.render, this);
-        this.model.on('change:client', this.render, this);
         return this.model.on('destroy', this.destroy, this);
       };
 
