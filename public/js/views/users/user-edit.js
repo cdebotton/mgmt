@@ -114,8 +114,7 @@
       UserEdit.prototype.updateConfirmPassword = function(e) {};
 
       UserEdit.prototype.updateTitle = function(model, value, status) {
-        this.title.html("" + (this.model.get('first_name')) + " " + (this.model.get('last_name')));
-        return console.log(this.title.html());
+        return this.title.html("" + (this.model.get('first_name')) + " " + (this.model.get('last_name')));
       };
 
       UserEdit.prototype.saveUser = function(e) {
@@ -123,6 +122,13 @@
       };
 
       UserEdit.prototype.cancelUser = function(e) {
+        var _this = this;
+        this.model.fetch({
+          wait: true,
+          success: function() {
+            return _this.close(e);
+          }
+        });
         return e.preventDefault();
       };
 

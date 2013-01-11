@@ -69,12 +69,14 @@ define [
 
 		updateTitle: (model, value, status) ->
 			@title.html "#{@model.get 'first_name'} #{@model.get 'last_name'}"
-			console.log @title.html()
 
 		saveUser: (e) =>
 			e.preventDefault()
 
 		cancelUser: (e) =>
+			@model.fetch
+				wait: true
+				success: () => @close e
 			e.preventDefault()
 
 		render: ->
