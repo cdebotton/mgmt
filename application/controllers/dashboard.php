@@ -7,7 +7,7 @@ class Dashboard_Controller extends Base_Controller {
 
 	public function get_index ()
 	{
-		$today = date('Y-m-d 00:00:00');
+		$today = date('Y-m-d');
 
 		$user = User::with(array('pdos', 'disciplines', 'roles', 'tasks' => function($query) use($today)
 		{
