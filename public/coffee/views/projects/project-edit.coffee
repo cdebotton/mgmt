@@ -17,9 +17,7 @@ define [
 
 	ns 'United.Views.Projects.ProjectEdit'
 	class United.Views.Projects.ProjectEdit extends Backbone.View
-		tagName:	'section'
-
-		className:	'project-drawer'
+		el: '#project-drawer'
 
 		events:
 			'click #save-project':			'saveProject'
@@ -32,24 +30,33 @@ define [
 		initialize: ->
 			United.EventBus.on 'animate-drawer-in', @animateIn, @
 			United.EventBus.on 'load-task-in-editor', @editTask, @
-			@model.get('project').get('tasks').on 'add', @editTask, @
+			@model.get('tasks').on 'add', @editTask, @
 
 		render: ->
 			@body = $ 'body'
-			ctx = @model.get('project').toJSON()
+			ctx = @model.toJSON()
 			html = United.JST.ProjectDrawer ctx
 			@$el.html html
 			@taskHolder = @$ '#project-task-holder'
+			@setup()
+			if @options.open is false
+				h = @$el.innerHeight() + 10
+				@$el.css({
+					marginTop: -h
+					display: 'block'
+				}).animate {
+					marginTop: 0
+				}, '175', 'ease-out'
 			@
 
 		setName: (e) =>
-			@model.get('project').set 'name', e.currentTarget.value
+			@model.set 'name', e.currentTarget.value
 
 		setCode: (e) =>
-			@model.get('project').set 'code', e.currentTarget.value
+			@model.set 'code', e.currentTarget.value
 
 		setClient: (e) =>
-			@model.get('project').set 'client_name', e.currentTarget.value
+			@model.set 'client_name', e.currentTarget.value
 
 		editTask: (task) ->
 			@taskEditor = new United.Views.Projects.ProjectTaskEdit
@@ -58,19 +65,19 @@ define [
 			@taskHolder.html @taskEditor.render().$el
 
 		newTask: (e) =>
-			@model.get('project').get('tasks').add {}
+			@model.get('tasks').add {}
 			e.preventDefault()
 
 		setup: ->
 			@overview = new United.Views.Projects.ProjectOverview
 				model: new United.Models.Projects.ProjectOverview
-					project: @model.get 'project'
+					project: @model
 			@liveSearch = new United.Views.Widgets.LiveSearchInput
 				el: '#client-search'
 				model: new United.Models.Widgets.LiveSearch
 					sources: window.clients
-			if @model.get('project').get('client')
-				@liveSearch.setValue 'id', @model.get('project').get('client').get('id')
+			if @model.get('client')
+				@liveSearch.setValue 'id', @model.get('client').get('id')
 			@liveSearch.$el.on 'keyup', @setClient
 			@liveSearch.model.on 'change', @setClientProps
 
@@ -80,27 +87,31 @@ define [
 			@body.bind 'keyup', @bindEscape
 
 		closeDrawer: (e) =>
-			if @model.get('project').isNew()
-				@model.get('project').destroy()
-			@$el.animate { 'margin-top': -@$el.innerHeight() }, 175, 'ease-out', =>
+			if @model.isNew()
+				@model.destroy()
+			@$el.animate { 'margin-top': -(@$el.innerHeight() + 10) }, 175, 'ease-out', =>
 				@taskHolder.remove()
 				@liveSearch.remove()
-				@remove()
+				@$el.html ''
+				@$el.css {
+					display: 'none'
+					marginTop: 0
+				}
 				United.EventBus.trigger 'close-project-drawer'
 			e.preventDefault()
 
 		bindEscape: (e) => if e.keyCode is 27 then @closeDrawer e
 
 		setClientProps: (model) =>
-			@model.get('project').set {
+			@model.set {
 				result: model
 			}
 
 		saveProject: (e) =>
-			@model.get('project').save null, { wait: true }
+			@model.save null, { wait: true }
 			@modal = new United.Views.Widgets.Modal
 					model: new Backbone.Model
 						title: 'Unsaved Project!'
-						msg: "<p>#{@model.get('project').get('name')} and its tasks have been saved.</p>"
+						msg: "<p>#{@model.get('name')} and its tasks have been saved.</p>"
 						options:
 							'Great!': United.Views.Widgets.Modal.prototype.closeModal

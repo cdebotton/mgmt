@@ -12,7 +12,7 @@
       __extends(ProjectList, _super);
 
       function ProjectList() {
-        this.dropDrawer = __bind(this.dropDrawer, this);
+        this.editProject = __bind(this.editProject, this);
 
         this.createNewProject = __bind(this.createNewProject, this);
 
@@ -33,8 +33,8 @@
       ProjectList.prototype.initialize = function() {
         United.EventBus.on('close-project-drawer', this.drawerClosed, this);
         United.Models.Users.Session = this.model.get('session');
-        United.EventBus.on('open-project', this.dropDrawer, this);
-        this.model.on('add:projects', this.addOne, this);
+        United.EventBus.on('open-project', this.editProject, this);
+        this.model.on('add:projects', this.editProject, this);
         this.model.on('reset:projects', this.addAll, this);
         this.projectList = this.$('#project-list');
         return this.addAll();
@@ -54,38 +54,39 @@
       };
 
       ProjectList.prototype.createNewProject = function(e) {
-        var project;
-        project = new United.Models.Projects.Project;
-        this.model.get('projects').add(project);
-        this.dropDrawer(project);
+        this.model.get('projects').add({});
         return e.preventDefault();
       };
 
-      ProjectList.prototype.dropDrawer = function(project) {
-        var params, _ref;
-        if (project == null) {
-          project = null;
-        }
+      ProjectList.prototype.editProject = function(project) {
+        var editor;
         if (!United.Models.Users.Session.isAdmin()) {
           return false;
         }
-        if ((_ref = this.drawer) != null) {
-          _ref.remove();
+        if (project.isNew()) {
+          this.addOne(project);
         }
-        params = {};
-        params['users'] = this.model.get('users');
-        if (project !== null) {
-          params['project'] = project;
-        }
-        this.drawer = new United.Views.Projects.ProjectEdit({
-          model: new United.Models.Projects.ProjectEdit(params)
+        editor = new United.Views.Projects.ProjectEdit({
+          model: project,
+          open: DRAWER_OPEN
         });
-        this.$el.prepend(this.drawer.render().$el);
-        this.drawer.setup();
-        if (!DRAWER_OPEN) {
-          DRAWER_OPEN = true;
-          return United.EventBus.trigger('animate-drawer-in');
-        }
+        editor.render();
+        return DRAWER_OPEN = true;
+        /*
+        			@drawer?.remove()
+        
+        			params = {}
+        			params['users'] = @model.get('users')
+        			if project isnt null then params['project'] = project
+        			@drawer = new United.Views.Projects.ProjectEdit
+        				model: new United.Models.Projects.ProjectEdit params
+        			@$el.prepend @drawer.render().$el
+        			@drawer.setup()
+        			if not DRAWER_OPEN
+        				DRAWER_OPEN = true
+        				United.EventBus.trigger 'animate-drawer-in'
+        */
+
       };
 
       ProjectList.prototype.drawerClosed = function() {

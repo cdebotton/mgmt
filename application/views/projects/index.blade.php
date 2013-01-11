@@ -53,6 +53,9 @@
 				</ul>
 			</div>
 		</div>
+		<div id="project-drawer">
+
+		</div>
 		<section id="project-list">
 
 		</section>

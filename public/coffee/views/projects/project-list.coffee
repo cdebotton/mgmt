@@ -22,8 +22,8 @@ define [
 		initialize: ->
 			United.EventBus.on 'close-project-drawer', @drawerClosed, @
 			United.Models.Users.Session = @model.get 'session'
-			United.EventBus.on 'open-project', @dropDrawer, @
-			@model.on 'add:projects', @addOne, @
+			United.EventBus.on 'open-project', @editProject, @
+			@model.on 'add:projects', @editProject, @
 			@model.on 'reset:projects', @addAll, @
 			@projectList = @$ '#project-list'
 			@addAll()
@@ -38,14 +38,19 @@ define [
 			@model.get('projects').each @addOne
 
 		createNewProject: (e) =>
-			project = new United.Models.Projects.Project
-			@model.get('projects').add project
-			@dropDrawer project
+			@model.get('projects').add {}
 			e.preventDefault()
 
-		dropDrawer: (project = null) =>
+		editProject: (project) =>
 			if not United.Models.Users.Session.isAdmin()
 				return false
+			if project.isNew() then @addOne project
+			editor = new United.Views.Projects.ProjectEdit
+				model: project
+				open: DRAWER_OPEN
+			editor.render()
+			DRAWER_OPEN = true
+			###
 			@drawer?.remove()
 
 			params = {}
@@ -58,5 +63,6 @@ define [
 			if not DRAWER_OPEN
 				DRAWER_OPEN = true
 				United.EventBus.trigger 'animate-drawer-in'
+			###
 
 		drawerClosed: -> DRAWER_OPEN = false

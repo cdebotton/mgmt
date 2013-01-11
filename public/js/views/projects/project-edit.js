@@ -29,9 +29,7 @@
         return ProjectEdit.__super__.constructor.apply(this, arguments);
       }
 
-      ProjectEdit.prototype.tagName = 'section';
-
-      ProjectEdit.prototype.className = 'project-drawer';
+      ProjectEdit.prototype.el = '#project-drawer';
 
       ProjectEdit.prototype.events = {
         'click #save-project': 'saveProject',
@@ -45,29 +43,39 @@
       ProjectEdit.prototype.initialize = function() {
         United.EventBus.on('animate-drawer-in', this.animateIn, this);
         United.EventBus.on('load-task-in-editor', this.editTask, this);
-        return this.model.get('project').get('tasks').on('add', this.editTask, this);
+        return this.model.get('tasks').on('add', this.editTask, this);
       };
 
       ProjectEdit.prototype.render = function() {
-        var ctx, html;
+        var ctx, h, html;
         this.body = $('body');
-        ctx = this.model.get('project').toJSON();
+        ctx = this.model.toJSON();
         html = United.JST.ProjectDrawer(ctx);
         this.$el.html(html);
         this.taskHolder = this.$('#project-task-holder');
+        this.setup();
+        if (this.options.open === false) {
+          h = this.$el.innerHeight() + 10;
+          this.$el.css({
+            marginTop: -h,
+            display: 'block'
+          }).animate({
+            marginTop: 0
+          }, '175', 'ease-out');
+        }
         return this;
       };
 
       ProjectEdit.prototype.setName = function(e) {
-        return this.model.get('project').set('name', e.currentTarget.value);
+        return this.model.set('name', e.currentTarget.value);
       };
 
       ProjectEdit.prototype.setCode = function(e) {
-        return this.model.get('project').set('code', e.currentTarget.value);
+        return this.model.set('code', e.currentTarget.value);
       };
 
       ProjectEdit.prototype.setClient = function(e) {
-        return this.model.get('project').set('client_name', e.currentTarget.value);
+        return this.model.set('client_name', e.currentTarget.value);
       };
 
       ProjectEdit.prototype.editTask = function(task) {
@@ -80,14 +88,14 @@
       };
 
       ProjectEdit.prototype.newTask = function(e) {
-        this.model.get('project').get('tasks').add({});
+        this.model.get('tasks').add({});
         return e.preventDefault();
       };
 
       ProjectEdit.prototype.setup = function() {
         this.overview = new United.Views.Projects.ProjectOverview({
           model: new United.Models.Projects.ProjectOverview({
-            project: this.model.get('project')
+            project: this.model
           })
         });
         this.liveSearch = new United.Views.Widgets.LiveSearchInput({
@@ -96,8 +104,8 @@
             sources: window.clients
           })
         });
-        if (this.model.get('project').get('client')) {
-          this.liveSearch.setValue('id', this.model.get('project').get('client').get('id'));
+        if (this.model.get('client')) {
+          this.liveSearch.setValue('id', this.model.get('client').get('id'));
         }
         this.liveSearch.$el.on('keyup', this.setClient);
         return this.liveSearch.model.on('change', this.setClientProps);
@@ -113,15 +121,19 @@
 
       ProjectEdit.prototype.closeDrawer = function(e) {
         var _this = this;
-        if (this.model.get('project').isNew()) {
-          this.model.get('project').destroy();
+        if (this.model.isNew()) {
+          this.model.destroy();
         }
         this.$el.animate({
-          'margin-top': -this.$el.innerHeight()
+          'margin-top': -(this.$el.innerHeight() + 10)
         }, 175, 'ease-out', function() {
           _this.taskHolder.remove();
           _this.liveSearch.remove();
-          _this.remove();
+          _this.$el.html('');
+          _this.$el.css({
+            display: 'none',
+            marginTop: 0
+          });
           return United.EventBus.trigger('close-project-drawer');
         });
         return e.preventDefault();
@@ -134,19 +146,19 @@
       };
 
       ProjectEdit.prototype.setClientProps = function(model) {
-        return this.model.get('project').set({
+        return this.model.set({
           result: model
         });
       };
 
       ProjectEdit.prototype.saveProject = function(e) {
-        this.model.get('project').save(null, {
+        this.model.save(null, {
           wait: true
         });
         return this.modal = new United.Views.Widgets.Modal({
           model: new Backbone.Model({
             title: 'Unsaved Project!',
-            msg: "<p>" + (this.model.get('project').get('name')) + " and its tasks have been saved.</p>",
+            msg: "<p>" + (this.model.get('name')) + " and its tasks have been saved.</p>",
             options: {
               'Great!': United.Views.Widgets.Modal.prototype.closeModal
             }
