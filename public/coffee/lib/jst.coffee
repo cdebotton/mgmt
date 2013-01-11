@@ -13,7 +13,8 @@ define [
 	'text!templates/edit-project-task-drawer.html'
 	'text!templates/option-modal.html'
 	'text!templates/project-item.html'
-], (ns, Handlebars, _, UserBadge, UserTimeline, GraphTimeline, TaskElement, EditModal, OverageTemplate, UserCalendar, ProjectDrawer, ProjectTaskDrawer, OptionModal, ProjectItem) ->
+	'text!templates/user-item.html'
+], (ns, Handlebars, _, UserBadge, UserTimeline, GraphTimeline, TaskElement, EditModal, OverageTemplate, UserCalendar, ProjectDrawer, ProjectTaskDrawer, OptionModal, ProjectItem, UserItem) ->
 
 	ns 'United.JST'
 	United.JST =
@@ -40,4 +41,6 @@ define [
 		UserCalendar:		Handlebars.compile UserCalendar
 
 		### Paid Day Off Management ###
+
 		### User Management ###
+		UserItem:			Handlebars.compile UserItem

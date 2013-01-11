@@ -50,5 +50,8 @@
 					</li>
 				</ul>
 			</div>
+		<section id="user-list">
+
+		</section>
 	</div>
 @endsection

@@ -7,6 +7,10 @@
 	<script>
 		var controller;
 		controller = '@yield('currentController')';
+		@if(!Auth::guest())
+			var author_id;
+			author_id = {{ Auth::user()->id }};
+		@endif
 	</script>
 	@yield('js-bootstrap')
 	{{ HTML::script('js/vendors/requirejs/require.js', array('data-main' => '/js/main')) }}
@@ -27,14 +31,6 @@
 	@if(!Auth::guest() && Auth::user()->has_role('admin'))
 		{{ Anbu::render() }}
 	@endif
-
-	@if(!Auth::guest())
-	<script>
-		var author_id;
-		author_id = {{ Auth::user()->id }};
-	</script>
-	@endif
-
 	{{ Asset::scripts() }}
 </body>
 </html>
