@@ -7,6 +7,7 @@
   define(['backbone', 'ns', 'animate', 'models/users/user', 'views/users/user-item', 'views/users/user-edit'], function(Backbone, ns) {
     ns('United.Views.Users.UserList');
     return United.Views.Users.UserList = (function(_super) {
+      var EDIT_OPEN;
 
       __extends(UserList, _super);
 
@@ -21,12 +22,18 @@
 
       UserList.prototype.el = '#user-manager';
 
+      EDIT_OPEN = false;
+
       UserList.prototype.events = {
         'click #new-user': 'newUser'
       };
 
       UserList.prototype.initialize = function() {
         United.EventBus.on('edit-user', this.editUser, this);
+        United.EventBus.on('user-edit-closed', function() {
+          return EDIT_OPEN = false;
+        });
+        this.model.on('add:users', this.editUser, this);
         this.userList = this.$('#user-list');
         return this.addAll();
       };
@@ -44,16 +51,19 @@
       };
 
       UserList.prototype.editUser = function(user) {
+        if (user.isNew()) {
+          this.addOne(user);
+        }
         this.editor = new United.Views.Users.UserEdit({
-          model: user
+          model: user,
+          open: EDIT_OPEN
         });
+        EDIT_OPEN = true;
         return this.editor.render();
       };
 
       UserList.prototype.newUser = function(user) {
-        this.editor = new United.Views.Users.UserEdit({
-          model: new United.Models.Users.User
-        });
+        this.model.get('users').add({});
         return this.editor.render();
       };
 

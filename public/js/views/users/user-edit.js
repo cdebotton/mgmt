@@ -12,6 +12,8 @@
       __extends(UserEdit, _super);
 
       function UserEdit() {
+        this.close = __bind(this.close, this);
+
         this.cancelUser = __bind(this.cancelUser, this);
 
         this.saveUser = __bind(this.saveUser, this);
@@ -51,7 +53,8 @@
         'keyup [name="password"]': 'updatePassword',
         'keyup [name="confrim-password"]': 'updateConfirmPassword',
         'click #save-user': 'saveUser',
-        'click #cancel-user': 'cancelUser'
+        'click #cancel-user': 'cancelUser',
+        'click .icon-remove': 'close'
       };
 
       UserEdit.prototype.initialize = function() {
@@ -132,14 +135,33 @@
         html = United.JST.UserEdit(ctx);
         this.$el.html(html);
         this.title = this.$('#username');
-        h = this.$el.innerHeight() + 10;
-        this.$el.css({
-          marginTop: -h,
-          display: 'block'
-        }).animate({
-          marginTop: 0
-        }, '175', 'ease-out');
+        if (this.options.open === false) {
+          h = this.$el.innerHeight() + 10;
+          this.$el.css({
+            marginTop: -h,
+            display: 'block'
+          }).animate({
+            marginTop: 0
+          }, '175', 'ease-out');
+        }
         return this;
+      };
+
+      UserEdit.prototype.close = function(e) {
+        var h,
+          _this = this;
+        h = this.$el.innerHeight() + 10;
+        this.$el.animate({
+          marginTop: -h
+        }, '175', 'ease-in', function() {
+          United.EventBus.trigger('user-edit-closed');
+          _this.$el.html('');
+          return _this.$el.css({
+            marginTop: 0,
+            display: 'none'
+          });
+        });
+        return e.preventDefault();
       };
 
       UserEdit.prototype.printLogin = function(d, name) {

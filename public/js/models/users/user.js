@@ -45,7 +45,8 @@
       User.prototype.defaults = {
         first_name: 'New',
         last_name: 'User',
-        photo: 'http://placehold.it/100x100'
+        photo: 'http://placehold.it/100x100',
+        hired_on: new Date()
       };
 
       User.prototype.parse = function(resp) {

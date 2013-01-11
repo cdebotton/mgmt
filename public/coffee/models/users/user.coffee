@@ -41,6 +41,7 @@ define [
 			first_name:	'New'
 			last_name:	'User'
 			photo: 'http://placehold.it/100x100'
+			hired_on: new Date()
 
 		parse: (resp) ->
 			resp.hired_on = new Date resp.hired_on

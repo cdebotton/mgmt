@@ -11,11 +11,15 @@ define [
 	class United.Views.Users.UserList extends Backbone.View
 		el: '#user-manager'
 
+		EDIT_OPEN = false
+
 		events:
 			'click #new-user':		'newUser'
 
 		initialize: ->
 			United.EventBus.on 'edit-user', @editUser, @
+			United.EventBus.on 'user-edit-closed', () -> EDIT_OPEN = false
+			@model.on 'add:users', @editUser, @
 			@userList = @$ '#user-list'
 			@addAll()
 
@@ -28,11 +32,14 @@ define [
 			@model.get('users').each @addOne
 
 		editUser: (user) ->
+			if user.isNew() then @addOne user
 			@editor = new United.Views.Users.UserEdit
 				model: user
+				open: EDIT_OPEN
+			EDIT_OPEN = true
 			@editor.render()
 
 		newUser: (user) =>
-			@editor = new United.Views.Users.UserEdit
-				model: new United.Models.Users.User
+			@model.get('users').add {}
+
 			@editor.render()

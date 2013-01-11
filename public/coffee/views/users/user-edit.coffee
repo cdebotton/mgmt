@@ -23,6 +23,7 @@ define [
 			'keyup [name="confrim-password"]':	'updateConfirmPassword'
 			'click #save-user':					'saveUser'
 			'click #cancel-user':				'cancelUser'
+			'click .icon-remove':				'close'
 
 		initialize: ->
 			United.JST.Hb.registerHelper 'printLogin', @printLogin
@@ -84,14 +85,28 @@ define [
 			html = United.JST.UserEdit ctx
 			@$el.html html
 			@title = @$ '#username'
-			h = @$el.innerHeight() + 10
-			@$el.css({
-				marginTop: -h
-				display: 'block'
-			}).animate {
-				marginTop: 0
-			}, '175', 'ease-out'
+			if @options.open is false
+				h = @$el.innerHeight() + 10
+				@$el.css({
+					marginTop: -h
+					display: 'block'
+				}).animate {
+					marginTop: 0
+				}, '175', 'ease-out'
 			@
+
+		close: (e) =>
+			h = @$el.innerHeight() + 10
+			@$el.animate {
+				marginTop: -h
+			}, '175', 'ease-in', () =>
+				United.EventBus.trigger 'user-edit-closed'
+				@$el.html ''
+				@$el.css {
+					marginTop: 0
+					display: 'none'
+				}
+			e.preventDefault()
 
 		printLogin: (d, name) ->
 			if isNaN d.getTime()
