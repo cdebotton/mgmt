@@ -1,0 +1,73 @@
+<div class="container">
+	<header id="user-drawer-header">
+		<h3 class="pull-left"><span id="username">{{ first_name }} {{ last_name }}</span> {{#if id}}<small>{{{ printLogin last_login first_name }}}</small>{{/if}}</h3>
+		<a href="#" class="pull-right"><i id="close-user-drawer" class="icon icon-remove icon-white"></i></a>
+	</header>
+	<form class="form-horizontal">
+		<div class ="column left">
+			<div class="form-element photo">
+				<img class="img-polaroid" src="{{ photo }}" />
+				<div class="meta">
+					<input type="file" name="photo">
+					<label class="form-label">Profile Photo</label>
+				</div>
+			</div>
+		</div>
+		<div class="column right">
+			<div class="form-row">
+				<div class="form-element first-name">
+					<input type="text" name="first-name" value="{{ first_name }}">
+					<div class="meta">
+						<label class="form-label">First Name</label>
+					</div>
+				</div>
+				<div class="form-element last-name">
+					<input type="text" name="last-name" value="{{ last_name }}">
+					<div class="meta">
+						<label class="form-label">Last Name</label>
+					</div>
+				</div>
+				<div class="form-element email">
+					<input type="text" name="email" value="{{ email }}">
+					<div class="meta">
+						<label class="form-label">Email</label>
+					</div>
+				</div>
+			</div>
+			<div class="form-row">
+				<div class="form-element hired-on">
+					<article class="date-field">
+						<input type="number" class="month-field" name="hired-on-month" value="{{ hired_on_month }}"> / <input type="number" class="day-field" name="hired-on-day" value="{{ hired_on_day }}"> / <input type="number" class="year-field" name="hired-on-year" value="{{ hired_on_year }}">
+					</article>
+					<div class="meta">
+						<label class="form-label">Date of Hire</label>
+					</div>
+				</div>
+				<div class="form-element pdo">
+					<input type="text" name="pdo_allotment" value="{{ pdo_allotment }}">
+					<div class="meta">
+						<label class="form-label">Paid Days Off</label>
+					</div>
+				</div>
+			</div>
+			<div class="form-row">
+				<div class="form-element password">
+					<input type="password" name="password">
+					<div class="meta">
+						<label class="form-label">New Password</label>
+					</div>
+				</div>
+				<div class="form-element confirm-password">
+					<input type="password" name="confirm-password">
+					<div class="meta">
+						<label class="form-label">Confirm New Password</label>
+					</div>
+				</div>
+				<div class="form-element actions">
+					<button id="save-user" class="btn btn-mini btn-primary">Save</button>
+					<button id="cancel-user" class="btn btn-mini">Cancel</button>
+				</div>
+			</div>
+		</div>
+	</form>
+</div>

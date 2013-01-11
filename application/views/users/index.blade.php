@@ -13,7 +13,7 @@
 			<div class="navbar-inner">
 				<a class="brand" href="#">Users</a>
 				<ul class="nav">
-					<li><a href="#" id="new-project">New User</a></li>
+					<li><a href="#" id="new-user">New User</a></li>
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="icon icon-filter"></span> Filters <span class="caret"></span></a>
 						<ul class="dropdown-menu" role="menu">
@@ -50,6 +50,10 @@
 					</li>
 				</ul>
 			</div>
+		</div>
+		<div id="user-drawer">
+
+		</div>
 		<section id="user-list">
 
 		</section>

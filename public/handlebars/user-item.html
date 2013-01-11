@@ -10,11 +10,23 @@
 		{{/each}}
 	</div>
 </div>
-<div class="profile stats">
+<div class="profile stats{{#unless tasks}} empty {{/unless}}">
 	<h5>{{first_name}} {{last_name}}</h5>
 	<article class="current-tasks">
-		<ul>
-			<lh>Current Jobs</lh>
-		</ul>
+		{{#if tasks}}
+			<ul>
+				{{#each tasks}}
+					<li>
+						{{#if project}}
+							<span class="label label-info task-project-code">{{ project.code }}</span>
+						{{/if}}
+						<span class="task-name">{{ name }}</span>
+						<span class="task-dates">{{{ printDates start_date end_date }}}</span>
+					</li>
+				{{/each}}
+			</ul>
+		{{else}}
+			<span class="label empty">User has no current tasks.</span>
+		{{/if}}
 	</article>
 </div>

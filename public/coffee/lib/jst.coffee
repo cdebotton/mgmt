@@ -14,7 +14,8 @@ define [
 	'text!templates/option-modal.html'
 	'text!templates/project-item.html'
 	'text!templates/user-item.html'
-], (ns, Handlebars, _, UserBadge, UserTimeline, GraphTimeline, TaskElement, EditModal, OverageTemplate, UserCalendar, ProjectDrawer, ProjectTaskDrawer, OptionModal, ProjectItem, UserItem) ->
+	'text!templates/user-edit.html'
+], (ns, Handlebars, _, UserBadge, UserTimeline, GraphTimeline, TaskElement, EditModal, OverageTemplate, UserCalendar, ProjectDrawer, ProjectTaskDrawer, OptionModal, ProjectItem, UserItem, UserEdit) ->
 
 	ns 'United.JST'
 	United.JST =
@@ -44,3 +45,4 @@ define [
 
 		### User Management ###
 		UserItem:			Handlebars.compile UserItem
+		UserEdit:			Handlebars.compile UserEdit

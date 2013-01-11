@@ -23,11 +23,23 @@
         'click': 'editUser'
       };
 
-      UserItem.prototype.initialize = function() {};
+      UserItem.prototype.initialize = function() {
+        return United.JST.Hb.registerHelper('printDates', this.printDates);
+      };
 
       UserItem.prototype.render = function() {
-        var ctx, html;
+        var ctx, html, i, task, _i, _len, _ref;
         ctx = this.model.toJSON();
+        if (ctx.tasks) {
+          _ref = ctx.tasks;
+          for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
+            task = _ref[i];
+            if (task.project_id !== null) {
+              task.project = this.model.get('tasks').at(i).get('project').toJSON();
+              task.project.client = this.model.get('tasks').at(i).get('project').get('client').toJSON();
+            }
+          }
+        }
         html = United.JST.UserItem(ctx);
         this.$el.html(html);
         return this;
@@ -37,6 +49,10 @@
         e.preventDefault();
         e.stopPropagation();
         return United.EventBus.trigger('edit-user', this.model);
+      };
+
+      UserItem.prototype.printDates = function(start, end) {
+        return "" + (parseInt(start.getMonth()) + 1) + "." + (start.getDate()) + "." + (start.getFullYear()) + " &mdash; " + (parseInt(end.getMonth()) + 1) + "." + (end.getDate()) + "." + (end.getFullYear()) + " ";
       };
 
       return UserItem;
