@@ -1,5 +1,14 @@
 @layout('layouts.default')
 
+@section('js-bootstrap')
+	<script>
+		var projects, users, clients;
+		projects = {{ $projects }};
+		users = {{ $users }};
+		clients = {{ $clients }};
+	</script>
+@endsection
+
 @section('content')
 	<div id="project-manager">
 		<div class="navbar">
@@ -48,10 +57,4 @@
 
 		</section>
 	</div>
-	<script>
-		var projects, users, clients;
-		projects = <?php echo $projects; ?>;
-		users = <?php echo $users; ?>;
-		clients = <?php echo $clients; ?>;
-	</script>
 @endsection

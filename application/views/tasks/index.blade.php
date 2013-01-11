@@ -1,5 +1,12 @@
 @layout('layouts.default')
 
+@section('js-bootstrap')
+	<script>
+		var users;
+		users = {{ $dev_json }};
+	</script>
+@endsection
+
 @section('content')
 	<section id="schedule-viewport">
 		<header class="navbar">
@@ -49,15 +56,15 @@
 			</div>
 		</header>
 		<section id="profile-palette">
-			
+
 		</section>
 		<section id="task-timeline">
 			<div id="task-timeline-wrapper">
-				
+
 			</div>
 			<div id="graph-timeline">
 				<div id="graph-timeline-wrapper">
-					
+
 				</div>
 			</div>
 		</section>
@@ -66,8 +73,4 @@
 			</div>
 		</section>
 	</section>
-	<script>
-		var users;
-		users = {{ $dev_json }};
-	</script>
 @endsection
