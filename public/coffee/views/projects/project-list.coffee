@@ -50,19 +50,5 @@ define [
 				open: DRAWER_OPEN
 			editor.render()
 			DRAWER_OPEN = true
-			###
-			@drawer?.remove()
-
-			params = {}
-			params['users'] = @model.get('users')
-			if project isnt null then params['project'] = project
-			@drawer = new United.Views.Projects.ProjectEdit
-				model: new United.Models.Projects.ProjectEdit params
-			@$el.prepend @drawer.render().$el
-			@drawer.setup()
-			if not DRAWER_OPEN
-				DRAWER_OPEN = true
-				United.EventBus.trigger 'animate-drawer-in'
-			###
 
 		drawerClosed: -> DRAWER_OPEN = false
