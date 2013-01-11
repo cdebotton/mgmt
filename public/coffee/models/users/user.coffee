@@ -9,7 +9,7 @@ define [
 	'models/users/discipline'
 	'collections/users/disciplines'
 	], (Backbone, ns) ->
-		
+
 	ns 'United.Models.Users.User'
 	class United.Models.Users.User extends Backbone.RelationalModel
 
@@ -41,7 +41,13 @@ define [
 			first_name:	'New'
 			last_name:	'User'
 			photo: 'http://placehold.it/100x100'
-		
+
+		parse: (resp) ->
+			resp.hired_on = new Date resp.hired_on
+			resp.last_login = new Date resp.last_login
+			resp
+
+
 		initialize: ->
 
 	United.Models.Users.User.setup()

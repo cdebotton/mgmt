@@ -71,11 +71,36 @@
         return this.model.set('email', e.currentTarget.value);
       };
 
-      UserEdit.prototype.updateHiredOnMonth = function(e) {};
+      UserEdit.prototype.updateHiredOnMonth = function(e) {
+        var d, v;
+        v = parseInt(e.currentTarget.value);
+        if ((0 < v && v < 13)) {
+          d = new Date(this.model.get('hired_on'));
+          d.setMonth(v - 1);
+          return this.model.set('hired_on', d);
+        }
+      };
 
-      UserEdit.prototype.updateHiredOnDay = function(e) {};
+      UserEdit.prototype.updateHiredOnDay = function(e) {
+        var d, v;
+        v = parseInt(e.currentTarget.value);
+        if ((0 < v && v < 32)) {
+          d = new Date(this.model.get('hired_on'));
+          d.setDate(v);
+          return this.model.set('hired_on', d);
+        }
+      };
 
-      UserEdit.prototype.updateHiredOnYear = function(e) {};
+      UserEdit.prototype.updateHiredOnYear = function(e) {
+        var d, v;
+        v = e.currentTarget.value;
+        if (v.match(/^\d{4}$/)) {
+          v = parseInt(v);
+          d = new Date(this.model.get('hired_on'));
+          d.setYear(parseInt(e.currentTarget.value));
+          return this.model.set('hired_on', d);
+        }
+      };
 
       UserEdit.prototype.updatePdo = function(e) {
         return this.model.set('pdo_allotment', e.currentTarget.value);
@@ -99,12 +124,11 @@
       };
 
       UserEdit.prototype.render = function() {
-        var ctx, h, hired, html;
+        var ctx, h, html;
         ctx = this.model.toJSON();
-        hired = new Date(ctx.hired_on);
-        ctx.hired_on_month = parseInt(hired.getMonth()) + 1;
-        ctx.hired_on_day = hired.getDate();
-        ctx.hired_on_year = hired.getFullYear();
+        ctx.hired_on_month = parseInt(ctx.hired_on.getMonth()) + 1;
+        ctx.hired_on_day = ctx.hired_on.getDate();
+        ctx.hired_on_year = ctx.hired_on.getFullYear();
         html = United.JST.UserEdit(ctx);
         this.$el.html(html);
         this.title = this.$('#username');
@@ -118,10 +142,9 @@
         return this;
       };
 
-      UserEdit.prototype.printLogin = function(login, name) {
-        var d, h, m;
-        d = new Date(login);
-        if (login.match(/^0000/)) {
+      UserEdit.prototype.printLogin = function(d, name) {
+        var h, m;
+        if (isNaN(d.getTime())) {
           return "" + name + " has never logged in.";
         } else {
           h = d.getHours();

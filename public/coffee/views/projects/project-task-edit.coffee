@@ -19,10 +19,6 @@ define [
 			'change select[name="color"]':		'updateColor'
 			'change select[name="user_id"]':	'updateUserId'
 
-		keyPressTimer: null
-
-		keyPressTimeout: 50
-
 		initialize: ->
 			United.JST.Hb.registerHelper 'printUsers', @printUsers
 			United.JST.Hb.registerHelper 'printColors', @printColors
@@ -66,84 +62,64 @@ define [
 			@model.get('task').set 'name', e.currentTarget.value
 
 		updateStartYear: (e) =>
-			clearTimeout @keyPressTimer
-			@keyPressTimer = setTimeout () =>
-				selected = @model.get 'task'
-				start_date = selected.get 'start_date'
-				target = parseInt(e.currentTarget.value)
-				new_date = new Date target, start_date.getMonth(), start_date.getDate(), 0, 0, 0
-				if new_date > @model.get 'end_date'
-					return
-				@model.get('task').set 'start_date', new_date
-			, @keyPressTimeout
+			selected = @model.get 'task'
+			start_date = selected.get 'start_date'
+			target = parseInt(e.currentTarget.value)
+			if target.toString().match /^\d{4}$/
+				d = new Date start_date
+				d.setYear target
+				if d < selected.get 'end_date'
+					@model.get('task').set 'start_date', d
 
 		updateStartMonth: (e) =>
-			clearTimeout @keyPressTimer
-			@keyPressTimer = setTimeout () =>
-				selected = @model.get 'task'
-				start_date = selected.get 'start_date'
-				target = parseInt(e.currentTarget.value)
-				if target > 12 then target = 12
-				else if target < 1 then target = 1
-				new_date = new Date start_date.getFullYear(), target - 1, start_date.getDate(), 0, 0, 0
-				if new_date > @model.get 'end_date'
-					return
-				@model.get('task').set 'start_date', new_date
-			, @keyPressTimeout
+			selected = @model.get 'task'
+			start_date = selected.get 'start_date'
+			target = parseInt(e.currentTarget.value)
+			if 0 < target < 13
+				d = new Date start_date
+				d.setMonth target - 1
+				if d < selected.get 'end_date'
+					@model.get('task').set 'start_date', d
 
 		updateStartDay: (e) =>
-			clearTimeout @keyPressTimer
-			@keyPressTimer = setTimeout () =>
-				selected = @model.get 'task'
-				start_date = selected.get 'start_date'
-				target = parseInt(e.currentTarget.value)
-				if target > 31 then target = 31
-				else if target < 1 then target = 1
-				new_date = new Date start_date.getFullYear(), start_date.getMonth(), target, 0, 0, 0
-				if new_date > @model.get 'end_date'
-					return
-				@model.get('task').set 'start_date', new_date
-			, @keyPressTimeout
+			selected = @model.get 'task'
+			start_date = selected.get 'start_date'
+			target = parseInt(e.currentTarget.value)
+			if 0 < target < 32
+				d = new Date start_date
+				d.setDate target
+				if d < selected.get 'end_date'
+					@model.get('task').set 'start_date', d
 
 		updateEndYear: (e) =>
-			clearTimeout @keyPressTimer
-			@keyPressTimer = setTimeout () =>
-				selected = @model.get 'task'
-				end_date = selected.get 'end_date'
-				target = parseInt(e.currentTarget.value)
-				new_date = new Date target, end_date.getMonth(), end_date.getDate(), 0, 0, 0
-				if new_date < @model.get 'start_date'
-					return
-				@model.get('task').set 'end_date', new_date
-			, @keyPressTimeout
+			selected = @model.get 'task'
+			end_date = selected.get 'end_date'
+			target = parseInt(e.currentTarget.value)
+			if target.toString().match /^\d{4}$/
+				d = new Date end_date
+				d.setYear target
+				if d > selected.get 'start_date'
+					@model.get('task').set 'end_date', d
 
 		updateEndMonth: (e) =>
-			clearTimeout @keyPressTimer
-			@keyPressTimer = setTimeout () =>
-				selected = @model.get 'task'
-				end_date = selected.get 'end_date'
-				target = parseInt(e.currentTarget.value)
-				if target > 12 then target = 12
-				else if target < 1 then target = 1
-				new_date = new Date end_date.getFullYear(), target - 1, end_date.getDate(), 0, 0, 0
-				if new_date < @model.get 'start_date'
-					return
-				@model.get('task').set 'end_date', new_date
-			, @keyPressTimeout
+			selected = @model.get 'task'
+			end_date = selected.get 'end_date'
+			target = parseInt(e.currentTarget.value)
+			if 0 < target < 13
+				d = new Date end_date
+				d.setMonth target - 1
+				if d > selected.get 'start_date'
+					@model.get('task').set 'end_date', d
 
 		updateEndDay: (e) =>
-			clearTimeout @keyPressTimer
-			@keyPressTimer = setTimeout () =>
-				selected = @model.get 'task'
-				end_date = selected.get 'end_date'
-				target = parseInt(e.currentTarget.value)
-				if target > 31 then target = 31
-				else if target < 1 then target = 1
-				new_date = new Date end_date.getFullYear(), end_date.getMonth(), target, 0, 0, 0
-				if new_date < @model.get 'start_date'
-					return
-				@model.get('task').set 'end_date', new_date
-			, @keyPressTimeout
+			selected = @model.get 'task'
+			end_date = selected.get 'end_date'
+			target = parseInt(e.currentTarget.value)
+			if 0 < target < 32
+				d = new Date end_date
+				d.setDate target
+				if d > selected.get 'start_date'
+					@model.get('task').set 'end_date', d
 
 		updateColor: (e) =>
 			@model.get('task').set 'color', e.currentTarget.value

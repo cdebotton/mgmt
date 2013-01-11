@@ -38,10 +38,26 @@ define [
 			@model.set 'email', e.currentTarget.value
 
 		updateHiredOnMonth: (e) =>
+			v = parseInt e.currentTarget.value
+			if 0 < v < 13
+				d = new Date @model.get 'hired_on'
+				d.setMonth v - 1
+				@model.set 'hired_on', d
 
 		updateHiredOnDay: (e) =>
+			v = parseInt e.currentTarget.value
+			if 0 < v < 32
+				d = new Date @model.get 'hired_on'
+				d.setDate v
+				@model.set 'hired_on', d
 
 		updateHiredOnYear: (e) =>
+			v = e.currentTarget.value
+			if v.match /^\d{4}$/
+				v = parseInt v
+				d = new Date @model.get 'hired_on'
+				d.setYear parseInt e.currentTarget.value
+				@model.set 'hired_on', d
 
 		updatePdo: (e) =>
 			@model.set 'pdo_allotment', e.currentTarget.value
@@ -62,10 +78,9 @@ define [
 
 		render: ->
 			ctx = @model.toJSON()
-			hired = new Date ctx.hired_on
-			ctx.hired_on_month = parseInt(hired.getMonth()) + 1
-			ctx.hired_on_day = hired.getDate()
-			ctx.hired_on_year = hired.getFullYear()
+			ctx.hired_on_month = parseInt(ctx.hired_on.getMonth()) + 1
+			ctx.hired_on_day = ctx.hired_on.getDate()
+			ctx.hired_on_year = ctx.hired_on.getFullYear()
 			html = United.JST.UserEdit ctx
 			@$el.html html
 			@title = @$ '#username'
@@ -78,9 +93,8 @@ define [
 			}, '175', 'ease-out'
 			@
 
-		printLogin: (login, name) ->
-			d = new Date login
-			if login.match /^0000/
+		printLogin: (d, name) ->
+			if isNaN d.getTime()
 				return "#{name} has never logged in."
 			else
 				h = d.getHours()

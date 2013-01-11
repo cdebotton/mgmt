@@ -53,10 +53,6 @@
         'change select[name="user_id"]': 'updateUserId'
       };
 
-      ProjectTaskEdit.prototype.keyPressTimer = null;
-
-      ProjectTaskEdit.prototype.keyPressTimeout = 50;
-
       ProjectTaskEdit.prototype.initialize = function() {
         United.JST.Hb.registerHelper('printUsers', this.printUsers);
         return United.JST.Hb.registerHelper('printColors', this.printColors);
@@ -108,119 +104,87 @@
       };
 
       ProjectTaskEdit.prototype.updateStartYear = function(e) {
-        var _this = this;
-        clearTimeout(this.keyPressTimer);
-        return this.keyPressTimer = setTimeout(function() {
-          var new_date, selected, start_date, target;
-          selected = _this.model.get('task');
-          start_date = selected.get('start_date');
-          target = parseInt(e.currentTarget.value);
-          new_date = new Date(target, start_date.getMonth(), start_date.getDate(), 0, 0, 0);
-          if (new_date > _this.model.get('end_date')) {
-            return;
+        var d, selected, start_date, target;
+        selected = this.model.get('task');
+        start_date = selected.get('start_date');
+        target = parseInt(e.currentTarget.value);
+        if (target.toString().match(/^\d{4}$/)) {
+          d = new Date(start_date);
+          d.setYear(target);
+          if (d < selected.get('end_date')) {
+            return this.model.get('task').set('start_date', d);
           }
-          return _this.model.get('task').set('start_date', new_date);
-        }, this.keyPressTimeout);
+        }
       };
 
       ProjectTaskEdit.prototype.updateStartMonth = function(e) {
-        var _this = this;
-        clearTimeout(this.keyPressTimer);
-        return this.keyPressTimer = setTimeout(function() {
-          var new_date, selected, start_date, target;
-          selected = _this.model.get('task');
-          start_date = selected.get('start_date');
-          target = parseInt(e.currentTarget.value);
-          if (target > 12) {
-            target = 12;
-          } else if (target < 1) {
-            target = 1;
+        var d, selected, start_date, target;
+        selected = this.model.get('task');
+        start_date = selected.get('start_date');
+        target = parseInt(e.currentTarget.value);
+        if ((0 < target && target < 13)) {
+          d = new Date(start_date);
+          d.setMonth(target - 1);
+          if (d < selected.get('end_date')) {
+            return this.model.get('task').set('start_date', d);
           }
-          new_date = new Date(start_date.getFullYear(), target - 1, start_date.getDate(), 0, 0, 0);
-          if (new_date > _this.model.get('end_date')) {
-            return;
-          }
-          return _this.model.get('task').set('start_date', new_date);
-        }, this.keyPressTimeout);
+        }
       };
 
       ProjectTaskEdit.prototype.updateStartDay = function(e) {
-        var _this = this;
-        clearTimeout(this.keyPressTimer);
-        return this.keyPressTimer = setTimeout(function() {
-          var new_date, selected, start_date, target;
-          selected = _this.model.get('task');
-          start_date = selected.get('start_date');
-          target = parseInt(e.currentTarget.value);
-          if (target > 31) {
-            target = 31;
-          } else if (target < 1) {
-            target = 1;
+        var d, selected, start_date, target;
+        selected = this.model.get('task');
+        start_date = selected.get('start_date');
+        target = parseInt(e.currentTarget.value);
+        if ((0 < target && target < 32)) {
+          d = new Date(start_date);
+          d.setDate(target);
+          if (d < selected.get('end_date')) {
+            return this.model.get('task').set('start_date', d);
           }
-          new_date = new Date(start_date.getFullYear(), start_date.getMonth(), target, 0, 0, 0);
-          if (new_date > _this.model.get('end_date')) {
-            return;
-          }
-          return _this.model.get('task').set('start_date', new_date);
-        }, this.keyPressTimeout);
+        }
       };
 
       ProjectTaskEdit.prototype.updateEndYear = function(e) {
-        var _this = this;
-        clearTimeout(this.keyPressTimer);
-        return this.keyPressTimer = setTimeout(function() {
-          var end_date, new_date, selected, target;
-          selected = _this.model.get('task');
-          end_date = selected.get('end_date');
-          target = parseInt(e.currentTarget.value);
-          new_date = new Date(target, end_date.getMonth(), end_date.getDate(), 0, 0, 0);
-          if (new_date < _this.model.get('start_date')) {
-            return;
+        var d, end_date, selected, target;
+        selected = this.model.get('task');
+        end_date = selected.get('end_date');
+        target = parseInt(e.currentTarget.value);
+        if (target.toString().match(/^\d{4}$/)) {
+          d = new Date(end_date);
+          d.setYear(target);
+          if (d > selected.get('start_date')) {
+            return this.model.get('task').set('end_date', d);
           }
-          return _this.model.get('task').set('end_date', new_date);
-        }, this.keyPressTimeout);
+        }
       };
 
       ProjectTaskEdit.prototype.updateEndMonth = function(e) {
-        var _this = this;
-        clearTimeout(this.keyPressTimer);
-        return this.keyPressTimer = setTimeout(function() {
-          var end_date, new_date, selected, target;
-          selected = _this.model.get('task');
-          end_date = selected.get('end_date');
-          target = parseInt(e.currentTarget.value);
-          if (target > 12) {
-            target = 12;
-          } else if (target < 1) {
-            target = 1;
+        var d, end_date, selected, target;
+        selected = this.model.get('task');
+        end_date = selected.get('end_date');
+        target = parseInt(e.currentTarget.value);
+        if ((0 < target && target < 13)) {
+          d = new Date(end_date);
+          d.setMonth(target - 1);
+          if (d > selected.get('start_date')) {
+            return this.model.get('task').set('end_date', d);
           }
-          new_date = new Date(end_date.getFullYear(), target - 1, end_date.getDate(), 0, 0, 0);
-          if (new_date < _this.model.get('start_date')) {
-            return;
-          }
-          return _this.model.get('task').set('end_date', new_date);
-        }, this.keyPressTimeout);
+        }
       };
 
       ProjectTaskEdit.prototype.updateEndDay = function(e) {
-        var _this = this;
-        clearTimeout(this.keyPressTimer);
-        return this.keyPressTimer = setTimeout(function() {
-          var end_date, new_date, selected, target;
-          selected = _this.model.get('task');
-          end_date = selected.get('end_date');
-          target = parseInt(e.currentTarget.value);
-          if (target > 31) {
-            target = 31;
-          } else if (target < 1) {
-            target = 1;
+        var d, end_date, selected, target;
+        selected = this.model.get('task');
+        end_date = selected.get('end_date');
+        target = parseInt(e.currentTarget.value);
+        if ((0 < target && target < 32)) {
+          d = new Date(end_date);
+          d.setDate(target);
+          if (d > selected.get('start_date')) {
+            return this.model.get('task').set('end_date', d);
           }
-          new_date = new Date(end_date.getFullYear(), end_date.getMonth(), target, 0, 0, 0);
-          if (new_date < _this.model.get('start_date')) {
-            return;
-          }
-          return _this.model.get('task').set('end_date', new_date);
-        }, this.keyPressTimeout);
+        }
       };
 
       ProjectTaskEdit.prototype.updateColor = function(e) {

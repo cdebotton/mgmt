@@ -48,6 +48,12 @@
         photo: 'http://placehold.it/100x100'
       };
 
+      User.prototype.parse = function(resp) {
+        resp.hired_on = new Date(resp.hired_on);
+        resp.last_login = new Date(resp.last_login);
+        return resp;
+      };
+
       User.prototype.initialize = function() {};
 
       return User;

@@ -4,7 +4,7 @@
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
 
-  define(['backbone', 'ns', 'jst', 'views/widgets/modal'], function(Backbone, ns) {
+  define(['backbone', 'ns', 'jst'], function(Backbone, ns) {
     ns('United.Views.Projects.ProjectTaskEdit');
     return United.Views.Projects.ProjectTaskEdit = (function(_super) {
 
@@ -16,10 +16,6 @@
         this.printColors = __bind(this.printColors, this);
 
         this.printUsers = __bind(this.printUsers, this);
-
-        this.saveTask = __bind(this.saveTask, this);
-
-        this.saveProjectModal = __bind(this.saveProjectModal, this);
 
         this.updatePercentage = __bind(this.updatePercentage, this);
 
@@ -46,7 +42,7 @@
       }
 
       ProjectTaskEdit.prototype.events = {
-        'click #save-task': 'saveTask',
+        'click #task-done': 'animateOut',
         'keyup input[name="task-name"]': 'updateTaskName',
         'keyup input[name="start_year"]': 'updateStartYear',
         'keyup input[name="start_month"]': 'updateStartMonth',
@@ -58,10 +54,6 @@
         'change select[name="color"]': 'updateColor',
         'change select[name="user_id"]': 'updateUserId'
       };
-
-      ProjectTaskEdit.prototype.keyPressTimer = null;
-
-      ProjectTaskEdit.prototype.keyPressTimeout = 50;
 
       ProjectTaskEdit.prototype.initialize = function() {
         United.JST.Hb.registerHelper('printUsers', this.printUsers);
@@ -75,6 +67,7 @@
         s = task.get('start_date');
         e = task.get('end_date');
         ctx = task.toJSON();
+        if (task.get('user')) ctx.user_id = task.get('user').get('id');
         ctx.start_month = s.getMonth() + 1;
         ctx.start_day = s.getDate();
         ctx.start_year = s.getFullYear();
@@ -111,69 +104,59 @@
       };
 
       ProjectTaskEdit.prototype.updateStartYear = function(e) {
-        var _this = this;
-        clearTimeout(this.keyPressTimer);
-        return this.keyPressTimer = setTimeout(function() {
-          var new_date, selected, start_date, target;
-          selected = _this.model.get('task');
-          start_date = selected.get('start_date');
-          target = parseInt(e.currentTarget.value);
-          new_date = new Date(target, start_date.getMonth(), start_date.getDate(), 0, 0, 0);
-          if (new_date > _this.model.get('end_date')) return;
-          return _this.model.get('task').set('start_date', new_date);
-        }, this.keyPressTimeout);
+        var d, selected, start_date, target;
+        selected = this.model.get('task');
+        start_date = selected.get('start_date');
+        target = parseInt(e.currentTarget.value);
+        if (target.toString().match(/^\d{4}$/)) {
+          d = new Date(end_date);
+          d.setYear(target);
+          if (d > selected.get('start_date')) {
+            return this.model.get('task').set('end_date', d);
+          }
+        }
       };
 
       ProjectTaskEdit.prototype.updateStartMonth = function(e) {
-        var _this = this;
-        clearTimeout(this.keyPressTimer);
-        return this.keyPressTimer = setTimeout(function() {
-          var new_date, selected, start_date, target;
-          selected = _this.model.get('task');
-          start_date = selected.get('start_date');
-          target = parseInt(e.currentTarget.value);
-          if (target > 12) {
-            target = 12;
-          } else if (target < 1) {
-            target = 1;
+        var d, selected, start_date, target;
+        selected = this.model.get('task');
+        start_date = selected.get('start_date');
+        target = parseInt(e.currentTarget.value);
+        if ((0 < target && target < 13)) {
+          d = new Date(start_date);
+          d.setMonth(target - 1);
+          if (d < selected.get('end_date')) {
+            return this.model.get('task').set('start_date', d);
           }
-          new_date = new Date(start_date.getFullYear(), target - 1, start_date.getDate(), 0, 0, 0);
-          if (new_date > _this.model.get('end_date')) return;
-          return _this.model.get('task').set('start_date', new_date);
-        }, this.keyPressTimeout);
+        }
       };
 
       ProjectTaskEdit.prototype.updateStartDay = function(e) {
-        var _this = this;
-        clearTimeout(this.keyPressTimer);
-        return this.keyPressTimer = setTimeout(function() {
-          var new_date, selected, start_date, target;
-          selected = _this.model.get('task');
-          start_date = selected.get('start_date');
-          target = parseInt(e.currentTarget.value);
-          if (target > 31) {
-            target = 31;
-          } else if (target < 1) {
-            target = 1;
+        var d, selected, start_date, target;
+        selected = this.model.get('task');
+        start_date = selected.get('start_date');
+        target = parseInt(e.currentTarget.value);
+        if ((0 < target && target < 32)) {
+          d = new Date(start_date);
+          d.setDate(target);
+          if (d < selected.get('end_date')) {
+            return this.model.get('task').set('start_date', d);
           }
-          new_date = new Date(start_date.getFullYear(), start_date.getMonth(), target, 0, 0, 0);
-          if (new_date > _this.model.get('end_date')) return;
-          return _this.model.get('task').set('start_date', new_date);
-        }, this.keyPressTimeout);
+        }
       };
 
       ProjectTaskEdit.prototype.updateEndYear = function(e) {
-        var _this = this;
-        clearTimeout(this.keyPressTimer);
-        return this.keyPressTimer = setTimeout(function() {
-          var end_date, new_date, selected, target;
-          selected = _this.model.get('task');
-          end_date = selected.get('end_date');
-          target = parseInt(e.currentTarget.value);
-          new_date = new Date(target, end_date.getMonth(), end_date.getDate(), 0, 0, 0);
-          if (new_date < _this.model.get('start_date')) return;
-          return _this.model.get('task').set('end_date', new_date);
-        }, this.keyPressTimeout);
+        var d, end_date, selected, target;
+        selected = this.model.get('task');
+        end_date = selected.get('end_date');
+        target = parseInt(e.currentTarget.value);
+        if (target.toString().match(/^\d{4}$/)) {
+          d = new Date(end_date);
+          d.setYear(target);
+          if (d > selected.get('start_date')) {
+            return this.model.get('task').set('end_date', d);
+          }
+        }
       };
 
       ProjectTaskEdit.prototype.updateEndMonth = function(e) {
@@ -226,59 +209,8 @@
         return this.model.get('task').set('percentage', parseInt(e.currentTarget.value));
       };
 
-      ProjectTaskEdit.prototype.saveProjectModal = function(e) {
-        var task,
-          _this = this;
-        task = this.model.get('task');
-        this.model.get('task').get('project').save(null, {
-          wait: true,
-          silent: true,
-          success: function(project, attrs, status) {
-            var i, task, _i, _len, _ref, _ref1;
-            project.set('id', attrs.id);
-            if (((_ref = attrs.tasks) != null ? _ref.length : void 0) > 0) {
-              _ref1 = attrs.tasks;
-              for (i = _i = 0, _len = _ref1.length; _i < _len; i = ++_i) {
-                task = _ref1[i];
-                task.start_date = new Date(task.start_date);
-                task.end_date = new Date(task.end_date);
-              }
-            }
-            project.set('tasks', attrs.tasks);
-            project.set('client_id', attrs.client_id);
-            _this.animateOut();
-            return _this.modal.closeModal();
-          }
-        });
-        return e.preventDefault();
-      };
-
-      ProjectTaskEdit.prototype.saveTask = function(e) {
-        var _this = this;
-        if (this.model.get('task').get('project').isNew()) {
-          return this.modal = new United.Views.Widgets.Modal({
-            model: new Backbone.Model({
-              title: 'Unsaved Project!',
-              msg: '<p>The project must be saved before child tasks can be added.</p>',
-              options: {
-                'Save Project': this.saveProjectModal,
-                'Cancel': United.Views.Widgets.Modal.prototype.closeModal
-              }
-            })
-          });
-        } else {
-          return this.model.get('task').save(null, {
-            wait: true,
-            success: function(task, attrs, status) {
-              _this.model.get('task').set('id', attrs.id);
-              return _this.animateOut();
-            }
-          });
-        }
-      };
-
-      ProjectTaskEdit.prototype.printUsers = function(array, opts) {
-        var buffer, item, key, user, _i, _len, _ref;
+      ProjectTaskEdit.prototype.printUsers = function(array, user_id, opts) {
+        var buffer, item, key, user, _i, _len;
         if (array != null ? array.length : void 0) {
           buffer = '';
           for (key = _i = 0, _len = array.length; _i < _len; key = ++_i) {
@@ -286,7 +218,7 @@
             item = {
               id: user.id,
               email: user.email,
-              selected: ((_ref = this.model.get('task')) != null ? _ref.has('user') : void 0) && +user.id === +this.model.get('task').get('user').get('id') ? ' SELECTED' : ''
+              selected: user_id && +user.id === +user_id ? ' SELECTED' : ''
             };
             buffer += opts.fn(item);
           }
