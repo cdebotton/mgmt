@@ -71,12 +71,17 @@ define [
 			@title.html "#{@model.get 'first_name'} #{@model.get 'last_name'}"
 
 		saveUser: (e) =>
+			@model.save null, {
+				wait: true
+				success: () => @close e
+			}
 			e.preventDefault()
 
 		cancelUser: (e) =>
-			@model.fetch
+			@model.fetch {
 				wait: true
 				success: () => @close e
+			}
 			e.preventDefault()
 
 		render: ->

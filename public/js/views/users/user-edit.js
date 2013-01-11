@@ -118,6 +118,13 @@
       };
 
       UserEdit.prototype.saveUser = function(e) {
+        var _this = this;
+        this.model.save(null, {
+          wait: true,
+          success: function() {
+            return _this.close(e);
+          }
+        });
         return e.preventDefault();
       };
 
