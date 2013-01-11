@@ -667,6 +667,10 @@ $modal-width: 480px
 		@include box-shadow(0 0 30px rgba(0, 0, 0, 0.1))
 		h3
 			padding: 0 40px
+		.job-count
+			position: absolute
+			top: 20px
+			left: 7px
 		dl
 			padding: 0
 			margin: 0
@@ -907,7 +911,12 @@ $modal-width: 480px
 		@include background(linear-gradient(-45deg, #fff, #eee))
 		@include border-radius(4px)
 		@include box-shadow(0 0 5px rgba(0, 0, 0, 0.25))
+		@include transition-property('-webkit-box-shadow, -moz-box-shadow, -ms-box-shadow, -box-shadow')
+		@include transition-duration('150ms')
+		@include transition-timing-function('ease-in')
 		margin-bottom: 25px
+		&:hover
+			@include box-shadow(0 0 15px rgba(0, 0, 0, 0.45))
 		&:nth-child(4n+1)
 			@include alpha
 		@:nth-child(4n+4)
@@ -929,11 +938,18 @@ $modal-width: 480px
 		height: 220px
 		cursor: pointer
 		border: 1px solid #ccc
-		@include background(linear-gradient(-45deg, #fff, #eee))
 		@include border-radius(4px)
 		@include box-shadow(0 0 5px rgba(0, 0, 0, 0.25))
+		@include transition-property('-webkit-box-shadow, -moz-box-shadow, -ms-box-shadow, -box-shadow')
+		-webkit-transform-style: preserve-3d
+		@include transition-duration('350ms')
+		@include transition-timing-function('ease-in')
 		margin-bottom: 25px
 		position: relative
+		&:hover
+			@include box-shadow(0 0 15px rgba(0, 0, 0, 0.45))
+			& .profile.stats
+				bottom: 0
 		&:nth-child(4n+1)
 			@include alpha
 		@:nth-child(4n+4)
@@ -953,3 +969,21 @@ $modal-width: 480px
 			width: 100px
 			height: 100px
 			margin: 5px auto 10px
+		.profile
+			position: absolute
+			top: 0
+			left: 0
+			bottom: 0
+			right: 0
+			overflow: hidden
+			&.info
+				@include background(linear-gradient(-45deg, #fff, #eee))
+			&.stats
+				@include transition-property('bottom')
+				@include transition-duration('275ms')
+				@include transition-timing-function('ease-out')
+				bottom: 220px
+				z-index: 10
+				@include background(linear-gradient(-45deg, #555, #222))
+				h5
+					color: #eee

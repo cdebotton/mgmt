@@ -10,6 +10,9 @@ define [
 
 		className: 'user-item'
 
+		events:
+			'click':		'editUser'
+
 		initialize: ->
 
 		render: ->
@@ -17,3 +20,8 @@ define [
 			html = United.JST.UserItem ctx
 			@$el.html html
 			@
+
+		editUser: (e) =>
+			e.preventDefault()
+			e.stopPropagation()
+			United.EventBus.trigger 'edit-user', @model

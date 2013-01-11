@@ -26,6 +26,7 @@
 			</div>
 			<div class="current-tasks">
 				<h3>Current jobs</h3>
+				<span class="badge badge-info job-count">{{ count($user->tasks) }}</span>
 				<dl>
 				@forelse($user->tasks as $task)
 					@if($task->project)
