@@ -924,3 +924,32 @@ $modal-width: 480px
 #user-list
 	@include grid-container
 	padding-top: 50px
+	.user-item
+		@include grid(3)
+		height: 220px
+		cursor: pointer
+		border: 1px solid #ccc
+		@include background(linear-gradient(-45deg, #fff, #eee))
+		@include border-radius(4px)
+		@include box-shadow(0 0 5px rgba(0, 0, 0, 0.25))
+		margin-bottom: 25px
+		position: relative
+		&:nth-child(4n+1)
+			@include alpha
+		@:nth-child(4n+4)
+			@include omega
+		h5
+			text-align: center
+			padding: 5px 0 0
+			margin-bottom: 0
+		.qualifiers
+			width: 180px
+			margin: 0 21px
+			position: absolute
+			bottom: 20px
+			text-align: center
+		.profile-image
+			display: block
+			width: 100px
+			height: 100px
+			margin: 5px auto 10px

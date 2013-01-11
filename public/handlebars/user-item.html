@@ -1,0 +1,10 @@
+<h5>{{first_name}} {{last_name}}</h5>
+<img class="img-polaroid profile-image" src="{{ photo }}" />
+<div class="qualifiers">
+	{{#each disciplines}}
+		<span class="label label-info">{{ name }}</span>
+	{{/each}}
+	{{#each roles}}
+		<span class="label label-inverse">{{ name }}</span>
+	{{/each}}
+</div>
