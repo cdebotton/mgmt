@@ -24,7 +24,8 @@
       };
 
       UserItem.prototype.initialize = function() {
-        return United.JST.Hb.registerHelper('printDates', this.printDates);
+        United.JST.Hb.registerHelper('printDates', this.printDates);
+        return this.model.on('change', this.render, this);
       };
 
       UserItem.prototype.render = function() {

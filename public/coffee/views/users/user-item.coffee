@@ -15,6 +15,7 @@ define [
 
 		initialize: ->
 			United.JST.Hb.registerHelper 'printDates', @printDates
+			@model.on 'change', @render, @
 
 		render: ->
 			ctx = @model.toJSON()
