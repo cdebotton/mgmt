@@ -18,6 +18,8 @@ define [
 	class United.Views.Projects.ProjectEdit extends Backbone.View
 		el: '#project-drawer'
 
+		TASK_OPEN = false
+
 		events:
 			'click #save-project':				'saveProject'
 			'click .add-task-to-project':		'newTask'
@@ -28,6 +30,7 @@ define [
 
 		initialize: ->
 			United.EventBus.on 'animate-drawer-in', @animateIn, @
+			United.EventBus.on 'close-project-task-drawer', @taskClosed, @
 			United.EventBus.on 'load-task-in-editor', @editTask, @
 			@model.get('tasks').on 'add', @editTask, @
 
@@ -36,7 +39,6 @@ define [
 			ctx = @model.toJSON()
 			html = United.JST.ProjectDrawer ctx
 			@$el.html html
-			@taskHolder = @$ '#project-task-holder'
 			@setup()
 			if @options.open is false
 				h = @$el.innerHeight() + 10
@@ -58,13 +60,18 @@ define [
 			@model.set 'client_name', e.currentTarget.value
 
 		editTask: (task) ->
-			@taskEditor = new United.Views.Projects.ProjectTaskEdit
+			taskEditor = new United.Views.Projects.ProjectTaskEdit
 				model: task
-			@taskHolder.html @taskEditor.render().$el
+				open: TASK_OPEN
+			taskEditor.render()
+			TASK_OPEN = true
 
 		newTask: (e) =>
 			@model.get('tasks').add {}
 			e.preventDefault()
+
+		taskClosed: ->
+			TASK_OPEN = false
 
 		setup: ->
 			@overview = new United.Views.Projects.ProjectOverview

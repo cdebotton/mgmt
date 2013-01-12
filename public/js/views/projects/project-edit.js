@@ -7,6 +7,7 @@
   define(['backbone', 'jquery', 'underscore', 'ns', 'jst', 'animate', 'models/clients/client', 'views/projects/project-task-edit', 'views/projects/project-overview', 'models/projects/project-overview', 'views/widgets/livesearch-input', 'models/widgets/livesearch', 'views/widgets/modal'], function(Backbone, $, _, ns) {
     ns('United.Views.Projects.ProjectEdit');
     return United.Views.Projects.ProjectEdit = (function(_super) {
+      var TASK_OPEN;
 
       __extends(ProjectEdit, _super);
 
@@ -31,6 +32,8 @@
 
       ProjectEdit.prototype.el = '#project-drawer';
 
+      TASK_OPEN = false;
+
       ProjectEdit.prototype.events = {
         'click #save-project': 'saveProject',
         'click .add-task-to-project': 'newTask',
@@ -42,6 +45,7 @@
 
       ProjectEdit.prototype.initialize = function() {
         United.EventBus.on('animate-drawer-in', this.animateIn, this);
+        United.EventBus.on('close-project-task-drawer', this.taskClosed, this);
         United.EventBus.on('load-task-in-editor', this.editTask, this);
         return this.model.get('tasks').on('add', this.editTask, this);
       };
@@ -52,7 +56,6 @@
         ctx = this.model.toJSON();
         html = United.JST.ProjectDrawer(ctx);
         this.$el.html(html);
-        this.taskHolder = this.$('#project-task-holder');
         this.setup();
         if (this.options.open === false) {
           h = this.$el.innerHeight() + 10;
@@ -79,15 +82,22 @@
       };
 
       ProjectEdit.prototype.editTask = function(task) {
-        this.taskEditor = new United.Views.Projects.ProjectTaskEdit({
-          model: task
+        var taskEditor;
+        taskEditor = new United.Views.Projects.ProjectTaskEdit({
+          model: task,
+          open: TASK_OPEN
         });
-        return this.taskHolder.html(this.taskEditor.render().$el);
+        taskEditor.render();
+        return TASK_OPEN = true;
       };
 
       ProjectEdit.prototype.newTask = function(e) {
         this.model.get('tasks').add({});
         return e.preventDefault();
+      };
+
+      ProjectEdit.prototype.taskClosed = function() {
+        return TASK_OPEN = false;
       };
 
       ProjectEdit.prototype.setup = function() {

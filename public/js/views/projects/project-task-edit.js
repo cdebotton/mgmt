@@ -39,6 +39,8 @@
         return ProjectTaskEdit.__super__.constructor.apply(this, arguments);
       }
 
+      ProjectTaskEdit.prototype.el = '#project-task-holder';
+
       ProjectTaskEdit.prototype.events = {
         'click #task-done': 'animateOut',
         'keyup input[name="task-name"]': 'updateTaskName',
@@ -79,13 +81,17 @@
         this.$el.css('height', 'auto');
         this.$el.html(html);
         h = this.$el.innerHeight();
-        this.$el.css({
-          height: 0,
-          opacity: 1
-        });
-        this.$el.animate({
-          height: h
-        }, 175, 'ease-in');
+        if (this.options.open === false) {
+          this.$el.css({
+            height: 0,
+            opacity: 1
+          });
+          this.$el.animate({
+            height: h
+          }, 175, 'ease-in');
+        } else {
+          this.$el.css('opacity', 1);
+        }
         return this;
       };
 
@@ -95,7 +101,7 @@
           height: 0
         }, 175, 'ease-out', function() {
           United.EventBus.trigger('close-project-task-drawer');
-          return _this.remove();
+          return _this.$el.html('');
         });
       };
 

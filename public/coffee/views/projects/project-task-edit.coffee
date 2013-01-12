@@ -6,6 +6,8 @@ define [
 
 	ns 'United.Views.Projects.ProjectTaskEdit'
 	class United.Views.Projects.ProjectTaskEdit extends Backbone.View
+		el: '#project-task-holder'
+
 		events:
 			'click #task-done':					'animateOut'
 			'keyup input[name="task-name"]':	'updateTaskName'
@@ -42,13 +44,15 @@ define [
 			@$el.css 'height', 'auto'
 			@$el.html html
 			h = @$el.innerHeight()
-			@$el.css {
-				height:		0
-				opacity:	1
-			}
-			@$el.animate {
-				height:		h
-			}, 175, 'ease-in'
+			if @options.open is false
+				@$el.css {
+					height: 0
+					opacity:	1
+				}
+				@$el.animate {
+					height:		h
+				}, 175, 'ease-in'
+			else @$el.css 'opacity', 1
 			@
 
 		animateOut: =>
@@ -56,7 +60,7 @@ define [
 				height:		0
 			}, 175, 'ease-out', =>
 				United.EventBus.trigger 'close-project-task-drawer'
-				@remove()
+				@$el.html ''
 
 		updateTaskName: (e) =>
 			@model.set 'name', e.currentTarget.value
