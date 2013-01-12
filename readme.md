@@ -56,3 +56,4 @@ Styling done in *.sass, NOT *.scss
 2. Change schedule view to work on a three tabbed scale instead of a fluid slider (week-month-year views).
 3. Custom dropdowns with sorting/filtering functionality instead of HTML5 dropdowns.
 4. Tie schedule/task editor to the user-row within the GUI.
+5. Move to Laravel 4, make api/v2 based on resourceful controllers.
