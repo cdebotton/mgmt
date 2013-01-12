@@ -45,8 +45,10 @@ define [
 		}
 
 		parse: (resp) ->
-			resp.hired_on = new Date resp.hired_on
-			resp.last_login = new Date resp.last_login
+			if resp.hired_on? and resp.hired_on not instanceof Date
+				resp.hired_on = new Date resp.hired_on
+			if resp.last_login? and resp.last_login not instanceof Date
+				resp.last_login = new Date resp.last_login
 			resp
 
 		initialize: ->

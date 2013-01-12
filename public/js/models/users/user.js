@@ -51,8 +51,12 @@
       };
 
       User.prototype.parse = function(resp) {
-        resp.hired_on = new Date(resp.hired_on);
-        resp.last_login = new Date(resp.last_login);
+        if ((resp.hired_on != null) && !(resp.hired_on instanceof Date)) {
+          resp.hired_on = new Date(resp.hired_on);
+        }
+        if ((resp.last_login != null) && !(resp.last_login instanceof Date)) {
+          resp.last_login = new Date(resp.last_login);
+        }
         return resp;
       };
 
