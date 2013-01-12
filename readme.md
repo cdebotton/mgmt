@@ -24,26 +24,45 @@ For anyone who may potentially modify this software, here is some information ab
 
 ### php
 - Laravel 3.2
+
 	- Authorized Zend Acl Bundle
+	
 	- Anbu for diagnostics
+	
 	- Swiftmailer for notifications
+	
 	- Debug, a custom bundle for debugging objects/arrays.
+	
 
 ### javascript
 - RequireJS for async loading and compilation
+
 	- text! plugin
-	- almond.js for minification AMD library.
+	
+	- almond.js for minificatio	n AMD library.
+	
 - jQuery to power backbone.
+
 	- jQuery.animation for CSS3 animations.
+	
 	- jQuery.cookie for storing user tokens.
+	
 	- Mousetrap for complex keypress events.
+	
 - Raphael.js
+
 	-Morris.js for graphing
+	
 - Backbone 0.9.9
+
 	- BackboneRelational 0.7.0 (Custom AMD Fork)
+	
 - CoffeeScript
+
 - Handlebars.js for templating
+
 - Underscore.js to power backbone, heavily used within modules
+
 The JavaScript framework makes use of the `JST` and `namespace` patterns. All modules are globally namespaced in a structure that mirrors the folder structure, all templates are compiled in one AMD Module.
 
 ### sass
