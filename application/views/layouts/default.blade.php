@@ -19,7 +19,7 @@
 
 	<header class="navbar navbar-fixed">
 		<div class="navbar-inner">
-			{{ HTML::link_to_action('dashboard@index', 'Brooklyn United MGMT', array(), array('class' => 'brand')) }}
+			{{ HTML::link_to_action('dashboard@index', 'ヾ(＠⌒ー⌒＠)ノ', array(), array('class' => 'brand')) }}
 			@if(!Auth::guest())
 				@include('partials.navigation')
 			@endif
