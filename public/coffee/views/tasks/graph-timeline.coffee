@@ -72,23 +72,12 @@ define [
 
 		generateDateRanges: () ->
 			@today = new Date()
-			@today.setHours 0
-			@today.setMinutes 0
-			@today.setSeconds 0
-			@today.setMilliseconds 0
+			@today.setHours 0, 0, 0, 0
 			@currentTime = @today.getTime()
-
-			@start = new Date @currentTime - @countMilli RANGE / 2
-			@start.setHours 0
-			@start.setMinutes 0
-			@start.setSeconds 0
-			@start.setMilliseconds 0
-
-			@end = new Date @currentTime + @countMilli RANGE / 2
-			@end.setHours 0
-			@end.setMinutes 0
-			@end.setSeconds 0
-			@end.setMilliseconds 0
+			@start = new Date @today.toString()
+			@start.setDate @today.getDate() - (RANGE / 2)
+			@end = new Date @today.toString()
+			@end.setDate @today.getDate() + (RANGE / 2)
 
 		drawTicks: () ->
 			@ticks = {dates: []}

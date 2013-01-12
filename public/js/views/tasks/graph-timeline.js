@@ -123,21 +123,12 @@
 
       GraphTimeline.prototype.generateDateRanges = function() {
         this.today = new Date();
-        this.today.setHours(0);
-        this.today.setMinutes(0);
-        this.today.setSeconds(0);
-        this.today.setMilliseconds(0);
+        this.today.setHours(0, 0, 0, 0);
         this.currentTime = this.today.getTime();
-        this.start = new Date(this.currentTime - this.countMilli(RANGE / 2));
-        this.start.setHours(0);
-        this.start.setMinutes(0);
-        this.start.setSeconds(0);
-        this.start.setMilliseconds(0);
-        this.end = new Date(this.currentTime + this.countMilli(RANGE / 2));
-        this.end.setHours(0);
-        this.end.setMinutes(0);
-        this.end.setSeconds(0);
-        return this.end.setMilliseconds(0);
+        this.start = new Date(this.today.toString());
+        this.start.setDate(this.today.getDate() - (RANGE / 2));
+        this.end = new Date(this.today.toString());
+        return this.end.setDate(this.today.getDate() + (RANGE / 2));
       };
 
       GraphTimeline.prototype.drawTicks = function() {
