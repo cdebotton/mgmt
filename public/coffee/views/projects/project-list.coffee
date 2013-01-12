@@ -4,7 +4,6 @@ define [
 	'ns'
 	'animate'
 	'views/projects/project-edit'
-	'models/projects/project-edit'
 	'models/clients/client'
 	'views/projects/project-item'
 ], (Backbone, $, ns) ->

@@ -7,7 +7,6 @@ define [
 	'animate'
 	'models/clients/client'
 	'views/projects/project-task-edit'
-	'models/projects/project-task-edit'
 	'views/projects/project-overview'
 	'models/projects/project-overview'
 	'views/widgets/livesearch-input'
@@ -60,8 +59,7 @@ define [
 
 		editTask: (task) ->
 			@taskEditor = new United.Views.Projects.ProjectTaskEdit
-				model: new United.Models.Projects.ProjectTaskEdit
-					task: task
+				model: task
 			@taskHolder.html @taskEditor.render().$el
 
 		newTask: (e) =>

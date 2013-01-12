@@ -4,7 +4,7 @@
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['backbone', 'jquery', 'underscore', 'ns', 'jst', 'animate', 'models/clients/client', 'views/projects/project-task-edit', 'models/projects/project-task-edit', 'views/projects/project-overview', 'models/projects/project-overview', 'views/widgets/livesearch-input', 'models/widgets/livesearch', 'views/widgets/modal'], function(Backbone, $, _, ns) {
+  define(['backbone', 'jquery', 'underscore', 'ns', 'jst', 'animate', 'models/clients/client', 'views/projects/project-task-edit', 'views/projects/project-overview', 'models/projects/project-overview', 'views/widgets/livesearch-input', 'models/widgets/livesearch', 'views/widgets/modal'], function(Backbone, $, _, ns) {
     ns('United.Views.Projects.ProjectEdit');
     return United.Views.Projects.ProjectEdit = (function(_super) {
 
@@ -80,9 +80,7 @@
 
       ProjectEdit.prototype.editTask = function(task) {
         this.taskEditor = new United.Views.Projects.ProjectTaskEdit({
-          model: new United.Models.Projects.ProjectTaskEdit({
-            task: task
-          })
+          model: task
         });
         return this.taskHolder.html(this.taskEditor.render().$el);
       };

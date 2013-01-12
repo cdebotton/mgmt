@@ -61,7 +61,7 @@
       ProjectTaskEdit.prototype.render = function() {
         var ctx, e, h, html, s, task;
         this.$el.css('opacity', 0);
-        task = this.model.get('task');
+        task = this.model;
         s = task.get('start_date');
         e = task.get('end_date');
         ctx = task.toJSON();
@@ -100,103 +100,103 @@
       };
 
       ProjectTaskEdit.prototype.updateTaskName = function(e) {
-        return this.model.get('task').set('name', e.currentTarget.value);
+        return this.model.set('name', e.currentTarget.value);
       };
 
       ProjectTaskEdit.prototype.updateStartYear = function(e) {
         var d, selected, start_date, target;
-        selected = this.model.get('task');
+        selected = this.model;
         start_date = selected.get('start_date');
         target = parseInt(e.currentTarget.value);
         if (target.toString().match(/^\d{4}$/)) {
           d = new Date(start_date);
           d.setYear(target);
           if (d < selected.get('end_date')) {
-            return this.model.get('task').set('start_date', d);
+            return this.model.set('start_date', d);
           }
         }
       };
 
       ProjectTaskEdit.prototype.updateStartMonth = function(e) {
         var d, selected, start_date, target;
-        selected = this.model.get('task');
+        selected = this.model;
         start_date = selected.get('start_date');
         target = parseInt(e.currentTarget.value);
         if ((0 < target && target < 13)) {
           d = new Date(start_date);
           d.setMonth(target - 1);
           if (d < selected.get('end_date')) {
-            return this.model.get('task').set('start_date', d);
+            return this.model.set('start_date', d);
           }
         }
       };
 
       ProjectTaskEdit.prototype.updateStartDay = function(e) {
         var d, selected, start_date, target;
-        selected = this.model.get('task');
+        selected = this.model;
         start_date = selected.get('start_date');
         target = parseInt(e.currentTarget.value);
         if ((0 < target && target < 32)) {
           d = new Date(start_date);
           d.setDate(target);
           if (d < selected.get('end_date')) {
-            return this.model.get('task').set('start_date', d);
+            return this.model.set('start_date', d);
           }
         }
       };
 
       ProjectTaskEdit.prototype.updateEndYear = function(e) {
         var d, end_date, selected, target;
-        selected = this.model.get('task');
+        selected = this.model;
         end_date = selected.get('end_date');
         target = parseInt(e.currentTarget.value);
         if (target.toString().match(/^\d{4}$/)) {
           d = new Date(end_date);
           d.setYear(target);
           if (d > selected.get('start_date')) {
-            return this.model.get('task').set('end_date', d);
+            return this.model.set('end_date', d);
           }
         }
       };
 
       ProjectTaskEdit.prototype.updateEndMonth = function(e) {
         var d, end_date, selected, target;
-        selected = this.model.get('task');
+        selected = this.model;
         end_date = selected.get('end_date');
         target = parseInt(e.currentTarget.value);
         if ((0 < target && target < 13)) {
           d = new Date(end_date);
           d.setMonth(target - 1);
           if (d > selected.get('start_date')) {
-            return this.model.get('task').set('end_date', d);
+            return this.model.set('end_date', d);
           }
         }
       };
 
       ProjectTaskEdit.prototype.updateEndDay = function(e) {
         var d, end_date, selected, target;
-        selected = this.model.get('task');
+        selected = this.model;
         end_date = selected.get('end_date');
         target = parseInt(e.currentTarget.value);
         if ((0 < target && target < 32)) {
           d = new Date(end_date);
           d.setDate(target);
           if (d > selected.get('start_date')) {
-            return this.model.get('task').set('end_date', d);
+            return this.model.set('end_date', d);
           }
         }
       };
 
       ProjectTaskEdit.prototype.updateColor = function(e) {
-        return this.model.get('task').set('color', e.currentTarget.value);
+        return this.model.set('color', e.currentTarget.value);
       };
 
       ProjectTaskEdit.prototype.updateUserId = function(e) {
-        return this.model.get('task').set('user_id', e.currentTarget.value);
+        return this.model.set('user_id', e.currentTarget.value);
       };
 
       ProjectTaskEdit.prototype.updatePercentage = function(e) {
-        return this.model.get('task').set('percentage', parseInt(e.currentTarget.value));
+        return this.model.set('percentage', parseInt(e.currentTarget.value));
       };
 
       ProjectTaskEdit.prototype.printUsers = function(array, user_id, opts) {
@@ -232,7 +232,7 @@
           buffer += opts.fn({
             id: id,
             color: color,
-            selected: ((_ref = this.model.get('task')) != null ? _ref.get('color') : void 0) === id ? ' SELECTED' : ''
+            selected: ((_ref = this.model) != null ? _ref.get('color') : void 0) === id ? ' SELECTED' : ''
           });
         }
         return buffer;

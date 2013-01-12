@@ -25,7 +25,7 @@ define [
 
 		render: () ->
 			@$el.css 'opacity', 0
-			task = @model.get 'task'
+			task = @model
 			s = task.get 'start_date'
 			e = task.get 'end_date'
 			ctx = task.toJSON()
@@ -59,76 +59,76 @@ define [
 				@remove()
 
 		updateTaskName: (e) =>
-			@model.get('task').set 'name', e.currentTarget.value
+			@model.set 'name', e.currentTarget.value
 
 		updateStartYear: (e) =>
-			selected = @model.get 'task'
+			selected = @model
 			start_date = selected.get 'start_date'
 			target = parseInt(e.currentTarget.value)
 			if target.toString().match /^\d{4}$/
 				d = new Date start_date
 				d.setYear target
 				if d < selected.get 'end_date'
-					@model.get('task').set 'start_date', d
+					@model.set 'start_date', d
 
 		updateStartMonth: (e) =>
-			selected = @model.get 'task'
+			selected = @model
 			start_date = selected.get 'start_date'
 			target = parseInt(e.currentTarget.value)
 			if 0 < target < 13
 				d = new Date start_date
 				d.setMonth target - 1
 				if d < selected.get 'end_date'
-					@model.get('task').set 'start_date', d
+					@model.set 'start_date', d
 
 		updateStartDay: (e) =>
-			selected = @model.get 'task'
+			selected = @model
 			start_date = selected.get 'start_date'
 			target = parseInt(e.currentTarget.value)
 			if 0 < target < 32
 				d = new Date start_date
 				d.setDate target
 				if d < selected.get 'end_date'
-					@model.get('task').set 'start_date', d
+					@model.set 'start_date', d
 
 		updateEndYear: (e) =>
-			selected = @model.get 'task'
+			selected = @model
 			end_date = selected.get 'end_date'
 			target = parseInt(e.currentTarget.value)
 			if target.toString().match /^\d{4}$/
 				d = new Date end_date
 				d.setYear target
 				if d > selected.get 'start_date'
-					@model.get('task').set 'end_date', d
+					@model.set 'end_date', d
 
 		updateEndMonth: (e) =>
-			selected = @model.get 'task'
+			selected = @model
 			end_date = selected.get 'end_date'
 			target = parseInt(e.currentTarget.value)
 			if 0 < target < 13
 				d = new Date end_date
 				d.setMonth target - 1
 				if d > selected.get 'start_date'
-					@model.get('task').set 'end_date', d
+					@model.set 'end_date', d
 
 		updateEndDay: (e) =>
-			selected = @model.get 'task'
+			selected = @model
 			end_date = selected.get 'end_date'
 			target = parseInt(e.currentTarget.value)
 			if 0 < target < 32
 				d = new Date end_date
 				d.setDate target
 				if d > selected.get 'start_date'
-					@model.get('task').set 'end_date', d
+					@model.set 'end_date', d
 
 		updateColor: (e) =>
-			@model.get('task').set 'color', e.currentTarget.value
+			@model.set 'color', e.currentTarget.value
 
 		updateUserId: (e) =>
-			@model.get('task').set 'user_id', e.currentTarget.value
+			@model.set 'user_id', e.currentTarget.value
 
 		updatePercentage: (e) =>
-			@model.get('task').set 'percentage', parseInt e.currentTarget.value
+			@model.set 'percentage', parseInt e.currentTarget.value
 
 		printUsers: (array, user_id, opts) =>
 			if array?.length
@@ -150,6 +150,6 @@ define [
 				buffer += opts.fn {
 					id: id
 					color: color
-					selected: if @model.get('task')?.get('color') is id then ' SELECTED' else ''
+					selected: if @model?.get('color') is id then ' SELECTED' else ''
 				}
 			return buffer

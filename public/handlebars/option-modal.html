@@ -16,9 +16,11 @@
 	{{/if}}
 	{{#if options}}
 		<nav class="modal-actions">
-			{{#printOptions options}}
-				<a href="#" class="btn btn-small {{ className }}">{{ label }}</a>
-			{{/printOptions}}
+			<div class="btn-group">
+				{{#printOptions options}}
+					<a href="#" class="btn btn-small {{ className }}">{{ label }}</a>
+				{{/printOptions}}
+			</div>
 		</nav>
 	{{/if}}
 </article>
