@@ -141,12 +141,12 @@
           _this.taskHolder.remove();
           _this.liveSearch.remove();
           _this.$el.html('');
-          _this.$el.css({
+          return _this.$el.css({
             display: 'none',
             marginTop: 0
           });
-          return United.EventBus.trigger('close-project-drawer');
         });
+        United.EventBus.trigger('close-project-drawer');
         return e.preventDefault();
       };
 

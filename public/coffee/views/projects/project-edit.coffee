@@ -103,7 +103,7 @@ define [
 					display: 'none'
 					marginTop: 0
 				}
-				United.EventBus.trigger 'close-project-drawer'
+			United.EventBus.trigger 'close-project-drawer'
 			e.preventDefault()
 
 		bindEscape: (e) => if e.keyCode is 27 then @closeDrawer e
