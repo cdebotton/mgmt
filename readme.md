@@ -1,5 +1,5 @@
 # ヾ(＠⌒ー⌒＠)ノ ella
-Management software for Brooklyn United by [Christian de Botton](mailto:debotton@brooklynunited.com).
+Management software for [Brooklyn United](http://www.brooklynunited.com) by [Christian de Botton](mailto:debotton@brooklynunited.com).
 
 ## admin
 
