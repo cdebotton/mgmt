@@ -34,6 +34,7 @@
           return EDIT_OPEN = false;
         });
         this.model.on('add:users', this.editUser, this);
+        this.model.on('add:users', this.addOne, this);
         this.userList = this.$('#user-list');
         return this.addAll();
       };
@@ -52,9 +53,6 @@
 
       UserList.prototype.editUser = function(user) {
         var _ref;
-        if (user.isNew()) {
-          this.addOne(user);
-        }
         if ((_ref = this.editor) != null) {
           _ref.undelegateEvents();
         }

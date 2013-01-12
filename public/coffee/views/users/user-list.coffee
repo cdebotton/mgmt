@@ -20,6 +20,7 @@ define [
 			United.EventBus.on 'edit-user', @editUser, @
 			United.EventBus.on 'user-edit-closed', () -> EDIT_OPEN = false
 			@model.on 'add:users', @editUser, @
+			@model.on 'add:users', @addOne, @
 			@userList = @$ '#user-list'
 			@addAll()
 
@@ -32,7 +33,6 @@ define [
 			@model.get('users').each @addOne
 
 		editUser: (user) ->
-			if user.isNew() then @addOne user
 			@editor?.undelegateEvents()
 			@editor = new United.Views.Users.UserEdit
 				model: user
