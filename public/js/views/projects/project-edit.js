@@ -82,12 +82,15 @@
       };
 
       ProjectEdit.prototype.editTask = function(task) {
-        var taskEditor;
-        taskEditor = new United.Views.Projects.ProjectTaskEdit({
+        var _ref;
+        if ((_ref = this.taskEditor) != null) {
+          _ref.undelegateEvents();
+        }
+        this.taskEditor = new United.Views.Projects.ProjectTaskEdit({
           model: task,
           open: TASK_OPEN
         });
-        taskEditor.render();
+        this.taskEditor.render();
         return TASK_OPEN = true;
       };
 

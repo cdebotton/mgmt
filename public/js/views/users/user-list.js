@@ -51,8 +51,12 @@
       };
 
       UserList.prototype.editUser = function(user) {
+        var _ref;
         if (user.isNew()) {
           this.addOne(user);
+        }
+        if ((_ref = this.editor) != null) {
+          _ref.undelegateEvents();
         }
         this.editor = new United.Views.Users.UserEdit({
           model: user,

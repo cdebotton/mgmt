@@ -60,10 +60,11 @@ define [
 			@model.set 'client_name', e.currentTarget.value
 
 		editTask: (task) ->
-			taskEditor = new United.Views.Projects.ProjectTaskEdit
+			@taskEditor?.undelegateEvents()
+			@taskEditor = new United.Views.Projects.ProjectTaskEdit
 				model: task
 				open: TASK_OPEN
-			taskEditor.render()
+			@taskEditor.render()
 			TASK_OPEN = true
 
 		newTask: (e) =>

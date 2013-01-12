@@ -33,6 +33,7 @@ define [
 
 		editUser: (user) ->
 			if user.isNew() then @addOne user
+			@editor?.undelegateEvents()
 			@editor = new United.Views.Users.UserEdit
 				model: user
 				open: EDIT_OPEN
