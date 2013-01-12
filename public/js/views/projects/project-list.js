@@ -35,6 +35,7 @@
         United.Models.Users.Session = this.model.get('session');
         United.EventBus.on('open-project', this.editProject, this);
         this.model.on('add:projects', this.editProject, this);
+        this.model.on('add:projects', this.addOne, this);
         this.model.on('reset:projects', this.addAll, this);
         this.projectList = this.$('#project-list');
         return this.addAll();
@@ -62,9 +63,6 @@
         var editor;
         if (!United.Models.Users.Session.isAdmin()) {
           return false;
-        }
-        if (project.isNew()) {
-          this.addOne(project);
         }
         editor = new United.Views.Projects.ProjectEdit({
           model: project,

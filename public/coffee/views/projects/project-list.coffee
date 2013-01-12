@@ -23,6 +23,7 @@ define [
 			United.Models.Users.Session = @model.get 'session'
 			United.EventBus.on 'open-project', @editProject, @
 			@model.on 'add:projects', @editProject, @
+			@model.on 'add:projects', @addOne, @
 			@model.on 'reset:projects', @addAll, @
 			@projectList = @$ '#project-list'
 			@addAll()
@@ -43,7 +44,6 @@ define [
 		editProject: (project) =>
 			if not United.Models.Users.Session.isAdmin()
 				return false
-			if project.isNew() then @addOne project
 			editor = new United.Views.Projects.ProjectEdit
 				model: project
 				open: DRAWER_OPEN
