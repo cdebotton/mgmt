@@ -11,11 +11,13 @@ define [
 		className: 'user-item'
 
 		events:
-			'click':		'editUser'
+			'click':				'editUser'
+			'click .icon-remove':	'deleteUser'
 
 		initialize: ->
 			United.JST.Hb.registerHelper 'printDates', @printDates
 			@model.on 'change', @render, @
+			@model.on 'destroy', @remove, @
 
 		render: ->
 			ctx = @model.toJSON()
@@ -32,6 +34,11 @@ define [
 			e.preventDefault()
 			e.stopPropagation()
 			United.EventBus.trigger 'edit-user', @model
+
+		deleteUser: (e) =>
+			e.preventDefault()
+			e.stopPropagation()
+			@model.destroy()
 
 		printDates: (start, end) ->
 			"#{parseInt(start.getMonth())+1}.#{start.getDate()}.#{start.getFullYear()} &mdash; #{parseInt(end.getMonth())+1}.#{end.getDate()}.#{end.getFullYear()} "

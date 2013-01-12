@@ -11,6 +11,8 @@
       __extends(UserItem, _super);
 
       function UserItem() {
+        this.deleteUser = __bind(this.deleteUser, this);
+
         this.editUser = __bind(this.editUser, this);
         return UserItem.__super__.constructor.apply(this, arguments);
       }
@@ -20,12 +22,14 @@
       UserItem.prototype.className = 'user-item';
 
       UserItem.prototype.events = {
-        'click': 'editUser'
+        'click': 'editUser',
+        'click .icon-remove': 'deleteUser'
       };
 
       UserItem.prototype.initialize = function() {
         United.JST.Hb.registerHelper('printDates', this.printDates);
-        return this.model.on('change', this.render, this);
+        this.model.on('change', this.render, this);
+        return this.model.on('destroy', this.remove, this);
       };
 
       UserItem.prototype.render = function() {
@@ -50,6 +54,12 @@
         e.preventDefault();
         e.stopPropagation();
         return United.EventBus.trigger('edit-user', this.model);
+      };
+
+      UserItem.prototype.deleteUser = function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        return this.model.destroy();
       };
 
       UserItem.prototype.printDates = function(start, end) {
