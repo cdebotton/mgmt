@@ -59,7 +59,8 @@
 
       UserEdit.prototype.initialize = function() {
         United.JST.Hb.registerHelper('printLogin', this.printLogin);
-        return this.model.on('change:first_name change:last_name', this.updateTitle, this);
+        this.model.on('change:first_name change:last_name', this.updateTitle, this);
+        return this.model.on('destroy', this.close, this);
       };
 
       UserEdit.prototype.updateFirstName = function(e) {
@@ -130,12 +131,17 @@
 
       UserEdit.prototype.cancelUser = function(e) {
         var _this = this;
-        this.model.fetch({
-          wait: true,
-          success: function() {
-            return _this.close(e);
-          }
-        });
+        if (this.model.isNew()) {
+          this.model.destroy();
+          this.close(e);
+        } else {
+          this.model.fetch({
+            wait: true,
+            success: function() {
+              return _this.close(e);
+            }
+          });
+        }
         return e.preventDefault();
       };
 
@@ -174,7 +180,9 @@
             display: 'none'
           });
         });
-        return e.preventDefault();
+        if (e.hasOwnProperty('preventDefault')) {
+          return e.preventDefault();
+        }
       };
 
       UserEdit.prototype.printLogin = function(d, name) {

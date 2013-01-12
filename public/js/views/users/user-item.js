@@ -4,7 +4,7 @@
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['backbone', 'ns', 'jst'], function(Backbone, ns) {
+  define(['backbone', 'ns', 'jst', 'views/widgets/modal'], function(Backbone, ns) {
     ns('United.Views.Users.UserItem');
     return United.Views.Users.UserItem = (function(_super) {
 
@@ -57,9 +57,27 @@
       };
 
       UserItem.prototype.deleteUser = function(e) {
+        var modal,
+          _this = this;
         e.preventDefault();
         e.stopPropagation();
-        return this.model.destroy();
+        if (!this.model.isNew()) {
+          return modal = new United.Views.Widgets.Modal({
+            model: new Backbone.Model({
+              title: "Are you sure?",
+              msg: "<p>Once deleted, " + (this.model.get('email')) + " cannot be recovered.</p>",
+              options: {
+                'Yes': function() {
+                  _this.model.destroy();
+                  return modal.closeModal();
+                },
+                'No': United.Views.Widgets.Modal.prototype.closeModal
+              }
+            })
+          });
+        } else {
+          return this.model.destroy();
+        }
       };
 
       UserItem.prototype.printDates = function(start, end) {

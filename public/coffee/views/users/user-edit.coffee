@@ -28,6 +28,7 @@ define [
 		initialize: ->
 			United.JST.Hb.registerHelper 'printLogin', @printLogin
 			@model.on 'change:first_name change:last_name', @updateTitle, @
+			@model.on 'destroy', @close, @
 
 		updateFirstName: (e) =>
 			@model.set 'first_name', e.currentTarget.value
@@ -78,7 +79,10 @@ define [
 			e.preventDefault()
 
 		cancelUser: (e) =>
-			@model.fetch {
+			if @model.isNew()
+				@model.destroy()
+				@close e
+			else @model.fetch {
 				wait: true
 				success: () => @close e
 			}
@@ -113,7 +117,8 @@ define [
 					marginTop: 0
 					display: 'none'
 				}
-			e.preventDefault()
+			if e.hasOwnProperty 'preventDefault'
+				e.preventDefault()
 
 		printLogin: (d, name) ->
 			if isNaN d.getTime()

@@ -46,6 +46,7 @@
         first_name: 'New',
         last_name: 'User',
         photo: 'http://placehold.it/100x100',
+        pdo_allotment: 15,
         hired_on: new Date()
       };
 

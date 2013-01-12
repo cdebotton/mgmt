@@ -20,7 +20,7 @@ define [
 		el: '#project-drawer'
 
 		events:
-			'click #save-project':			'saveProject'
+			'click #save-project':				'saveProject'
 			'click .add-task-to-project':		'newTask'
 			'click #close-project-drawer':		'closeDrawer'
 			'keyup input[name="project-name"]':	'setName'

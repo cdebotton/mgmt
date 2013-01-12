@@ -12,7 +12,6 @@ define [
 
 	ns 'United.Models.Users.User'
 	class United.Models.Users.User extends Backbone.RelationalModel
-
 		url: -> "/api/v1/users" + if not @isNew() then "/update/#{@get 'id'}" else ''
 
 		relations: [{
@@ -37,17 +36,18 @@ define [
 			collectionType:		United.Collections.Tasks.Disciplines
 		}]
 
-		defaults:
+		defaults: {
 			first_name:	'New'
 			last_name:	'User'
 			photo: 'http://placehold.it/100x100'
+			pdo_allotment: 15
 			hired_on: new Date()
+		}
 
 		parse: (resp) ->
 			resp.hired_on = new Date resp.hired_on
 			resp.last_login = new Date resp.last_login
 			resp
-
 
 		initialize: ->
 

@@ -2,6 +2,7 @@ define [
 	'backbone'
 	'ns'
 	'jst'
+	'views/widgets/modal'
 ], (Backbone, ns) ->
 
 	ns 'United.Views.Users.UserItem'
@@ -38,7 +39,16 @@ define [
 		deleteUser: (e) =>
 			e.preventDefault()
 			e.stopPropagation()
-			@model.destroy()
+			if not @model.isNew() then modal = new United.Views.Widgets.Modal
+				model: new Backbone.Model
+					title: "Are you sure?"
+					msg: "<p>Once deleted, #{@model.get 'email'} cannot be recovered.</p>"
+					options:
+						'Yes': () =>
+							@model.destroy()
+							modal.closeModal()
+						'No': United.Views.Widgets.Modal::closeModal
+			else @model.destroy()
 
 		printDates: (start, end) ->
 			"#{parseInt(start.getMonth())+1}.#{start.getDate()}.#{start.getFullYear()} &mdash; #{parseInt(end.getMonth())+1}.#{end.getDate()}.#{end.getFullYear()} "

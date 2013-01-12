@@ -12,7 +12,12 @@ class Api_V1_Users_Controller extends Base_Controller
 
 	final public function get_update($id)
 	{
-		$user = User::with(array('tasks', 'roles'))->find($id);
+		$today = date('Y-m-d');
+		$user = User::with(array('roles', 'disciplines', 'tasks.project', 'tasks.project.client', 'tasks' => function($query) use($today)
+			{
+				$query->where('start_date', '<=', $today)
+					->where('end_date', '>=', $today);
+			}))->find($id);
 		return eloquent_to_json($user);
 	}
 
