@@ -20,7 +20,7 @@ From the users tab, paid days off can be adjusted. Vacation days used can also b
 Users have a *dashboard* and access to their own *profile* and *schedule*. All previously mentioned functionality is not visible to non-administrative users.
 
 ## about the software
-For anyone who many potentially modify this software, here is some information about how it was built.
+For anyone who may potentially modify this software, here is some information about how it was built.
 
 ### php
 - Laravel 3.2
