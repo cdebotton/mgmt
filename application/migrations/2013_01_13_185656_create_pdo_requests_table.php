@@ -14,7 +14,7 @@ class Create_Pdo_Requests_Table {
 			$table->integer('user_id');
 			$table->date('start_date');
 			$table->date('end_date');
-			$table->text('reason');
+			$table->text('type');
 			$table->timestamps();
 		});
 	}
