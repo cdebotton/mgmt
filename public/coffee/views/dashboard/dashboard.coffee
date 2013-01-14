@@ -2,6 +2,7 @@ define [
 	'backbone'
 	'ns'
 	'views/dashboard/pdo-request'
+	'views/dashboard/pdo-list'
 ], (Backbone, ns) ->
 
 	ns 'United.Views.Dashboard.Dashboard'
@@ -22,6 +23,7 @@ define [
 			United.JST.Hb.registerHelper 'getMonth', @getMonth
 			United.JST.Hb.registerHelper 'getDate', @getDate
 			United.EventBus.on 'request-closed', @requestClosed, @
+			United.EventBus.on 'pdo-list-closed', @pdoListClosed, @
 
 		createNewPdo: (e) =>
 			@model.get('session').get('requests').add {}
@@ -42,8 +44,10 @@ define [
 
 		requestClosed: -> REQUEST_OPEN = false
 
+		pdoListClosed: -> LIST_OPEN = false
+
 		showRequests: (e) =>
-			view = new United.Views.Dashboard.RequestList
+			view = new United.Views.Dashboard.PdoList
 				model: @model.get('session')
 				open: LIST_OPEN
 			LIST_OPEN = true

@@ -750,7 +750,7 @@ $modal-width: 480px
 		top: 0
 		left: 0
 		margin: 0
-		display: block
+		display: none
 		width: 280px
 		padding: 10px
 		@include background(linear-gradient(top, #444, #222))
@@ -758,6 +758,10 @@ $modal-width: 480px
 		font-size: 12px
 		@include border-radius(5px)
 		@include box-shadow(0 0 15px rgba(0, 0, 0, 0.5))
+		#close-pdo-list
+			position: absolute
+			top: 5px
+			right: 10px
 		li
 			overflow: hidden
 			width: 280px
@@ -769,12 +773,11 @@ $modal-width: 480px
 				float: left
 			.column
 				float: left
-				&+.column
-					margin-left: 10ppx
 				&.left
 					width: 80px
 				&.right
-					width: 190px
+					width: 180px
+					padding-left: 20px
 			.type
 				font-weight: bold
 				text-transform: uppercase

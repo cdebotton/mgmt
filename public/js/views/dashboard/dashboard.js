@@ -4,7 +4,7 @@
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['backbone', 'ns', 'views/dashboard/pdo-request'], function(Backbone, ns) {
+  define(['backbone', 'ns', 'views/dashboard/pdo-request', 'views/dashboard/pdo-list'], function(Backbone, ns) {
     ns('United.Views.Dashboard.Dashboard');
     return United.Views.Dashboard.Dashboard = (function(_super) {
       var LIST_OPEN, REQUEST_OPEN;
@@ -35,7 +35,8 @@
         United.JST.Hb.registerHelper('getYear', this.getYear);
         United.JST.Hb.registerHelper('getMonth', this.getMonth);
         United.JST.Hb.registerHelper('getDate', this.getDate);
-        return United.EventBus.on('request-closed', this.requestClosed, this);
+        United.EventBus.on('request-closed', this.requestClosed, this);
+        return United.EventBus.on('pdo-list-closed', this.pdoListClosed, this);
       };
 
       Dashboard.prototype.createNewPdo = function(e) {
@@ -68,9 +69,13 @@
         return REQUEST_OPEN = false;
       };
 
+      Dashboard.prototype.pdoListClosed = function() {
+        return LIST_OPEN = false;
+      };
+
       Dashboard.prototype.showRequests = function(e) {
         var view;
-        view = new United.Views.Dashboard.RequestList({
+        view = new United.Views.Dashboard.PdoList({
           model: this.model.get('session'),
           open: LIST_OPEN
         });
