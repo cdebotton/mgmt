@@ -37,6 +37,11 @@ define [
 				}, 175, 'ease-out'
 
 		makeRequest: (e) ->
+			e.preventDefault()
+			@model.save {}, {
+				wait: true
+				success: @destroyed
+			}
 
 		cancelRequest: (e) =>
 			e.preventDefault()

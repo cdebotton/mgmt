@@ -21,7 +21,9 @@ define [
 			@model.get('session').on 'add:requests', @editRequest, @
 
 		createNewPdo: (e) =>
-			@model.get('session').get('requests').add {}
+			@model.get('session').get('requests').add {
+				user_id: @model.get('session').get('id')
+			}
 			e.preventDefault()
 
 		editRequest: (request) ->

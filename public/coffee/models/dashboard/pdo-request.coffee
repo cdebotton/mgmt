@@ -11,6 +11,9 @@ define [
 
 	ns 'United.Models.Dashboard.PdoRequest'
 	class United.Models.Dashboard.PdoRequest extends Backbone.RelationalModel
+
+		url: -> "/api/v1/requests"
+
 		defaults:
 			start_date: t
 			end_date: n

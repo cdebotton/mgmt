@@ -49,7 +49,13 @@
         }
       };
 
-      PdoRequest.prototype.makeRequest = function(e) {};
+      PdoRequest.prototype.makeRequest = function(e) {
+        e.preventDefault();
+        return this.model.save({}, {
+          wait: true,
+          success: this.destroyed
+        });
+      };
 
       PdoRequest.prototype.cancelRequest = function(e) {
         e.preventDefault();

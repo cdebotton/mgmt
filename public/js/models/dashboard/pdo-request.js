@@ -18,6 +18,10 @@
         return PdoRequest.__super__.constructor.apply(this, arguments);
       }
 
+      PdoRequest.prototype.url = function() {
+        return "/api/v1/requests";
+      };
+
       PdoRequest.prototype.defaults = {
         start_date: t,
         end_date: n

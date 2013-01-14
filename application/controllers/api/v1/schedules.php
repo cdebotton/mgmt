@@ -3,7 +3,8 @@
 use Client\Project as Project;
 use Client\Project\Task as Task;
 
-class Api_V1_Schedules_Controller extends Controller {
+class Api_V1_Schedules_Controller extends Base_Controller
+{
 	public $restful = true;
 
 	public function __construct()

@@ -33,7 +33,9 @@
       };
 
       Dashboard.prototype.createNewPdo = function(e) {
-        this.model.get('session').get('requests').add({});
+        this.model.get('session').get('requests').add({
+          user_id: this.model.get('session').get('id')
+        });
         return e.preventDefault();
       };
 
