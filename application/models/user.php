@@ -11,9 +11,14 @@ class User extends Eloquent {
 		return $this->has_many('User\\Pdo');
 	}
 
-	public function pdo_adjustments()
+	public function adjustments()
 	{
 		return $this->has_many('User\\Pdo\\Adjustment');
+	}
+
+	public function requests()
+	{
+		return $this->has_many('User\\Pdo\\Request');
 	}
 
 	public function disciplines()
