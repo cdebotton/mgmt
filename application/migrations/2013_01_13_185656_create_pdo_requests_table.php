@@ -12,7 +12,6 @@ class Create_Pdo_Requests_Table {
 		SchemaEnhanced::create('pdo_requests', function($table){
 			$table->increments('id');
 			$table->integer('user_id');
-			$table->date('request_date');
 			$table->date('start_date');
 			$table->date('end_date');
 			$table->text('reason');

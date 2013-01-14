@@ -682,6 +682,66 @@ $modal-width: 480px
 				border-top: 1px solid #eee
 				&+dt
 					margin-top: 20px
+#pdo-request
+	padding: 20px 0
+	@include background(linear-gradient(top, #333, #111))
+	@include box-shadow(0 0 30px rgba(0, 0, 0, 0.75), 0 1px 3px rgba(0, 0, 0, 0.85))
+	color: #eee
+	#pdo-request-header
+		overflow: hidden
+		display: block
+		h3
+			padding-top: 0
+			margin-top: 0
+		.icon-remove
+			margin: 10px 15px 0 0
+	.form-horizontal
+		@include grid-container
+		overflow: hidden
+		.date-field
+			float: left
+			background-color: #fff
+			color: #bbb
+			@include border-radius(4px)
+			input[type="number"]
+				border: 0
+			input[type="number"].day-field, input[type="number"].month-field
+				text-align: center
+				width: 40px
+			input[type="number"].year-field
+				width: 61px
+				text-align: center
+		.form-row
+			overflow: hidden
+		.form-element
+			float: left
+			&+.form-element
+				margin-left: 15px
+			label
+				font-size: 11px
+				color: #eee
+				margin: 5px 0
+		.column
+			float: left
+			&.left
+				width: 110px
+			&.right
+				width: 830px
+			&+.column
+				margin-left: 20px
+		.photo
+			input
+				width: 78px
+				overflow: hidden
+		.first-name, .last-name, .email, .password, .confirm-password
+			width: 203px
+			input
+				width: 187px
+		.hired-on
+		.pdo
+			width: 75px
+			input
+				width: 62px
 
 .live-search
 	overflow: visible

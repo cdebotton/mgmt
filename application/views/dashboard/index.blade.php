@@ -51,7 +51,7 @@
 		<div id="pdo-request">
 			<!-- Remove after styling is done -->
 				<div class="container">
-					<header id="user-drawer-header">
+					<header id="pdo-request-header">
 						<h3 class="pull-left">Time Off <small>Send a Request for Approval</small></h3>
 						<a href="#" class="pull-right"><i id="close-user-drawer" class="icon icon-remove icon-white"></i></a>
 					</header>
