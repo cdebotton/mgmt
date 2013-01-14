@@ -22,7 +22,7 @@
         }, {
           type: Backbone.HasMany,
           key: 'disciplines',
-          relatedModel: United.Models.Users.Role,
+          relatedModel: United.Models.Users.Discipline,
           collectionType: United.Collections.Users.Disciplines
         }, {
           type: Backbone.HasMany,
