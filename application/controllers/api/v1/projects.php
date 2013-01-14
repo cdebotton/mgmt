@@ -34,6 +34,7 @@ class Api_V1_Projects_Controller extends Controller
 			foreach ($input->tasks as $object) {
 				$task = new Task;
 				$task->name = $object->name;
+				$task->color = $object->color;
 				$task->user_id = $object->user_id;
 				$task->author_id = $object->author_id;
 				$task->start_date = $object->start_date;
@@ -70,6 +71,7 @@ class Api_V1_Projects_Controller extends Controller
 			foreach ($input->tasks as $object) {
 				$task = isset($object->id) ? Task::find($object->id) : new Task;
 				$task->name = $object->name;
+				$task->color = $object->color;
 				$task->user_id = $object->user_id;
 				$task->author_id = $object->author_id;
 				$task->start_date = $object->start_date;
