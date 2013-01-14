@@ -49,7 +49,25 @@
 			</div>
 		</div>
 		<div id="pdo-request">
+			<!-- Remove after styling is done -->
+				<div class="container">
+					<header id="user-drawer-header">
+						<h3 class="pull-left">Time Off <small>Send a Request for Approval</small></h3>
+						<a href="#" class="pull-right"><i id="close-user-drawer" class="icon icon-remove icon-white"></i></a>
+					</header>
+					<form class="form-horizontal">
+						<div class="form-row">
+							<div class="form-element first-name">
+								<input type="text" name="first-name" value="">
+								<div class="meta">
+									<label class="form-label">First Name</label>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
 
+			<!-- End remove block -->
 		</div>
 	</div>
 @endsection

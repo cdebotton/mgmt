@@ -37,6 +37,7 @@
       };
 
       LiveSearchInput.prototype.initialize = function() {
+        var elWidth;
         this.list = new United.Views.Widgets.LiveSearchList({
           listenTo: this.cid
         });
@@ -45,7 +46,9 @@
         this.wrapper = this.$el.parent('.live-search');
         this.wrapper.append(this.list.$el);
         this.icons = $('<span class="add-on"><i class="icon icon-search"></i><i class="icon icon-remove icon-white"></i></span>');
-        return this.$el.after(this.icons);
+        this.$el.after(this.icons);
+        elWidth = this.$el.innerWidth();
+        return this.$el.css('width', elWidth - 36);
       };
 
       LiveSearchInput.prototype.keyDown = function(e) {

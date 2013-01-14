@@ -23,6 +23,8 @@ define [
 				@wrapper.append @list.$el
 				@icons = $ '<span class="add-on"><i class="icon icon-search"></i><i class="icon icon-remove icon-white"></i></span>'
 				@$el.after @icons
+				elWidth = @$el.innerWidth()
+				@$el.css 'width', elWidth - 36
 
 			keyDown: (e) =>
 				@suppressKeyPressRepeat = _.indexOf([40,38,9,13,27], e.keyCode) > 0
