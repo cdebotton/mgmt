@@ -1,5 +1,7 @@
 <?php
 
+use User\Pdo\Request as Request;
+
 class Api_V1_Requests_Controller extends Base_Controller
 {
 	public $restful = true;
@@ -12,6 +14,14 @@ class Api_V1_Requests_Controller extends Base_Controller
 
 	final public function post_index()
 	{
+		$input = Input::json();
+		$request = new Request;
+		$request->start_date = $input->start_date;
+		$request->end_date = $input->end_date;
+		$request->type = $input->type;
+		$request->message = $input->message;
+		$request->save();
 
+		return Response::json($request->to_array());
 	}
 }

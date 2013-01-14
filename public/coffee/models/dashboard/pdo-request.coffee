@@ -17,5 +17,8 @@ define [
 		defaults:
 			start_date: t
 			end_date: n
+			type: null
+			message: null
+			status: false
 
 	United.Models.Dashboard.PdoRequest.setup()

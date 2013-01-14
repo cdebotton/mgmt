@@ -4,38 +4,47 @@
 						<a href="#" class="pull-right"><i id="close-user-drawer" class="icon icon-remove icon-white"></i></a>
 					</header>
 					<form class="form-horizontal">
-						<div class="form-element pdo-end">
-							<article class="date-field">
-								<input type="number" class="month-field" name="end_month" value="{{{ getMonth start_date }}}"> / <input type="number" class="day-field" name="end_day" value="{{{ getDate start_date }}}"> / <input type="number" class="year-field" name="end_year" value="{{{ getYear start_date }}}">
-							</article>
-							<div class="meta">
-								<label class="form-label">From</label>
+						<div class="form-row">
+							<div class="form-element pdo-end">
+								<article class="date-field">
+									<input type="number" class="month-field" name="start_month" value="{{{ getMonth start_date }}}"> / <input type="number" class="day-field" name="start_day" value="{{{ getDate start_date }}}"> / <input type="number" class="year-field" name="start_year" value="{{{ getYear start_date }}}">
+								</article>
+								<div class="meta">
+									<label class="form-label">From</label>
+								</div>
+							</div>
+							<div class="form-element pdo-end">
+								<article class="date-field">
+									<input type="number" class="month-field" name="end_month" value="{{{ getMonth end_date }}}"> / <input type="number" class="day-field" name="end_day" value="{{{ getDate end_date }}}"> / <input type="number" class="year-field" name="end_year" value="{{{ getYear end_date }}}">
+								</article>
+								<div class="meta">
+									<label class="form-label">Through</label>
+								</div>
+							</div>
+							<div class="form-element pdo-reason">
+								<select name="pdo-type">
+									<option value="null">Please select a type</option>
+									<option value="vacation">Vacation</option>
+									<option value="voting">Voting</option>
+									<option value="jury duty">Jury Duty</option>
+									<option value="maternity leave">Maternity Leave</option>
+									<option value="funeral leave">Funeral Leave</option>
+									<option value="other">Other</option>
+								</select>
+							</div>
+							<div class="form-element actions">
+								<div class="btn-group">
+									<button class="btn btn-mini btn-primary" id="make-request">Make Request</button>
+									<button class="btn btn-mini" id="cancel-request">Cancel</button>
+								</div>
 							</div>
 						</div>
-						<div class="form-element pdo-end">
-							<article class="date-field">
-								<input type="number" class="month-field" name="end_month" value="{{{ getMonth end_date }}}"> / <input type="number" class="day-field" name="end_day" value="{{{ getDate end_date }}}"> / <input type="number" class="year-field" name="end_year" value="{{{ getYear end_date }}}">
-							</article>
-							<div class="meta">
-								<label class="form-label">Through</label>
-							</div>
-						</div>
-						<div class="form-element pdo-reason">
-							<select>
-								<option value="null">Please select a type</option>
-								<option value="vacation">Vacation</option>
-								<option value="voting">Voting</option>
-								<option value="jury duty">Jury Duty</option>
-								<option value="maternity leave">Maternity Leave</option>
-								<option value="funeral leave">Funeral Leave</option>
-								<option value="other">Other</option>
-							</select>
-						</div>
-						<div class="form-element actions">
-							<div class="btn-group">
-								<button class="btn btn-mini btn-primary" id="make-request">Make Request</button>
-								<button class="btn btn-mini" id="cancel-request">Cancel</button>
-							</div>
+						<div class="form-row">
+							<div class="form-element message">
+								<textarea name="message"></textarea>
+								<div class="meta">
+									<label class="form-label">Message to Administrator</label>
+								</div>
 						</div>
 					</form>
 				</div>

@@ -24,7 +24,10 @@
 
       PdoRequest.prototype.defaults = {
         start_date: t,
-        end_date: n
+        end_date: n,
+        type: null,
+        message: null,
+        status: false
       };
 
       return PdoRequest;

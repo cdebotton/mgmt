@@ -4,13 +4,29 @@
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['backbone', 'ns', 'animate', 'jst'], function(Backbone, ns) {
+  define(['backbone', 'underscore', 'ns', 'animate', 'jst'], function(Backbone, _, ns) {
     ns('United.Views.Dashboard.PdoRequest');
     return United.Views.Dashboard.PdoRequest = (function(_super) {
 
       __extends(PdoRequest, _super);
 
       function PdoRequest() {
+        this.setMessage = __bind(this.setMessage, this);
+
+        this.setType = __bind(this.setType, this);
+
+        this.setEndDay = __bind(this.setEndDay, this);
+
+        this.setEndMonth = __bind(this.setEndMonth, this);
+
+        this.setEndYear = __bind(this.setEndYear, this);
+
+        this.setStartDay = __bind(this.setStartDay, this);
+
+        this.setStartMonth = __bind(this.setStartMonth, this);
+
+        this.setStartYear = __bind(this.setStartYear, this);
+
         this.cancelRequest = __bind(this.cancelRequest, this);
         return PdoRequest.__super__.constructor.apply(this, arguments);
       }
@@ -20,7 +36,15 @@
       PdoRequest.prototype.events = {
         'click #make-request': 'makeRequest',
         'click .icon-remove': 'cancelRequest',
-        'click #cancel-request': 'cancelRequest'
+        'click #cancel-request': 'cancelRequest',
+        'keyup [name="start_month"]': 'setStartMonth',
+        'keyup [name="start_day"]': 'setStartDay',
+        'keyup [name="start_year"]': 'setStartYear',
+        'keyup [name="end_month"]': 'setEndMonth',
+        'keyup [name="end_day"]': 'setEndDay',
+        'keyup [name="end_year"]': 'setEndYear',
+        'keyup [name="message"]': 'setMessage',
+        'change [name="pdo-type"]': 'setType'
       };
 
       PdoRequest.prototype.initialize = function() {
@@ -53,7 +77,7 @@
         e.preventDefault();
         return this.model.save({}, {
           wait: true,
-          success: this.destroyed
+          success: _.bind(this.destroyed, this)
         });
       };
 
@@ -73,6 +97,84 @@
           _this.$el.html('');
           return _this.undelegateEvents();
         });
+      };
+
+      PdoRequest.prototype.setStartYear = function(e) {
+        var date;
+        if (e.currentTarget.value.match(/^\d{4}$/)) {
+          date = new Date(this.model.get('start_date'));
+          date.setYear(parseInt(e.currentTarget.value, 10));
+          if (date < this.model.get('end_date')) {
+            return this.model.set('start_date', date);
+          }
+        }
+      };
+
+      PdoRequest.prototype.setStartMonth = function(e) {
+        var date, target;
+        target = (parseInt(e.currentTarget.value, 10)) - 1;
+        if ((0 <= target && target <= 12)) {
+          date = new Date(this.model.get('start_date'));
+          date.setMonth(target);
+          if (date < this.model.get('end_date')) {
+            return this.model.set('start_date', date);
+          }
+        }
+      };
+
+      PdoRequest.prototype.setStartDay = function(e) {
+        var date, target;
+        target = parseInt(e.currentTarget.value, 10);
+        if ((0 < target && target < 32)) {
+          date = new Date(this.model.get('start_date'));
+          date.setDate(target);
+          if (date < this.model.get('end_date')) {
+            return this.model.set('start_date', date);
+          }
+        }
+      };
+
+      PdoRequest.prototype.setEndYear = function(e) {
+        var date;
+        if (e.currentTarget.value.match(/^\d{4}$/)) {
+          date = new Date(this.model.get('end_date'));
+          date.setYear(parseInt(e.currentTarget.value, 10));
+          if (date > this.model.get('start_date')) {
+            return this.model.set('end_date', date);
+          }
+        }
+      };
+
+      PdoRequest.prototype.setEndMonth = function(e) {
+        var date, target;
+        target = (parseInt(e.currentTarget.value, 10)) - 1;
+        if ((0 <= target && target <= 12)) {
+          date = new Date(this.model.get('end_date'));
+          date.setMonth(target);
+          if (date > this.model.get('start_date')) {
+            return this.model.set('end_date', date);
+          }
+        }
+      };
+
+      PdoRequest.prototype.setEndDay = function(e) {
+        var date, target;
+        target = parseInt(e.currentTarget.value, 10);
+        if ((0 < target && target < 32)) {
+          date = new Date(this.model.get('end_date'));
+          date.setDate(target);
+          if (date > this.model.get('start_date')) {
+            return this.model.set('end_date', date);
+          }
+        }
+      };
+
+      PdoRequest.prototype.setType = function(e) {
+        return this.model.set('type', e.currentTarget.value);
+      };
+
+      PdoRequest.prototype.setMessage = function(e) {
+        return this.model.set('message', e.currentTarget.value);
       };
 
       return PdoRequest;
