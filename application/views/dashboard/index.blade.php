@@ -49,44 +49,7 @@
 			</div>
 		</div>
 		<div id="pdo-request">
-			<!-- Remove after styling is done -->
-				<div class="container">
-					<header id="pdo-request-header">
-						<h3 class="pull-left">Time Off <small>Send a Request for Approval</small></h3>
-						<a href="#" class="pull-right"><i id="close-user-drawer" class="icon icon-remove icon-white"></i></a>
-					</header>
-					<form class="form-horizontal">
-						<div class="form-element pdo-end">
-							<article class="date-field">
-								<input type="number" class="month-field" name="end_month" value=""> / <input type="number" class="day-field" name="end_day" value=""> / <input type="number" class="year-field" name="end_year" value="">
-							</article>
-							<div class="meta">
-								<label class="form-label">From</label>
-							</div>
-						</div>
-						<div class="form-element pdo-end">
-							<article class="date-field">
-								<input type="number" class="month-field" name="end_month" value=""> / <input type="number" class="day-field" name="end_day" value=""> / <input type="number" class="year-field" name="end_year" value="">
-							</article>
-							<div class="meta">
-								<label class="form-label">Through</label>
-							</div>
-						</div>
-						<div class="form-element pdo-reason">
-							<select>
-								<option>Please select a type</option>
-								<option>Vacation</option>
-								<option>Voting</option>
-								<option>Jury Duty</option>
-								<option>Maternity Leave</option>
-								<option>Funeral Leave</option>
-								<option>Other</option>
-							</select>
-						</div>
-					</form>
-				</div>
 
-			<!-- End remove block -->
 		</div>
 	</div>
 @endsection

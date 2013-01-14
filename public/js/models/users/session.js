@@ -3,7 +3,7 @@
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['backbone', 'underscore', 'ns', 'relational', 'models/users/role', 'collections/users/roles', 'models/users/discipline', 'collections/users/disciplines'], function(Backbone, _, ns, relational) {
+  define(['backbone', 'underscore', 'ns', 'relational', 'collections/users/roles', 'collections/users/disciplines', 'collections/dashboard/pdo-requests'], function(Backbone, _, ns, relational) {
     ns('United.Models.Users.Session');
     United.Models.Users.Session = (function(_super) {
 
@@ -24,6 +24,11 @@
           key: 'disciplines',
           relatedModel: United.Models.Users.Role,
           collectionType: United.Collections.Users.Disciplines
+        }, {
+          type: Backbone.HasMany,
+          key: 'requests',
+          relatedModel: United.Models.Dashboard.PdoRequest,
+          collectionType: United.Collections.Dashboard.PdoRequest
         }
       ];
 

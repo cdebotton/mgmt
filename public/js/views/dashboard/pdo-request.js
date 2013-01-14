@@ -3,7 +3,12 @@
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['backbone', 'ns', 'animate'], function(Backbone, ns) {
+  define(['backbone', 'ns', 'animate', 'jst'], function(Backbone, ns) {
+    var n, t;
+    t = new Date();
+    t.setHours(0, 0, 0, 0);
+    n = new Date();
+    n.setDate(t.getDate() + 7);
     ns('United.Views.Dashboard.PdoRequest');
     return United.Views.Dashboard.PdoRequest = (function(_super) {
 
@@ -14,6 +19,11 @@
       }
 
       PdoRequest.prototype.el = '#pdo-request';
+
+      PdoRequest.prototype.defaults = {
+        start_date: t,
+        end_date: n
+      };
 
       PdoRequest.prototype.initialize = function() {};
 

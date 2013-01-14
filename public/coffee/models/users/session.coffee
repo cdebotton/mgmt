@@ -3,10 +3,9 @@ define [
 	'underscore'
 	'ns'
 	'relational'
-	'models/users/role'
 	'collections/users/roles'
-	'models/users/discipline'
 	'collections/users/disciplines'
+	'collections/dashboard/pdo-requests'
 ], (Backbone, _, ns, relational) ->
 
 	ns 'United.Models.Users.Session'
@@ -22,6 +21,11 @@ define [
 			key:				'disciplines'
 			relatedModel:		United.Models.Users.Role
 			collectionType:		United.Collections.Users.Disciplines
+		}, {
+			type:				Backbone.HasMany
+			key:				'requests'
+			relatedModel:		United.Models.Dashboard.PdoRequest
+			collectionType:		United.Collections.Dashboard.PdoRequest
 		}]
 
 		url: -> 'api/v1/session'

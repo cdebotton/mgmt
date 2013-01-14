@@ -7,6 +7,7 @@
   define(['backbone', 'ns', 'views/dashboard/pdo-request'], function(Backbone, ns) {
     ns('United.Views.Dashboard.Dashboard');
     return United.Views.Dashboard.Dashboard = (function(_super) {
+      var REQUEST_OPEN;
 
       __extends(Dashboard, _super);
 
@@ -15,13 +16,17 @@
         return Dashboard.__super__.constructor.apply(this, arguments);
       }
 
+      REQUEST_OPEN = false;
+
       Dashboard.prototype.el = '#dashboard-container';
 
       Dashboard.prototype.events = {
         'click #request-time-off': 'createNewPdo'
       };
 
-      Dashboard.prototype.initialize = function() {};
+      Dashboard.prototype.initialize = function() {
+        return console.log(this.model.get('session'));
+      };
 
       Dashboard.prototype.createNewPdo = function(e) {
         return e.preventDefault();
