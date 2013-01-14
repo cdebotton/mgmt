@@ -640,6 +640,8 @@ $modal-width: 480px
 							border-top: 1px solid #eee
 
 #dashboard-head
+	z-index: 10
+	position: relative
 	background-color: #fefefe
 	padding: 40px 0
 	@include box-shadow(0 5px 15px rgba(0, 0, 0, 0.1), 0 1px 0 rgba(0, 0, 0, 0.1))
@@ -683,10 +685,13 @@ $modal-width: 480px
 				&+dt
 					margin-top: 20px
 #pdo-request
+	display: none
 	padding: 20px 0
+	position: relative
 	@include background(linear-gradient(top, #333, #111))
 	@include box-shadow(0 0 30px rgba(0, 0, 0, 0.75), 0 1px 3px rgba(0, 0, 0, 0.85))
 	color: #eee
+	z-index: 0
 	#pdo-request-header
 		overflow: hidden
 		display: block

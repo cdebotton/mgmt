@@ -25,11 +25,40 @@
       };
 
       Dashboard.prototype.initialize = function() {
-        return console.log(this.model.get('session'));
+        United.JST.Hb.registerHelper('getYear', this.getYear);
+        United.JST.Hb.registerHelper('getMonth', this.getMonth);
+        United.JST.Hb.registerHelper('getDate', this.getDate);
+        United.EventBus.on('request-closed', this.requestClosed, this);
+        return this.model.get('session').on('add:requests', this.editRequest, this);
       };
 
       Dashboard.prototype.createNewPdo = function(e) {
+        this.model.get('session').get('requests').add({});
         return e.preventDefault();
+      };
+
+      Dashboard.prototype.editRequest = function(request) {
+        this.requestView = new United.Views.Dashboard.PdoRequest({
+          model: request,
+          open: REQUEST_OPEN
+        });
+        return REQUEST_OPEN = true;
+      };
+
+      Dashboard.prototype.getYear = function(date) {
+        return date.getFullYear();
+      };
+
+      Dashboard.prototype.getMonth = function(date) {
+        return parseInt(date.getMonth()) + 1;
+      };
+
+      Dashboard.prototype.getDate = function(date) {
+        return date.getDate();
+      };
+
+      Dashboard.prototype.requestClosed = function() {
+        return REQUEST_OPEN = false;
       };
 
       return Dashboard;

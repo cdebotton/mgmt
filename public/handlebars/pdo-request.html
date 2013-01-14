@@ -6,7 +6,7 @@
 					<form class="form-horizontal">
 						<div class="form-element pdo-end">
 							<article class="date-field">
-								<input type="number" class="month-field" name="end_month" value=""> / <input type="number" class="day-field" name="end_day" value=""> / <input type="number" class="year-field" name="end_year" value="">
+								<input type="number" class="month-field" name="end_month" value="{{{ getMonth start_date }}}"> / <input type="number" class="day-field" name="end_day" value="{{{ getDate start_date }}}"> / <input type="number" class="year-field" name="end_year" value="{{{ getYear start_date }}}">
 							</article>
 							<div class="meta">
 								<label class="form-label">From</label>
@@ -14,7 +14,7 @@
 						</div>
 						<div class="form-element pdo-end">
 							<article class="date-field">
-								<input type="number" class="month-field" name="end_month" value=""> / <input type="number" class="day-field" name="end_day" value=""> / <input type="number" class="year-field" name="end_year" value="">
+								<input type="number" class="month-field" name="end_month" value="{{{ getMonth end_date }}}"> / <input type="number" class="day-field" name="end_day" value="{{{ getDate end_date }}}"> / <input type="number" class="year-field" name="end_year" value="{{{ getYear end_date }}}">
 							</article>
 							<div class="meta">
 								<label class="form-label">Through</label>
@@ -33,8 +33,8 @@
 						</div>
 						<div class="form-element actions">
 							<div class="btn-group">
-								<button class="btn btn-mini btn-primary">Make Request</button>
-								<button class="btn btn-mini">Cancel</button>
+								<button class="btn btn-mini btn-primary" id="make-request">Make Request</button>
+								<button class="btn btn-mini" id="cancel-request">Cancel</button>
 							</div>
 						</div>
 					</form>

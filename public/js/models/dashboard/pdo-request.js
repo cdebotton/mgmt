@@ -4,6 +4,11 @@
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   define(['backbone', 'ns', 'relational'], function(Backbone, ns) {
+    var n, t;
+    t = new Date();
+    t.setHours(0, 0, 0, 0);
+    n = new Date(t.getTime());
+    n.setDate(t.getDate() + 7);
     ns('United.Models.Dashboard.PdoRequest');
     United.Models.Dashboard.PdoRequest = (function(_super) {
 
@@ -12,6 +17,11 @@
       function PdoRequest() {
         return PdoRequest.__super__.constructor.apply(this, arguments);
       }
+
+      PdoRequest.prototype.defaults = {
+        start_date: t,
+        end_date: n
+      };
 
       return PdoRequest;
 
