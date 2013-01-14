@@ -7,24 +7,31 @@
   define(['backbone', 'ns', 'views/dashboard/pdo-request'], function(Backbone, ns) {
     ns('United.Views.Dashboard.Dashboard');
     return United.Views.Dashboard.Dashboard = (function(_super) {
-      var REQUEST_OPEN;
+      var LIST_OPEN, REQUEST_OPEN;
 
       __extends(Dashboard, _super);
 
       function Dashboard() {
+        this.showRequests = __bind(this.showRequests, this);
+
         this.createNewPdo = __bind(this.createNewPdo, this);
         return Dashboard.__super__.constructor.apply(this, arguments);
       }
 
       REQUEST_OPEN = false;
 
+      LIST_OPEN = false;
+
       Dashboard.prototype.el = '#dashboard-container';
 
       Dashboard.prototype.events = {
-        'click #request-time-off': 'createNewPdo'
+        'click #request-time-off': 'createNewPdo',
+        'click #request-counter': 'showRequests'
       };
 
       Dashboard.prototype.initialize = function() {
+        this.model.get('session').on('add:requests', this.updateRequests, this);
+        this.model.get('session').on('remove:requests', this.updateRequests, this);
         United.JST.Hb.registerHelper('getYear', this.getYear);
         United.JST.Hb.registerHelper('getMonth', this.getMonth);
         United.JST.Hb.registerHelper('getDate', this.getDate);
@@ -41,6 +48,10 @@
         return e.preventDefault();
       };
 
+      Dashboard.prototype.updateRequests = function(model) {
+        return this.$('#request-counter .badge').html(this.model.get('session').get('requests').length);
+      };
+
       Dashboard.prototype.getYear = function(date) {
         return date.getFullYear();
       };
@@ -55,6 +66,16 @@
 
       Dashboard.prototype.requestClosed = function() {
         return REQUEST_OPEN = false;
+      };
+
+      Dashboard.prototype.showRequests = function(e) {
+        var view;
+        view = new United.Views.Dashboard.RequestList({
+          model: this.model.get('session'),
+          open: LIST_OPEN
+        });
+        LIST_OPEN = true;
+        return e.preventDefault();
       };
 
       return Dashboard;

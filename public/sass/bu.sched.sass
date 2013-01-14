@@ -736,6 +736,53 @@ $modal-width: 480px
 			width: 75px
 			input
 				width: 62px
+#pdo-actions
+	position: relative
+	#request-counter
+		a
+			color: #333
+			font-weight: bold
+			&:hover
+				color: #888
+				text-decoration: none
+	#pdo-list
+		position: absolute
+		top: 0
+		left: 0
+		margin: 0
+		display: block
+		width: 280px
+		padding: 10px
+		@include background(linear-gradient(top, #444, #222))
+		color: #eee
+		font-size: 12px
+		@include border-radius(5px)
+		@include box-shadow(0 0 15px rgba(0, 0, 0, 0.5))
+		li
+			overflow: hidden
+			width: 280px
+			&+li
+				margin-top: 10px
+				padding-top: 10px
+				border-top: 1px solid #aaa
+			span, a
+				float: left
+			.column
+				float: left
+				&+.column
+					margin-left: 10ppx
+				&.left
+					width: 80px
+				&.right
+					width: 190px
+			.type
+				font-weight: bold
+				text-transform: uppercase
+			.dates
+			.status
+				font-weight: bold
+			.btn
+				margin-left: 20px
 
 .live-search
 	overflow: visible

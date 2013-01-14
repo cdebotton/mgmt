@@ -16,7 +16,8 @@ define [
 	'text!templates/user-item.html'
 	'text!templates/user-edit.html'
 	'text!templates/pdo-request.html'
-], (ns, Handlebars, _, UserBadge, UserTimeline, GraphTimeline, TaskElement, EditModal, OverageTemplate, UserCalendar, ProjectDrawer, ProjectTaskDrawer, OptionModal, ProjectItem, UserItem, UserEdit, PdoRequest) ->
+	'text!templates/pdo-request-list.html'
+], (ns, Handlebars, _, UserBadge, UserTimeline, GraphTimeline, TaskElement, EditModal, OverageTemplate, UserCalendar, ProjectDrawer, ProjectTaskDrawer, OptionModal, ProjectItem, UserItem, UserEdit, PdoRequest, PdoRequestList) ->
 
 	ns 'United.JST'
 	United.JST =
@@ -44,6 +45,7 @@ define [
 
 		### Paid Day Off Management ###
 		PdoRequest:			Handlebars.compile PdoRequest
+		PdoRequestList:		Handlebars.compile PdoRequestList
 
 		### User Management ###
 		UserItem:			Handlebars.compile UserItem
