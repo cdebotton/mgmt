@@ -13,6 +13,9 @@ class Dashboard_Controller extends Base_Controller {
 		{
 			$query->where('start_date', '<=', $today)
 				->where('end_date', '>=', $today);
+		}, 'requests' => function($query)
+		{
+			$query->where_status(false);
 		}))->where_id(Auth::user()->id)
 			->first();
 

@@ -3,7 +3,7 @@
 use Client\Project\Task as Task;
 use Client\Project as Project;
 
-class Api_V1_Projects_Controller extends Controller
+class Api_V1_Projects_Controller extends Api_V1_Base_Controller
 {
 	public $restful = true;
 

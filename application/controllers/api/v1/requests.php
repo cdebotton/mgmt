@@ -2,7 +2,7 @@
 
 use User\Pdo\Request as Request;
 
-class Api_V1_Requests_Controller extends Base_Controller
+class Api_V1_Requests_Controller extends Api_V1_Base_Controller
 {
 	public $restful = true;
 
@@ -16,6 +16,7 @@ class Api_V1_Requests_Controller extends Base_Controller
 	{
 		$input = Input::json();
 		$request = new Request;
+		$request->user_id = Auth::user()->id;
 		$request->start_date = $input->start_date;
 		$request->end_date = $input->end_date;
 		$request->type = $input->type;
