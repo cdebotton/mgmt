@@ -23,13 +23,9 @@
 							</div>
 							<div class="form-element pdo-reason">
 								<select name="pdo-type">
-									<option value="null">Please select a type</option>
-									<option value="vacation">Vacation</option>
-									<option value="voting">Voting</option>
-									<option value="jury duty">Jury Duty</option>
-									<option value="maternity leave">Maternity Leave</option>
-									<option value="funeral leave">Funeral Leave</option>
-									<option value="other">Other</option>
+									{{#printTypes type}}
+										<option value="{{ value }}"{{ selected }}>{{ key }}</option>
+									{{/printTypes}}
 								</select>
 							</div>
 							<div class="form-element actions">
@@ -41,7 +37,7 @@
 						</div>
 						<div class="form-row">
 							<div class="form-element message">
-								<textarea name="message"></textarea>
+								<textarea name="message">{{ message }}</textarea>
 								<div class="meta">
 									<label class="form-label">Message to Administrator</label>
 								</div>

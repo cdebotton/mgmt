@@ -8,6 +8,15 @@ define [
 
 	ns 'United.Views.Dashboard.PdoRequest'
 	class United.Views.Dashboard.PdoRequest extends Backbone.View
+		PDO_TYPES = {
+			'Please select a type':			'null'
+			'Vacation':						'vacation'
+			'Voting':						'voting'
+			'Jury Duty':					'jury duty'
+			'Maternity Leave':				'maternity leave'
+			'Funeral Leave':				'funeral leave'
+			'Other':						'other'
+		}
 		el: '#pdo-request'
 
 		events:
@@ -24,6 +33,7 @@ define [
 			'change [name="pdo-type"]':		'setType'
 
 		initialize: ->
+			United.JST.Hb.registerHelper 'printTypes', @printTypes
 			@model.on 'destroy', @destroyed, @
 			@render()
 
@@ -116,3 +126,14 @@ define [
 
 		setMessage: (e) =>
 			@model.set 'message', e.currentTarget.value
+
+		printTypes: (selected, opts) ->
+			buffer = ''
+			for key, value of PDO_TYPES
+				item = {
+					key: key
+					value: value
+					selected: if value is selected then ' SELECTED' else ''
+				}
+				buffer += opts.fn item
+			buffer

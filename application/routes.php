@@ -73,9 +73,9 @@ Route::filter('page-title', function ()
 	Section::inject('title', $title);
 });
 
-Route::filter('deny-non-async', function ()
+Route::filter('api', function ()
 {
-	if (!Request::ajax() || Auth::guest() || !Auth::user()->has_role('admin')) {
+	if (!Request::ajax() || Auth::guest()) {
 		return Response::error('500');
 	}
 });

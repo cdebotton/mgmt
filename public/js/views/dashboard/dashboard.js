@@ -28,23 +28,17 @@
         United.JST.Hb.registerHelper('getYear', this.getYear);
         United.JST.Hb.registerHelper('getMonth', this.getMonth);
         United.JST.Hb.registerHelper('getDate', this.getDate);
-        United.EventBus.on('request-closed', this.requestClosed, this);
-        return this.model.get('session').on('add:requests', this.editRequest, this);
+        return United.EventBus.on('request-closed', this.requestClosed, this);
       };
 
       Dashboard.prototype.createNewPdo = function(e) {
-        this.model.get('session').get('requests').add({
-          user_id: this.model.get('session').get('id')
-        });
-        return e.preventDefault();
-      };
-
-      Dashboard.prototype.editRequest = function(request) {
+        this.model.get('session').get('requests').add({});
         this.requestView = new United.Views.Dashboard.PdoRequest({
-          model: request,
+          model: this.model.get('session').get('requests').last(),
           open: REQUEST_OPEN
         });
-        return REQUEST_OPEN = true;
+        REQUEST_OPEN = true;
+        return e.preventDefault();
       };
 
       Dashboard.prototype.getYear = function(date) {

@@ -21,4 +21,11 @@ define [
 			message: null
 			status: false
 
+		parse: (resp) ->
+			if resp.start_date? and not resp.start_date instanceof Date
+				resp.start_date = new Date resp.start_date
+			if resp.end_date? and not resp.end_date instanceof Date
+				resp.end_date = new Date resp.end_date
+			resp
+
 	United.Models.Dashboard.PdoRequest.setup()

@@ -30,6 +30,16 @@
         status: false
       };
 
+      PdoRequest.prototype.parse = function(resp) {
+        if ((resp.start_date != null) && !resp.start_date instanceof Date) {
+          resp.start_date = new Date(resp.start_date);
+        }
+        if ((resp.end_date != null) && !resp.end_date instanceof Date) {
+          resp.end_date = new Date(resp.end_date);
+        }
+        return resp;
+      };
+
       return PdoRequest;
 
     })(Backbone.RelationalModel);

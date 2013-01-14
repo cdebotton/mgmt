@@ -7,6 +7,7 @@
   define(['backbone', 'underscore', 'ns', 'animate', 'jst'], function(Backbone, _, ns) {
     ns('United.Views.Dashboard.PdoRequest');
     return United.Views.Dashboard.PdoRequest = (function(_super) {
+      var PDO_TYPES;
 
       __extends(PdoRequest, _super);
 
@@ -31,6 +32,16 @@
         return PdoRequest.__super__.constructor.apply(this, arguments);
       }
 
+      PDO_TYPES = {
+        'Please select a type': 'null',
+        'Vacation': 'vacation',
+        'Voting': 'voting',
+        'Jury Duty': 'jury duty',
+        'Maternity Leave': 'maternity leave',
+        'Funeral Leave': 'funeral leave',
+        'Other': 'other'
+      };
+
       PdoRequest.prototype.el = '#pdo-request';
 
       PdoRequest.prototype.events = {
@@ -48,6 +59,7 @@
       };
 
       PdoRequest.prototype.initialize = function() {
+        United.JST.Hb.registerHelper('printTypes', this.printTypes);
         this.model.on('destroy', this.destroyed, this);
         return this.render();
       };
@@ -175,6 +187,21 @@
 
       PdoRequest.prototype.setMessage = function(e) {
         return this.model.set('message', e.currentTarget.value);
+      };
+
+      PdoRequest.prototype.printTypes = function(selected, opts) {
+        var buffer, item, key, value;
+        buffer = '';
+        for (key in PDO_TYPES) {
+          value = PDO_TYPES[key];
+          item = {
+            key: key,
+            value: value,
+            selected: value === selected ? ' SELECTED' : ''
+          };
+          buffer += opts.fn(item);
+        }
+        return buffer;
       };
 
       return PdoRequest;

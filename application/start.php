@@ -59,7 +59,8 @@ Laravel\Autoloader::$aliases = $aliases;
 */
 
 Autoloader::map(array(
-	'Base_Controller' => path('app').'controllers/base.php',
+	'Base_Controller'			=> path('app').'controllers/base.php',
+	'Api_V1_Base_Controller'	=> path('app') . 'controllers/api/v1/base.php'
 ));
 
 /*

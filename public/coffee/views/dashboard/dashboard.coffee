@@ -18,19 +18,14 @@ define [
 			United.JST.Hb.registerHelper 'getMonth', @getMonth
 			United.JST.Hb.registerHelper 'getDate', @getDate
 			United.EventBus.on 'request-closed', @requestClosed, @
-			@model.get('session').on 'add:requests', @editRequest, @
 
 		createNewPdo: (e) =>
-			@model.get('session').get('requests').add {
-				user_id: @model.get('session').get('id')
-			}
-			e.preventDefault()
-
-		editRequest: (request) ->
+			@model.get('session').get('requests').add {}
 			@requestView = new United.Views.Dashboard.PdoRequest
-				model: request
+				model: @model.get('session').get('requests').last()
 				open: REQUEST_OPEN
 			REQUEST_OPEN = true
+			e.preventDefault()
 
 		getYear: (date) -> date.getFullYear()
 
