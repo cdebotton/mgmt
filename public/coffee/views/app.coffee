@@ -5,6 +5,7 @@ define [
 	'views/tasks/schedule-manager'
 	'views/projects/project-list'
 	'views/users/user-list'
+	'views/dashboard/dashboard'
 
 ], (Backbone, _, ns) ->
 
@@ -26,4 +27,6 @@ define [
 				when 'projects' then new United.Views.Projects.ProjectList
 					model: @model
 				when 'users' then new United.Views.Users.UserList
+					model: @model
+				when '' then new United.Views.Dashboard.Dashboard
 					model: @model
