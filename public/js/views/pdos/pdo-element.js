@@ -19,7 +19,8 @@
 
       PdoElement.prototype.initialize = function() {
         United.EventBus.on('gridpoint-dispatch', this.gridPointsReceived, this);
-        return United.EventBus.on('offset-timeline', this.offsetTimeline, this);
+        United.EventBus.on('offset-timeline', this.offsetTimeline, this);
+        return United.EventBus.on('zoom-grid-updated', this.updateZoom, this);
       };
 
       PdoElement.prototype.render = function() {
@@ -47,6 +48,10 @@
         return this.$el.css({
           '-webkit-transform': "translate3d(" + dx + ")"
         });
+      };
+
+      PdoElement.prototype.updateZoom = function(zoom) {
+        return United.EventBus.trigger('where-am-i', this.cid, this.model.get('start_date'), this.model.get('end_date'));
       };
 
       return PdoElement;

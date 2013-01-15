@@ -12,6 +12,7 @@ define [
 		initialize: () ->
 			United.EventBus.on 'gridpoint-dispatch', @gridPointsReceived, @
 			United.EventBus.on 'offset-timeline', @offsetTimeline, @
+			United.EventBus.on 'zoom-grid-updated', @updateZoom, @
 
 		render: ->
 			United.EventBus.trigger 'where-am-i', @cid, @model.get('start_date'), @model.get('end_date')
@@ -31,3 +32,6 @@ define [
 		offsetTimeline: (dx) ->
 			@$el.css
 				'-webkit-transform':	"translate3d(#{dx})"
+
+		updateZoom: (zoom) ->
+			United.EventBus.trigger 'where-am-i', @cid, @model.get('start_date'), @model.get 'end_date'
