@@ -1,1 +1,11 @@
-wws
+	<div class="user">
+		<a href="mailto:{{ user.email }}">{{ user.first_name }} {{ user.last_name }}</a>
+	</div>
+	<div class="type"><span class="label label-{{{ printTypeClass type }}}">{{{ printType type }}}</span></div>
+	<div class="requested-on">{{{ printDate created_at }}}</div>
+	<div class="dates">{{{ printDate start_date }}} - {{{ printDate end_date }}}</div>
+	<div class="msg"><p>{{{ printMsg message }}}</p></div>
+	<div class="actions btn-group">
+		<span class="accept-request btn btn-mini btn-primary">Accept</span>
+		<span class="reject-request btn btn-mini">Reject</span>
+	</div>

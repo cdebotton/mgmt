@@ -10,10 +10,10 @@
 @section('content')
 	<section id="request-overview">
 		<header id="request-header">
-			<span class="user">User</span>
-			<span class="type">Type</span>
-			<span class="requested-on">Requested on</span>
-			<span class="dates">Dates</span>
+			<div class="user">User</div>
+			<div class="type">Type</div>
+			<div class="requested-on">Requested on</div>
+			<div class="dates">Dates</div>
 		</header>
 		<div id="request-overview-body">
 

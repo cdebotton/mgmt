@@ -3,9 +3,10 @@
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['backbone', 'ns'], function(Backbone, ns) {
+  define(['backbone', 'underscore', 'ns', 'views/requests/request-overview-item'], function(Backbone, _, ns) {
     ns('United.Views.Requests.RequestOverview');
     return United.Views.Requests.RequestOverview = (function(_super) {
+      var MONTHS;
 
       __extends(RequestOverview, _super);
 
@@ -13,13 +14,66 @@
         return RequestOverview.__super__.constructor.apply(this, arguments);
       }
 
+      MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
       RequestOverview.prototype.el = '#request-overview-body';
 
-      RequestOverview.prototype.initialize = function() {};
+      RequestOverview.prototype.initialize = function() {
+        United.JST.Hb.registerHelper('printType', this.printType);
+        United.JST.Hb.registerHelper('printTypeClass', this.printTypeClass);
+        United.JST.Hb.registerHelper('printDate', this.printDate);
+        United.JST.Hb.registerHelper('printMsg', this.printMsg);
+        this.requests = new Backbone.Collection(window.requests);
+        this.requests.on('add', this.addOne, this);
+        this.requests.on('reset', this.addAll, this);
+        return this.addAll();
+      };
 
-      RequestOverview.prototype.addOne = function(item) {};
+      RequestOverview.prototype.addOne = function(item) {
+        var view;
+        view = new United.Views.Requests.RequestOverviewItem({
+          model: item
+        });
+        this.$el.append(view.render().$el);
+        return view.setup();
+      };
 
-      RequestOverview.prototype.addAll = function(items) {};
+      RequestOverview.prototype.addAll = function(items) {
+        this.$el.html('');
+        return this.requests.each(_.bind(this.addOne, this));
+      };
+
+      RequestOverview.prototype.printType = function(type) {
+        return new United.JST.Hb.SafeString((type.split(' ').map(function(word) {
+          return word[0].toUpperCase() + word.slice(1).toLowerCase();
+        })).join(' '));
+      };
+
+      RequestOverview.prototype.printTypeClass = function(type) {
+        switch (type) {
+          case 'vacation':
+            return 'info';
+          case 'jury duty':
+            return 'warning';
+          case 'maternity leave':
+            return 'danger';
+          case 'voting':
+            return 'success';
+          case 'funeral leave':
+            return 'important';
+          default:
+            return 'inverse';
+        }
+      };
+
+      RequestOverview.prototype.printDate = function(date) {
+        date = new Date(date);
+        return MONTHS[date.getMonth() + 1] + ' ' + date.getDate() + ', ' + date.getFullYear();
+      };
+
+      RequestOverview.prototype.printMsg = function(msg) {
+        return new Handlebars.SafeString(msg);
+      };
 
       return RequestOverview;
 
