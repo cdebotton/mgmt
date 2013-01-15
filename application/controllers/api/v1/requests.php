@@ -1,6 +1,7 @@
 <?php
 
 use User\Pdo\Request as Request;
+use User\Pdo as Pdo;
 
 class Api_V1_Requests_Controller extends Api_V1_Base_Controller
 {
@@ -40,6 +41,13 @@ class Api_V1_Requests_Controller extends Api_V1_Base_Controller
 			->first();
 		$request->status = $input->status;
 		$request->save();
+
+		$pdo = new Pdo;
+		$pdo->user_id = $request->user_id;
+		$pdo->start_date = $request->start_date;
+		$pdo->end_date = $request->end_date;
+		$pdo->save();
+
 		return Response::json($request->to_array());
 	}
 
