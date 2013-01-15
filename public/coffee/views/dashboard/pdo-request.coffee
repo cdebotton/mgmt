@@ -1,10 +1,12 @@
 define [
 	'backbone'
+	'jquery'
 	'underscore'
 	'ns'
 	'animate'
 	'jst'
-], (Backbone, _, ns) ->
+	'views/widgets/modal'
+], (Backbone, $, _, ns) ->
 
 	ns 'United.Views.Dashboard.PdoRequest'
 	class United.Views.Dashboard.PdoRequest extends Backbone.View
@@ -57,7 +59,14 @@ define [
 
 		makeRequest: (e) ->
 			e.preventDefault()
-			@model.save {}, {
+			if (resp = @model.isValid()) isnt true
+				modal = new United.Views.Widgets.Modal
+					model: new Backbone.Model
+						title: 'Woops!'
+						msg: resp
+						options:
+							Okay:	United.Views.Widgets.Modal::closeModal
+			else @model.save {}, {
 				wait: true
 				success: _.bind @destroyed, @
 			}

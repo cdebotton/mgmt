@@ -26,8 +26,25 @@
         start_date: t,
         end_date: n,
         type: null,
-        message: null,
+        message: '',
         status: false
+      };
+
+      PdoRequest.prototype.isValid = function() {
+        if (!(new Date(this.attributes.start_date)) instanceof Date) {
+          return 'The start date is not a valid date.';
+        }
+        if (!(new Date(this.attributes.end_date)) instanceof Date) {
+          return 'The end date is not a valid date.';
+        }
+        if (this.attributes.end_date < this.attributes.start_date) {
+          return 'The end date must come after the start date';
+        }
+        if (this.attributes.type === null || this.attributes.type === 'null') {
+          return 'You must select a type of request.';
+        } else {
+          return true;
+        }
       };
 
       PdoRequest.prototype.parse = function(resp) {

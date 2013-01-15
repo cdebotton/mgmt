@@ -13,6 +13,8 @@
 
       function PdoList() {
         this.close = __bind(this.close, this);
+
+        this.deletePdo = __bind(this.deletePdo, this);
         return PdoList.__super__.constructor.apply(this, arguments);
       }
 
@@ -21,7 +23,8 @@
       PdoList.prototype.el = '#pdo-list';
 
       PdoList.prototype.events = {
-        'click #close-pdo-list': 'close'
+        'click #close-pdo-list': 'close',
+        'click .cancel-request': 'deletePdo'
       };
 
       PdoList.prototype.initialize = function() {
@@ -65,6 +68,14 @@
         } else {
           return opts.inverse();
         }
+      };
+
+      PdoList.prototype.deletePdo = function(e) {
+        var id, pdo;
+        e.preventDefault();
+        id = $(e.currentTarget).data('id');
+        pdo = this.model.get('requests').find(id);
+        return console.log(pdo);
       };
 
       PdoList.prototype.close = function(e) {

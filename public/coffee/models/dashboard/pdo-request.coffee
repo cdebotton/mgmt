@@ -18,8 +18,19 @@ define [
 			start_date: t
 			end_date: n
 			type: null
-			message: null
+			message: ''
 			status: false
+
+		isValid: () ->
+			if not (new Date @attributes.start_date) instanceof Date
+				return 'The start date is not a valid date.'
+			if not (new Date @attributes.end_date) instanceof Date
+				return 'The end date is not a valid date.'
+			if @attributes.end_date < @attributes.start_date
+				return 'The end date must come after the start date'
+			if @attributes.type is null or @attributes.type is 'null'
+				return 'You must select a type of request.'
+			else return true
 
 		parse: (resp) ->
 			if resp.start_date? and not resp.start_date instanceof Date

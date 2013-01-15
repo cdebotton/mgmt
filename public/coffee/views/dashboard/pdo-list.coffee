@@ -12,6 +12,7 @@ define [
 
 		events:
 			'click #close-pdo-list':	'close'
+			'click .cancel-request':	'deletePdo'
 
 		initialize: ->
 			United.JST.Hb.registerHelper 'printRequests', @printRequests
@@ -44,6 +45,12 @@ define [
 					item.status = if item.status is true then 'Approved' else 'Unapproved'
 				buffer += opts.fn item
 			else return opts.inverse()
+
+		deletePdo: (e) =>
+			e.preventDefault()
+			id = $(e.currentTarget).data 'id'
+			pdo = @model.get('requests').find id
+			console.log pdo
 
 		close: (e) =>
 			e.preventDefault()

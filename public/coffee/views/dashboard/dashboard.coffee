@@ -17,6 +17,7 @@ define [
 			'click #request-counter':  'showRequests'
 
 		initialize: ->
+			@updateRequests()
 			@model.get('session').on 'add:requests', @updateRequests, @
 			@model.get('session').on 'remove:requests', @updateRequests, @
 			United.JST.Hb.registerHelper 'getYear', @getYear
@@ -34,7 +35,8 @@ define [
 			e.preventDefault()
 
 		updateRequests: (model) ->
-			@$('#request-counter .badge').html @model.get('session').get('requests').length
+			len = @model.get('session').get('requests').length
+			@$('#request-counter .badge').html len
 
 		getYear: (date) -> date.getFullYear()
 
@@ -47,8 +49,9 @@ define [
 		pdoListClosed: -> LIST_OPEN = false
 
 		showRequests: (e) =>
-			view = new United.Views.Dashboard.PdoList
-				model: @model.get('session')
-				open: LIST_OPEN
-			LIST_OPEN = true
+			if @model.get('session').get('requests').length > 0
+				view = new United.Views.Dashboard.PdoList
+					model: @model.get('session')
+					open: LIST_OPEN
+				LIST_OPEN = true
 			e.preventDefault()

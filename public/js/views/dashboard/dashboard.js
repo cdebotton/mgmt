@@ -30,6 +30,7 @@
       };
 
       Dashboard.prototype.initialize = function() {
+        this.updateRequests();
         this.model.get('session').on('add:requests', this.updateRequests, this);
         this.model.get('session').on('remove:requests', this.updateRequests, this);
         United.JST.Hb.registerHelper('getYear', this.getYear);
@@ -50,7 +51,9 @@
       };
 
       Dashboard.prototype.updateRequests = function(model) {
-        return this.$('#request-counter .badge').html(this.model.get('session').get('requests').length);
+        var len;
+        len = this.model.get('session').get('requests').length;
+        return this.$('#request-counter .badge').html(len);
       };
 
       Dashboard.prototype.getYear = function(date) {
@@ -75,11 +78,13 @@
 
       Dashboard.prototype.showRequests = function(e) {
         var view;
-        view = new United.Views.Dashboard.PdoList({
-          model: this.model.get('session'),
-          open: LIST_OPEN
-        });
-        LIST_OPEN = true;
+        if (this.model.get('session').get('requests').length > 0) {
+          view = new United.Views.Dashboard.PdoList({
+            model: this.model.get('session'),
+            open: LIST_OPEN
+          });
+          LIST_OPEN = true;
+        }
         return e.preventDefault();
       };
 

@@ -4,7 +4,7 @@
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['backbone', 'underscore', 'ns', 'animate', 'jst'], function(Backbone, _, ns) {
+  define(['backbone', 'jquery', 'underscore', 'ns', 'animate', 'jst', 'views/widgets/modal'], function(Backbone, $, _, ns) {
     ns('United.Views.Dashboard.PdoRequest');
     return United.Views.Dashboard.PdoRequest = (function(_super) {
       var PDO_TYPES;
@@ -86,11 +86,24 @@
       };
 
       PdoRequest.prototype.makeRequest = function(e) {
+        var modal, resp;
         e.preventDefault();
-        return this.model.save({}, {
-          wait: true,
-          success: _.bind(this.destroyed, this)
-        });
+        if ((resp = this.model.isValid()) !== true) {
+          return modal = new United.Views.Widgets.Modal({
+            model: new Backbone.Model({
+              title: 'Woops!',
+              msg: resp,
+              options: {
+                Okay: United.Views.Widgets.Modal.prototype.closeModal
+              }
+            })
+          });
+        } else {
+          return this.model.save({}, {
+            wait: true,
+            success: _.bind(this.destroyed, this)
+          });
+        }
       };
 
       PdoRequest.prototype.cancelRequest = function(e) {
