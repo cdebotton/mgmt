@@ -32,7 +32,13 @@ define [
 			'keyup [name="end_day"]':		'setEndDay'
 			'keyup [name="end_year"]':		'setEndYear'
 			'keyup [name="message"]':		'setMessage'
-			'change [name="pdo-type"]':		'setType'
+			'blur [name="start_month"]':	'resetStartMonth'
+			'blur [name="start_day"]':		'resetStartDay'
+			'blur [name="start_year"]':		'resetStartYear'
+			'blur [name="end_month"]':		'resetEndMonth'
+			'blur [name="end_day"]':		'resetEndDay'
+			'blur [name="end_year"]':		'resetEndYear'
+			'blur [name="message"]':		'resetMessage'
 
 		initialize: ->
 			United.JST.Hb.registerHelper 'printTypes', @printTypes
@@ -63,7 +69,7 @@ define [
 				modal = new United.Views.Widgets.Modal
 					model: new Backbone.Model
 						title: 'Woops!'
-						msg: resp
+						msg: "<p>#{resp}</p>"
 						options:
 							Okay:	United.Views.Widgets.Modal::closeModal
 			else @model.save {}, {
@@ -146,3 +152,24 @@ define [
 				}
 				buffer += opts.fn item
 			buffer
+
+		resetStartMonth: (e) =>
+			e.currentTarget.value = @model.get('start_date').getMonth() + 1
+
+		resetStartDay: (e) =>
+			e.currentTarget.value = @model.get('start_date').getDate()
+
+		resetStartYear: (e) =>
+			e.currentTarget.value = @model.get('start_date').getFullYear()
+
+		resetEndMonth: (e) =>
+			e.currentTarget.value = @model.get('end_date').getMonth() + 1
+
+		resetEndDay: (e) =>
+			e.currentTarget.value = @model.get('end_date').getDate()
+
+		resetEndYear: (e) =>
+			e.currentTarget.value = @model.get('end_date').getFullYear()
+
+		resetMessage: (e) =>
+			e.currentTarget.value = @model.get 'msg'

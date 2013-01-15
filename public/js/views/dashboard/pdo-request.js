@@ -12,6 +12,20 @@
       __extends(PdoRequest, _super);
 
       function PdoRequest() {
+        this.resetMessage = __bind(this.resetMessage, this);
+
+        this.resetEndYear = __bind(this.resetEndYear, this);
+
+        this.resetEndDay = __bind(this.resetEndDay, this);
+
+        this.resetEndMonth = __bind(this.resetEndMonth, this);
+
+        this.resetStartYear = __bind(this.resetStartYear, this);
+
+        this.resetStartDay = __bind(this.resetStartDay, this);
+
+        this.resetStartMonth = __bind(this.resetStartMonth, this);
+
         this.setMessage = __bind(this.setMessage, this);
 
         this.setType = __bind(this.setType, this);
@@ -55,7 +69,13 @@
         'keyup [name="end_day"]': 'setEndDay',
         'keyup [name="end_year"]': 'setEndYear',
         'keyup [name="message"]': 'setMessage',
-        'change [name="pdo-type"]': 'setType'
+        'blur [name="start_month"]': 'resetStartMonth',
+        'blur [name="start_day"]': 'resetStartDay',
+        'blur [name="start_year"]': 'resetStartYear',
+        'blur [name="end_month"]': 'resetEndMonth',
+        'blur [name="end_day"]': 'resetEndDay',
+        'blur [name="end_year"]': 'resetEndYear',
+        'blur [name="message"]': 'resetMessage'
       };
 
       PdoRequest.prototype.initialize = function() {
@@ -92,7 +112,7 @@
           return modal = new United.Views.Widgets.Modal({
             model: new Backbone.Model({
               title: 'Woops!',
-              msg: resp,
+              msg: "<p>" + resp + "</p>",
               options: {
                 Okay: United.Views.Widgets.Modal.prototype.closeModal
               }
@@ -215,6 +235,34 @@
           buffer += opts.fn(item);
         }
         return buffer;
+      };
+
+      PdoRequest.prototype.resetStartMonth = function(e) {
+        return e.currentTarget.value = this.model.get('start_date').getMonth() + 1;
+      };
+
+      PdoRequest.prototype.resetStartDay = function(e) {
+        return e.currentTarget.value = this.model.get('start_date').getDate();
+      };
+
+      PdoRequest.prototype.resetStartYear = function(e) {
+        return e.currentTarget.value = this.model.get('start_date').getFullYear();
+      };
+
+      PdoRequest.prototype.resetEndMonth = function(e) {
+        return e.currentTarget.value = this.model.get('end_date').getMonth() + 1;
+      };
+
+      PdoRequest.prototype.resetEndDay = function(e) {
+        return e.currentTarget.value = this.model.get('end_date').getDate();
+      };
+
+      PdoRequest.prototype.resetEndYear = function(e) {
+        return e.currentTarget.value = this.model.get('end_date').getFullYear();
+      };
+
+      PdoRequest.prototype.resetMessage = function(e) {
+        return e.currentTarget.value = this.model.get('msg');
       };
 
       return PdoRequest;
