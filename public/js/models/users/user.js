@@ -14,7 +14,7 @@
       }
 
       User.prototype.url = function() {
-        return "/api/v1/users" + (!this.isNew() ? "/update/" + (this.get('id')) : '');
+        return "/api/v1/users" + (!this.isNew() ? "/" + (this.get('id')) : '');
       };
 
       User.prototype.relations = [

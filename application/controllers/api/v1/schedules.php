@@ -39,7 +39,7 @@ class Api_V1_Schedules_Controller extends Api_V1_Base_Controller
 		return Response::json($json, 200);
 	}
 
-	public function put_update($id)
+	public function put_index($id)
 	{
 		$task = Task::find($id);
 		$json = Input::json();

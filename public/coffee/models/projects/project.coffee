@@ -10,7 +10,7 @@ define [
 	ns 'United.Models.Projects.Project'
 	class United.Models.Projects.Project extends Backbone.RelationalModel
 
-		url: -> "/api/v1/projects" + if not @isNew() then "/update/#{@get 'id'}" else ''
+		url: -> "/api/v1/projects" + if not @isNew() then "/#{@get 'id'}" else ''
 
 		relations: [{
 			type:				Backbone.HasMany

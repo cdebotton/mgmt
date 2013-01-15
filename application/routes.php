@@ -10,6 +10,11 @@ Asset::add('styles', 'css/bu.sched.css');
  */
 Route::group(array('before' => 'admin-auth|page-title'), function ()
 {
+	Route::any('/api/v1/requests/(:num)', 'api.v1.requests@index');
+	Route::any('/api/v1/projects/(:num)', 'api.v1.projects@index');
+	Route::any('/api/v1/schedules/(:num)', 'api.v1.schedules@index');
+	Route::any('/api/v1/session/(:num)', 'api.v1.session@index');
+	Route::any('/api/v1/users/(:num)', 'api.v1.users@index');
 	Route::controller(Controller::detect());
 	Route::get('/', 'dashboard@index');
 	Route::get('profile', 'users@profile');

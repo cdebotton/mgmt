@@ -51,7 +51,7 @@ class Api_V1_Projects_Controller extends Api_V1_Base_Controller
 		return Response::json($project->to_array());
 	}
 
-	public function put_update($id = null)
+	public function put_index($id = null)
 	{
 		$input = Input::json();
 		$project 		= Project::find($id);

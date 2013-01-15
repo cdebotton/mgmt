@@ -4,15 +4,21 @@ class Api_V1_Users_Controller extends Api_V1_Base_Controller
 {
 	public $restful = true;
 
-	final public function get_update($id)
+	final public function get_index($id = null)
 	{
-		$today = date('Y-m-d');
-		$user = User::with(array('roles', 'disciplines', 'tasks.project', 'tasks.project.client', 'tasks' => function($query) use($today)
-			{
-				$query->where('start_date', '<=', $today)
-					->where('end_date', '>=', $today);
-			}))->find($id);
-		return eloquent_to_json($user);
+		if ($id === null and Auth::user()->has_role('admin')) {
+			$users = User::all();
+			return eloquent_to_json($users);
+		}
+		else {
+			$today = date('Y-m-d');
+			$user = User::with(array('roles', 'disciplines', 'tasks.project', 'tasks.project.client', 'tasks' => function($query) use($today)
+				{
+					$query->where('start_date', '<=', $today)
+						->where('end_date', '>=', $today);
+				}))->find($id);
+			return Response::json($user->to_array());
+		}
 	}
 
 	final public function post_index()
@@ -36,7 +42,7 @@ class Api_V1_Users_Controller extends Api_V1_Base_Controller
 		return Response::json($resp->to_array());
 	}
 
-	final public function put_update($id)
+	final public function put_index($id)
 	{
 		$input = Input::json();
 		$user = User::find($input->id);
@@ -57,7 +63,7 @@ class Api_V1_Users_Controller extends Api_V1_Base_Controller
 		return Response::json($resp->to_array());
 	}
 
-	final public function delete_update($id)
+	final public function delete_index($id)
 	{
 		User::find($id)->delete();
 	}

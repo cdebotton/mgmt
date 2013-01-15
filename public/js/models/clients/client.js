@@ -13,6 +13,10 @@
         return Client.__super__.constructor.apply(this, arguments);
       }
 
+      Client.prototype.url = function() {
+        return '/api/v1/clients' + (this.isNew() ? "/" + (this.model.get('id')) : '');
+      };
+
       Client.prototype.relations = [
         {
           type: Backbone.HasMany,

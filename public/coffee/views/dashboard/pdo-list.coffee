@@ -2,12 +2,11 @@ define [
 	'backbone'
 	'ns'
 	'jst'
+	'views/dashboard/pdo-request-item'
 ], (Backbone, ns) ->
 
 	ns 'United.Views.Dashboard.PdoList'
 	class United.Views.Dashboard.PdoList extends Backbone.View
-		MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-
 		el: '#pdo-list'
 
 		events:
@@ -15,13 +14,19 @@ define [
 			'click .cancel-request':	'deletePdo'
 
 		initialize: ->
-			United.JST.Hb.registerHelper 'printRequests', @printRequests
+			@list = @$ '#pdo-list-ul'
+			@addAll()
 			@render()
 
+		addAll: (items) =>
+			@model.get('requests').each @addOne
+
+		addOne: (item) =>
+			view = new United.Views.Dashboard.PdoRequestItem
+				model: item
+			@list.append view.render().$el
+
 		render: ->
-			ctx = @model.toJSON()
-			html = United.JST.PdoRequestList ctx
-			@$el.html html
 			@$el.css {
 				display: 'block'
 				opacity: 0
@@ -31,21 +36,6 @@ define [
 			}, 175, 'ease-in'
 			@
 
-		printRequests: (requests, opts) ->
-			if requests?.length
-				buffer = ''
-				for request, i in requests
-					s = new Date request.start_date
-					e = new Date request.end_date
-					item = {}
-					item.id = request.id
-					item.type = (request.type.split(' ').map (word) -> word[0].toUpperCase() + word.slice(1).toLowerCase()).join ' '
-					item.start = MONTHS[s.getMonth()] + '. ' + s.getDate() + ', ' + s.getFullYear()
-					item.end = MONTHS[e.getMonth()] + '. ' + e.getDate() + ', ' + e.getFullYear()
-					item.status = if item.status is true then 'Approved' else 'Unapproved'
-				buffer += opts.fn item
-			else return opts.inverse()
-
 		deletePdo: (e) =>
 			e.preventDefault()
 			id = $(e.currentTarget).data 'id'
@@ -53,6 +43,7 @@ define [
 			console.log pdo
 
 		close: (e) =>
+			@list.html ''
 			e.preventDefault()
 			@$el.animate {
 				opacity: 0

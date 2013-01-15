@@ -26,9 +26,12 @@
 						<div id="pdo-actions">
 							<a id="request-time-off" class="btn btn-inverse btn-mini" href="#">Request time off</a>
 							<span id="request-counter">&mdash; <a href="#"><span class="badge badge-inverse">{{ count($user->requests) }}</span> requests pending.</a></span>
-							<ul id="pdo-list">
+							<div id="pdo-list">
+								<i class="icon-remove icon-white" id="close-pdo-list"></i>
+								<ul id="pdo-list-ul">
 
-							</ul>
+								</ul>
+							</div>
 						</div>
 					</article>
 				</div>

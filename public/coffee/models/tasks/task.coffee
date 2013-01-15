@@ -22,7 +22,7 @@ define [
 			percentage:		0
 		}
 
-		url: -> "/api/v1/schedules" + if not @isNew() then "/update/#{@get 'id'}" else ''
+		url: -> "/api/v1/schedules" + if not @isNew() then "/#{@get 'id'}" else ''
 
 		initialize: ->
 			@on 'change:user', @locateTrack, @

@@ -6,10 +6,16 @@ class Api_V1_Requests_Controller extends Api_V1_Base_Controller
 {
 	public $restful = true;
 
-	public function __construct()
+	public function get_index($id = null)
 	{
-		parent::__construct();
-		$this->filter('before', 'deny-non-async');
+		if ($id === null) {
+			$requests = Request::with('user')->get();
+			return eloquent_to_json($requests);
+		}
+		else {
+			$request = Request::with('user')->where_id($id)->first();
+			return Response::json($request->to_array());
+		}
 	}
 
 	final public function post_index()
@@ -24,5 +30,12 @@ class Api_V1_Requests_Controller extends Api_V1_Base_Controller
 		$request->save();
 
 		return Response::json($request->to_array());
+	}
+
+	final public function delete_index($id)
+	{
+		$request = Request::find($id);
+		$request->delete();
+		return Response::json(array());
 	}
 }

@@ -9,6 +9,9 @@ define [
 	ns 'United.Models.Clients.Client'
 	class United.Models.Clients.Client extends Backbone.RelationalModel
 
+		url: ->
+			'/api/v1/clients' + if @isNew() then "/#{@model.get 'id'}" else ''
+
 		relations: [{
 			type:				Backbone.HasMany
 			relatedModel: 		United.Models.Projects.Project

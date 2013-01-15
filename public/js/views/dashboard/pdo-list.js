@@ -4,10 +4,9 @@
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['backbone', 'ns', 'jst'], function(Backbone, ns) {
+  define(['backbone', 'ns', 'jst', 'views/dashboard/pdo-request-item'], function(Backbone, ns) {
     ns('United.Views.Dashboard.PdoList');
     return United.Views.Dashboard.PdoList = (function(_super) {
-      var MONTHS;
 
       __extends(PdoList, _super);
 
@@ -15,10 +14,12 @@
         this.close = __bind(this.close, this);
 
         this.deletePdo = __bind(this.deletePdo, this);
+
+        this.addOne = __bind(this.addOne, this);
+
+        this.addAll = __bind(this.addAll, this);
         return PdoList.__super__.constructor.apply(this, arguments);
       }
-
-      MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
       PdoList.prototype.el = '#pdo-list';
 
@@ -28,15 +29,24 @@
       };
 
       PdoList.prototype.initialize = function() {
-        United.JST.Hb.registerHelper('printRequests', this.printRequests);
+        this.list = this.$('#pdo-list-ul');
+        this.addAll();
         return this.render();
       };
 
+      PdoList.prototype.addAll = function(items) {
+        return this.model.get('requests').each(this.addOne);
+      };
+
+      PdoList.prototype.addOne = function(item) {
+        var view;
+        view = new United.Views.Dashboard.PdoRequestItem({
+          model: item
+        });
+        return this.list.append(view.render().$el);
+      };
+
       PdoList.prototype.render = function() {
-        var ctx, html;
-        ctx = this.model.toJSON();
-        html = United.JST.PdoRequestList(ctx);
-        this.$el.html(html);
         this.$el.css({
           display: 'block',
           opacity: 0
@@ -45,29 +55,6 @@
           opacity: 1
         }, 175, 'ease-in');
         return this;
-      };
-
-      PdoList.prototype.printRequests = function(requests, opts) {
-        var buffer, e, i, item, request, s, _i, _len;
-        if (requests != null ? requests.length : void 0) {
-          buffer = '';
-          for (i = _i = 0, _len = requests.length; _i < _len; i = ++_i) {
-            request = requests[i];
-            s = new Date(request.start_date);
-            e = new Date(request.end_date);
-            item = {};
-            item.id = request.id;
-            item.type = (request.type.split(' ').map(function(word) {
-              return word[0].toUpperCase() + word.slice(1).toLowerCase();
-            })).join(' ');
-            item.start = MONTHS[s.getMonth()] + '. ' + s.getDate() + ', ' + s.getFullYear();
-            item.end = MONTHS[e.getMonth()] + '. ' + e.getDate() + ', ' + e.getFullYear();
-            item.status = item.status === true ? 'Approved' : 'Unapproved';
-          }
-          return buffer += opts.fn(item);
-        } else {
-          return opts.inverse();
-        }
       };
 
       PdoList.prototype.deletePdo = function(e) {
@@ -80,6 +67,7 @@
 
       PdoList.prototype.close = function(e) {
         var _this = this;
+        this.list.html('');
         e.preventDefault();
         return this.$el.animate({
           opacity: 0

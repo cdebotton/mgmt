@@ -29,7 +29,7 @@
       };
 
       Task.prototype.url = function() {
-        return "/api/v1/schedules" + (!this.isNew() ? "/update/" + (this.get('id')) : '');
+        return "/api/v1/schedules" + (!this.isNew() ? "/" + (this.get('id')) : '');
       };
 
       Task.prototype.initialize = function() {
