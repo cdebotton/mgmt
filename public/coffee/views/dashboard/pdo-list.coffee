@@ -43,7 +43,6 @@ define [
 			console.log pdo
 
 		close: (e) =>
-			@list.html ''
 			e.preventDefault()
 			@$el.animate {
 				opacity: 0

@@ -67,7 +67,6 @@
 
       PdoList.prototype.close = function(e) {
         var _this = this;
-        this.list.html('');
         e.preventDefault();
         return this.$el.animate({
           opacity: 0
