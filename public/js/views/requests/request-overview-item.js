@@ -104,6 +104,10 @@
       };
 
       RequestOverviewItem.prototype.reject = function(e) {
+        this.model.destroy({
+          wait: true,
+          success: this.destroyView
+        });
         e.preventDefault();
         return e.stopPropagation();
       };

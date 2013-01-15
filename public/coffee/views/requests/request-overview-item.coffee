@@ -69,6 +69,10 @@ define [
 			e.stopPropagation()
 
 		reject: (e) =>
+			@model.destroy {
+				wait: true
+				success: @destroyView
+			}
 			e.preventDefault()
 			e.stopPropagation()
 
