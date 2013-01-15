@@ -2,11 +2,8 @@ define [
 	'backbone'
 	'ns'
 	'relational'
-	'models/users/role'
 	'collections/users/roles'
-	'models/tasks/task'
 	'collections/tasks/tasks'
-	'models/users/discipline'
 	'collections/users/disciplines'
 	'collections/pdos/pdos'
 	], (Backbone, ns) ->

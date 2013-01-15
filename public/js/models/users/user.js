@@ -3,7 +3,7 @@
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['backbone', 'ns', 'relational', 'models/users/role', 'collections/users/roles', 'models/tasks/task', 'collections/tasks/tasks', 'models/users/discipline', 'collections/users/disciplines', 'collections/pdos/pdos'], function(Backbone, ns) {
+  define(['backbone', 'ns', 'relational', 'collections/users/roles', 'collections/tasks/tasks', 'collections/users/disciplines', 'collections/pdos/pdos'], function(Backbone, ns) {
     ns('United.Models.Users.User');
     United.Models.Users.User = (function(_super) {
 

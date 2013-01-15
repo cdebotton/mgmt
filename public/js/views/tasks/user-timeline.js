@@ -4,7 +4,7 @@
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['backbone', 'underscore', 'jquery', 'ns', 'jst', 'views/tasks/task-element', 'views/tasks/overage'], function(Backbone, _, $, ns) {
+  define(['backbone', 'underscore', 'jquery', 'ns', 'jst', 'views/tasks/task-element', 'views/pdos/pdo-element', 'views/tasks/overage'], function(Backbone, _, $, ns) {
     ns('United.Views.Tasks.UserTimeline');
     return United.Views.Tasks.UserTimeline = (function(_super) {
       var DRAGGING;
@@ -17,6 +17,8 @@
         this.onDrag = __bind(this.onDrag, this);
 
         this.startDrag = __bind(this.startDrag, this);
+
+        this.drawPdo = __bind(this.drawPdo, this);
 
         this.addOne = __bind(this.addOne, this);
 
@@ -40,8 +42,7 @@
 
       UserTimeline.prototype.initialize = function() {
         this.body = $('body');
-        this.startListening();
-        return console.log(this.model);
+        return this.startListening();
       };
 
       UserTimeline.prototype.startListening = function() {
@@ -158,10 +159,10 @@
         }
       };
 
-      UserTimeline.prototype.addOne = function(task) {
+      UserTimeline.prototype.addOne = function(object) {
         var html, view;
         view = new United.Views.Tasks.TaskElement({
-          model: task
+          model: object
         });
         html = view.render().$el;
         return this.$el.append(html);
@@ -169,7 +170,18 @@
 
       UserTimeline.prototype.addAll = function() {
         this.$el.html('');
-        return this.model.get('tasks').each(this.addOne);
+        this.model.get('tasks').each(this.addOne);
+        return this.model.get('pdos').each(this.drawPdo);
+      };
+
+      UserTimeline.prototype.drawPdo = function(pdo) {
+        var html, view;
+        view = new United.Views.Pdos.PdoElement({
+          model: pdo
+        });
+        html = view.render().$el;
+        console.log(html);
+        return this.$el.append(html);
       };
 
       UserTimeline.prototype.adjustHeight = function(model, value, status) {

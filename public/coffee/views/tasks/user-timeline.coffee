@@ -5,6 +5,7 @@ define [
 	'ns'
 	'jst'
 	'views/tasks/task-element'
+	'views/pdos/pdo-element'
 	'views/tasks/overage'
 ], (Backbone, _, $, ns) ->
 
@@ -27,7 +28,6 @@ define [
 		initialize: ->
 			@body = $ 'body'
 			@startListening()
-			console.log @model
 
 		startListening: ->
 			if United.Models.Users.Session.isAdmin()
@@ -108,15 +108,23 @@ define [
 			if userId is @model.get 'id'
 				@addOne task
 
-		addOne: (task) =>
+		addOne: (object) =>
 			view = new United.Views.Tasks.TaskElement
-				model: task
+				model: object
 			html = view.render().$el
 			@$el.append html
 
 		addAll: ->
 			@$el.html ''
 			@model.get('tasks').each @addOne
+			@model.get('pdos').each @drawPdo
+
+		drawPdo: (pdo) =>
+			view = new United.Views.Pdos.PdoElement
+				model: pdo
+			html = view.render().$el
+			console.log html
+			@$el.append html
 
 		adjustHeight: (model, value, status) ->
 			highest = (@model.get('tasks').max (task) -> +task.get('track'))?.get 'track'
