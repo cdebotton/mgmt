@@ -92,6 +92,8 @@
       };
 
       RequestOverviewItem.prototype.accept = function(e) {
+        this.model.set('status', true);
+        this.model.save();
         e.preventDefault();
         return e.stopPropagation();
       };

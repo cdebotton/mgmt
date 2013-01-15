@@ -14,7 +14,10 @@ class Requests_Controller extends Base_Controller
 
 	public function get_index()
 	{
-		$requests = Request::with('user')->get();
+		$requests = Request::with('user')
+			->where_status(false)
+			->get();
+
 		return View::make('requests.index')
 			->with('requests', eloquent_to_json($requests));
 	}

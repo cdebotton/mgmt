@@ -3,7 +3,7 @@
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['backbone', 'underscore', 'ns', 'views/requests/request-overview-item'], function(Backbone, _, ns) {
+  define(['backbone', 'underscore', 'ns', 'views/requests/request-overview-item', 'collections/dashboard/pdo-requests'], function(Backbone, _, ns) {
     ns('United.Views.Requests.RequestOverview');
     return United.Views.Requests.RequestOverview = (function(_super) {
       var MONTHS;
@@ -23,7 +23,7 @@
         United.JST.Hb.registerHelper('printTypeClass', this.printTypeClass);
         United.JST.Hb.registerHelper('printDate', this.printDate);
         United.JST.Hb.registerHelper('printMsg', this.printMsg);
-        this.requests = new Backbone.Collection(window.requests);
+        this.requests = new United.Collections.Dashboard.PdoRequests(window.requests);
         this.requests.on('add', this.addOne, this);
         this.requests.on('reset', this.addAll, this);
         return this.addAll();

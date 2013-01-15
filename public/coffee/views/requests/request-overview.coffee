@@ -3,6 +3,7 @@ define [
 	'underscore'
 	'ns'
 	'views/requests/request-overview-item'
+	'collections/dashboard/pdo-requests'
 ], (Backbone, _, ns) ->
 
 	ns 'United.Views.Requests.RequestOverview'
@@ -16,7 +17,7 @@ define [
 			United.JST.Hb.registerHelper 'printTypeClass', @printTypeClass
 			United.JST.Hb.registerHelper 'printDate', @printDate
 			United.JST.Hb.registerHelper 'printMsg', @printMsg
-			@requests = new Backbone.Collection window.requests
+			@requests = new United.Collections.Dashboard.PdoRequests window.requests
 			@requests.on 'add', @addOne, @
 			@requests.on 'reset', @addAll, @
 			@addAll()

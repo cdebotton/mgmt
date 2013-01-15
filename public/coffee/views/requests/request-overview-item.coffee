@@ -60,6 +60,8 @@ define [
 			}
 
 		accept: (e) =>
+			@model.set 'status', true
+			@model.save()
 			e.preventDefault()
 			e.stopPropagation()
 

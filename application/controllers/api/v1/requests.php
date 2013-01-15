@@ -32,6 +32,17 @@ class Api_V1_Requests_Controller extends Api_V1_Base_Controller
 		return Response::json($request->to_array());
 	}
 
+	final public function put_index($id)
+	{
+		$input = Input::json();
+		$request = Request::with('user')
+			->where_id($id)
+			->first();
+		$request->status = $input->status;
+		$request->save();
+		return Response::json($request->to_array());
+	}
+
 	final public function delete_index($id)
 	{
 		$request = Request::find($id);
