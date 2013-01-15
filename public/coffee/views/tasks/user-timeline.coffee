@@ -27,13 +27,14 @@ define [
 		initialize: ->
 			@body = $ 'body'
 			@startListening()
+			console.log @model
 
 		startListening: ->
 			if United.Models.Users.Session.isAdmin()
 				United.EventBus.on 'percentage-points-calculated', @drawRanges, @
 				United.EventBus.on 'percentage-changed', @calculateOverages, @
 				@model.get('tasks').on 'change:start_date change:end_date change:user change:percentage', @calculateOverages, @
-				United.EventBus.on 'zoom-grid-updated', @calculateOverages, @			
+				United.EventBus.on 'zoom-grid-updated', @calculateOverages, @
 
 			document.addEventListener 'mouseout', @mouseout, false
 			United.EventBus.on 'task-added', @taskCreated, @
@@ -59,7 +60,7 @@ define [
 				from = e.relatedTarget or e.toElement
 				if not from or from.nodeName is 'HTML'
 					return @stopDrag e
-					
+
 		render: ->
 			ctx = @model.toJSON()
 			html = United.JST['UserTimeline'] ctx

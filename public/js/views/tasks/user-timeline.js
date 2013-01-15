@@ -40,7 +40,8 @@
 
       UserTimeline.prototype.initialize = function() {
         this.body = $('body');
-        return this.startListening();
+        this.startListening();
+        return console.log(this.model);
       };
 
       UserTimeline.prototype.startListening = function() {

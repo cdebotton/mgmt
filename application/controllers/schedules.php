@@ -11,7 +11,7 @@ class Schedules_Controller extends Base_Controller {
 	public function get_index ()
 	{
 		if (Auth::user()->has_role('admin')) {
-			$users = User::with(array('roles', 'tasks', 'tasks.project', 'tasks.project.client', 'disciplines'))
+			$users = User::with(array('roles', 'tasks', 'tasks.project', 'tasks.project.client', 'disciplines', 'pdos'))
 				->get();
 			$roles = Role::all();
 			$disciplines = Discipline::all();

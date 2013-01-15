@@ -8,6 +8,7 @@ define [
 	'collections/tasks/tasks'
 	'models/users/discipline'
 	'collections/users/disciplines'
+	'collections/pdos/pdos'
 	], (Backbone, ns) ->
 
 	ns 'United.Models.Users.User'
@@ -34,6 +35,16 @@ define [
 			key:				'disciplines'
 			relatedModel:		United.Models.Users.Discipline
 			collectionType:		United.Collections.Tasks.Disciplines
+		}, {
+			type:				Backbone.HasMany
+			key:				'pdos'
+			relatedModel:		United.Models.Pdos.Pdo
+			collectionType:		United.Collections.Pdos.Pdos
+			reverseRelation:
+				type:			Backbone.HasOne
+				key:			'user'
+				keySource:		'user_id'
+				includeInJSON:	'id'
 		}]
 
 		defaults: {
