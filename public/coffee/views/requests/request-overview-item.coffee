@@ -61,10 +61,20 @@ define [
 
 		accept: (e) =>
 			@model.set 'status', true
-			@model.save()
+			@model.save {}, {
+				wait: true
+				success: @destroyView
+			}
 			e.preventDefault()
 			e.stopPropagation()
 
 		reject: (e) =>
 			e.preventDefault()
 			e.stopPropagation()
+
+		destroyView: =>
+			@$el.animate {
+				opacity: 0
+				height: 0
+				margin: 0
+			}, 175, 'ease-out', () => @remove()

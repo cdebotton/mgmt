@@ -11,6 +11,8 @@
       __extends(RequestOverviewItem, _super);
 
       function RequestOverviewItem() {
+        this.destroyView = __bind(this.destroyView, this);
+
         this.reject = __bind(this.reject, this);
 
         this.accept = __bind(this.accept, this);
@@ -93,7 +95,10 @@
 
       RequestOverviewItem.prototype.accept = function(e) {
         this.model.set('status', true);
-        this.model.save();
+        this.model.save({}, {
+          wait: true,
+          success: this.destroyView
+        });
         e.preventDefault();
         return e.stopPropagation();
       };
@@ -101,6 +106,17 @@
       RequestOverviewItem.prototype.reject = function(e) {
         e.preventDefault();
         return e.stopPropagation();
+      };
+
+      RequestOverviewItem.prototype.destroyView = function() {
+        var _this = this;
+        return this.$el.animate({
+          opacity: 0,
+          height: 0,
+          margin: 0
+        }, 175, 'ease-out', function() {
+          return _this.remove();
+        });
       };
 
       return RequestOverviewItem;
