@@ -6,6 +6,7 @@ define [
 	'views/projects/project-list'
 	'views/users/user-list'
 	'views/dashboard/dashboard'
+	'views/requests/request-overview'
 
 ], (Backbone, _, ns) ->
 
@@ -27,6 +28,8 @@ define [
 				when 'projects' then new United.Views.Projects.ProjectList
 					model: @model
 				when 'users' then new United.Views.Users.UserList
+					model: @model
+				when 'requests' then new United.Views.Requests.RequestOverview
 					model: @model
 				when '' then new United.Views.Dashboard.Dashboard
 					model: @model

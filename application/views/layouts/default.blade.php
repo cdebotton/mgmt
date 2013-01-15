@@ -28,9 +28,6 @@
 
 	@yield('content')
 
-	@if(!Auth::guest() && Auth::user()->has_role('admin'))
-		{{ Anbu::render() }}
-	@endif
 	{{ Asset::scripts() }}
 </body>
 </html>
