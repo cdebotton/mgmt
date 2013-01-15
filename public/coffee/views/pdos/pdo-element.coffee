@@ -15,7 +15,7 @@ define [
 
 		render: ->
 			United.EventBus.trigger 'where-am-i', @cid, @model.get('start_date'), @model.get('end_date')
-			@$el.html(@model.get 'type')
+			@$el.html('<article>Out<br/>of<br/>office.</article>')
 			@
 
 		gridPointsReceived: (cid, p1, p2, offset) ->

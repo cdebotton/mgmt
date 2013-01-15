@@ -24,7 +24,7 @@
 
       PdoElement.prototype.render = function() {
         United.EventBus.trigger('where-am-i', this.cid, this.model.get('start_date'), this.model.get('end_date'));
-        this.$el.html(this.model.get('type'));
+        this.$el.html('<article>Out<br/>of<br/>office.</article>');
         return this;
       };
 
