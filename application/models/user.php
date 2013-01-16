@@ -3,6 +3,7 @@
 use Validations\User as UserValidator;
 
 class User extends Eloquent {
+	private static $DATE_FORMAT = 'Y-m-d';
 
 	public static $hidden = array('password');
 
@@ -79,4 +80,27 @@ class User extends Eloquent {
 		return false;
 	}
 
+	public function employment_duration()
+	{
+		$today_str = date(static::$DATE_FORMAT);
+		$today = date_create_from_format(static::$DATE_FORMAT, $today_str);
+		$hired_on_str = date(static::$DATE_FORMAT, strtotime($this->hired_on));
+		$hired_on = date_create_from_format(static::$DATE_FORMAT, $hired_on_str);
+		return date_diff($today, $hired_on);
+	}
+
+	public function accrued_pdos()
+	{
+		$months = $this->employment_duration()->m + ($this->employment_duration()->y * 12);
+		return $months * ($this->pdo_allotment/12);
+	}
+
+	public function pdos_used()
+	{
+		$total = 0;
+		foreach ($this->pdos as $pdo) {
+			$total += $pdo->duration();
+		}
+		return $total;
+	}
 }
