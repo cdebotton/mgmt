@@ -3,7 +3,11 @@
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['backbone', 'ns', 'models/users/user'], function(Backbone, ns) {
+  define(function(require, exports, module) {
+    var Backbone, UserModel, ns;
+    ns = require('ns');
+    Backbone = require('backbone');
+    UserModel = require('models/users/user');
     ns('United.Collections.Users.Users');
     return United.Collections.Users.Users = (function(_super) {
 
@@ -13,7 +17,7 @@
         return Users.__super__.constructor.apply(this, arguments);
       }
 
-      Users.prototype.model = United.Models.Users.User;
+      Users.prototype.model = UserModel;
 
       Users.prototype.initialize = function() {};
 
