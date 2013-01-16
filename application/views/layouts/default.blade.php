@@ -13,7 +13,6 @@
 		@endif
 	</script>
 	@yield('js-bootstrap')
-	{{ HTML::script('js/vendors/requirejs/require.js', array('data-main' => '/js/main')) }}
 </head>
 <body id="bu-schedule">
 

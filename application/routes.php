@@ -4,7 +4,7 @@
  * Add assets to containers.
  */
 Asset::add('styles', 'css/bu.sched.css');
-
+Asset::add('scripts', 'js/vendors/requirejs/require.js', array(), array('data-main' => 'js/main'));
 /**
  * Handle all non-standard routes once logged in.
  */
