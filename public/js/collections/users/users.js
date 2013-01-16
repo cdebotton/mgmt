@@ -8,6 +8,7 @@
     ns = require('ns');
     Backbone = require('backbone');
     UserModel = require('models/users/user');
+    console.log(United);
     ns('United.Collections.Users.Users');
     return United.Collections.Users.Users = (function(_super) {
 
