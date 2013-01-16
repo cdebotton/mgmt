@@ -18,6 +18,7 @@ define [
 			@model.on 'add:user', @addOne, @
 			@model.on 'reset:user', @addAll, @
 			@model.on 'remove:user', @addAll, @
+
 			@addAll()
 
 		startListening: ->

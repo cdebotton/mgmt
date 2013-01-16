@@ -1,6 +1,7 @@
 <?php
 
 use User\Role as Role;
+use Client\Project\Task as Task;
 use User\Discipline as Discipline;
 use Validations\Schedule as ScheduleValidator;
 
@@ -26,8 +27,13 @@ class Schedules_Controller extends Base_Controller {
 				'green'		=> 'Green',
 				'yellow'	=> 'Yellow'
 			);
+
+			$unassignedTasks = Task::with(array('project', 'project.client'))
+				->where_null('user_id')->get();
+
 			return View::make('tasks.index')
 				->with('developers', $userArray)
+				->with('unassigned_tasks', eloquent_to_json($unassignedTasks))
 				->with('dev_json', eloquent_to_json($users))
 				->with('colors', $colors)
 				->with('disciplines', $disciplines)

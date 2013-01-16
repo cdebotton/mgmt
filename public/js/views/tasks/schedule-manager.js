@@ -39,6 +39,14 @@
         United.EventBus.on('modal-closed', this.modalClosed, this);
         United.EventBus.on('open-modal', this.openModal, this);
         United.EventBus.on('set-view', this.setView, this);
+        this.model.get('users').add({
+          roles: [],
+          disciplines: [],
+          first_name: 'Unassigned',
+          last_name: 'Tasks',
+          unassigned: true,
+          tasks: new United.Collections.Tasks.Tasks(window.unassignedTasks)
+        });
         United.Models.Users.Session = this.model.get('session');
         this.window = $(window);
         this.header = this.$('.navbar');

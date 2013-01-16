@@ -123,7 +123,6 @@ define [
 			view = new United.Views.Pdos.PdoElement
 				model: pdo
 			html = view.render().$el
-			console.log html
 			@$el.append html
 
 		adjustHeight: (model, value, status) ->

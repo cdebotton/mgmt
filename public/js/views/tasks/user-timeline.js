@@ -180,7 +180,6 @@
           model: pdo
         });
         html = view.render().$el;
-        console.log(html);
         return this.$el.append(html);
       };
 

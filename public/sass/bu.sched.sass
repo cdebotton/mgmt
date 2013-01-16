@@ -488,8 +488,8 @@ $modal-width: 480px
 					position: absolute
 					top: 6px
 					bottom: 0
-					border-left: 2px solid #000
-					border-right: 2px solid #000
+					border-left: 1px solid #000
+					border-right: 1px solid #000
 					@include box-sizing('border-box')
 					@include box-shadow(0 0 15px rgba(0, 0, 0, 0.65))
 					@include transition-property('background-color')
@@ -512,7 +512,7 @@ $modal-width: 480px
 						font-size: 14px
 						position: absolute
 						z-index: 10
-						text-shadow: 0 0 10px rgba(0, 0, 0, 0.95), 1px 0 0 #000, 0 1px 0 #000, -1px 0 0 #000, 0 -1px 0 #000
+						text-shadow: 0 0 15px rgba(0, 0, 0, 1), 1px 0 0 #000, 0 1px 0 #000, -1px 0 0 #000, 0 -1px 0 #000
 						@include opacity(0)
 						@include transition-property('opacity')
 						@include transition-duration('.2s')
@@ -529,15 +529,6 @@ $modal-width: 480px
 							@include transform(rotateZ(90deg))
 							-webkit-transform-origin: 100% 100%
 							transform-origin: 100% 100%
-					.text
-						text-align: center
-						color: #eee
-						position: absolute
-						font-size: 12px
-						height: 12px
-						margin-top: 50%
-						top: -6px
-						z-index: 15
 					&:hover
 						.background-element
 							@include opacity(1)

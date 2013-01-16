@@ -34,6 +34,14 @@ define [
 			United.EventBus.on 'modal-closed', @modalClosed, @
 			United.EventBus.on 'open-modal', @openModal, @
 			United.EventBus.on 'set-view', @setView, @
+			@model.get('users').add {
+				roles: []
+				disciplines: []
+				first_name: 'Unassigned'
+				last_name: 'Tasks'
+				unassigned: true
+				tasks: new United.Collections.Tasks.Tasks window.unassignedTasks
+			}
 			United.Models.Users.Session = @model.get 'session'
 			@window = $(window)
 			@header = @$ '.navbar'

@@ -2,8 +2,9 @@
 
 @section('js-bootstrap')
 	<script>
-		var users;
+		var users, unassignedTasks;
 		users = {{ $dev_json }};
+		unassignedTasks = {{ $unassigned_tasks }};
 	</script>
 @endsection
 
