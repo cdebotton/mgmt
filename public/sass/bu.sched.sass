@@ -486,35 +486,62 @@ $modal-width: 480px
 				@include task-element
 				.pdo-element
 					position: absolute
-					background-image: -webkit-linear-gradient(-45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent)
 					top: 6px
-					@include background-size(60px 60px)
 					bottom: 0
-					background-color: rgba(0, 0, 0, 0.25)
 					border-left: 2px solid #000
 					border-right: 2px solid #000
 					@include box-sizing('border-box')
 					@include box-shadow(0 0 15px rgba(0, 0, 0, 0.65))
-					text-align: center
 					@include transition-property('background-color')
 					@include transition-duration('.2s')
 					@include transition-timing-function('ease-in')
-					article
+					.background-element
+						@include background(linear-gradient(-45deg, #444, #222))
+						@include opacity(0.35)
+						position: absolute
+						top: 0
+						left: 0
+						bottom: 0
+						right: 0
 						@include transition-property('opacity')
 						@include transition-duration('.2s')
 						@include transition-timing-function('ease-in')
-						@include opacity(0)
-						color: #eee
-						text-transform: uppercase
+					.date
+						color: #fff
 						font-weight: bold
+						font-size: 14px
+						position: absolute
+						z-index: 10
+						text-shadow: 0 0 10px rgba(0, 0, 0, 0.95), 1px 0 0 #000, 0 1px 0 #000, -1px 0 0 #000, 0 -1px 0 #000
+						@include opacity(0)
+						@include transition-property('opacity')
+						@include transition-duration('.2s')
+						@include transition-timing-function('ease-in')
+						&.start
+							top: 10px
+							left: 20px
+							@include transform(rotateZ(90deg))
+							-webkit-transform-origin: 0% 0%
+							transform-origin: 0% 0%
+						&.end
+							bottom: 10px
+							right: 0
+							@include transform(rotateZ(90deg))
+							-webkit-transform-origin: 100% 100%
+							transform-origin: 100% 100%
+					.text
+						text-align: center
+						color: #eee
+						position: absolute
 						font-size: 12px
-						margin-top: 25px
-						line-height: 12px
-						letter-spacing: 1px
-						text-shadow: 0 0 10px rgba(255, 255, 255, 0.35)
+						height: 12px
+						margin-top: 50%
+						top: -6px
+						z-index: 15
 					&:hover
-						background-color: rgba(0, 0, 0, 0.75)
-						article
+						.background-element
+							@include opacity(1)
+						.date
 							@include opacity(1)
 				.overage
 					background-color: rgba(0, 255, 255, 0.25)

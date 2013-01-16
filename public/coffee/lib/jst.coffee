@@ -18,7 +18,8 @@ define [
 	'text!templates/pdo-request.html'
 	'text!templates/pdo-request-list-item.html'
 	'text!templates/request-overview-item.html'
-], (ns, Handlebars, _, UserBadge, UserTimeline, GraphTimeline, TaskElement, EditModal, OverageTemplate, UserCalendar, ProjectDrawer, ProjectTaskDrawer, OptionModal, ProjectItem, UserItem, UserEdit, PdoRequest, PdoRequestListItem, RequestOverviewItem) ->
+	'text!templates/pdo-element.html'
+], (ns, Handlebars, _, UserBadge, UserTimeline, GraphTimeline, TaskElement, EditModal, OverageTemplate, UserCalendar, ProjectDrawer, ProjectTaskDrawer, OptionModal, ProjectItem, UserItem, UserEdit, PdoRequest, PdoRequestListItem, RequestOverviewItem, PdoElement) ->
 
 	ns 'United.JST'
 	United.JST =
@@ -48,6 +49,7 @@ define [
 		PdoRequest:				Handlebars.compile PdoRequest
 		PdoRequestListItem:		Handlebars.compile PdoRequestListItem
 		RequestOverviewItem:	Handlebars.compile RequestOverviewItem
+		PdoElement:				Handlebars.compile PdoElement
 
 		### User Management ###
 		UserItem:				Handlebars.compile UserItem

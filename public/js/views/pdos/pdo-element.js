@@ -3,15 +3,18 @@
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['backbone', 'ns'], function(Backbone, ns) {
+  define(['backbone', 'ns', 'jst'], function(Backbone, ns) {
     ns('United.Views.Pdos.PdoElement');
     return United.Views.Pdos.PdoElement = (function(_super) {
+      var MONTHS;
 
       __extends(PdoElement, _super);
 
       function PdoElement() {
         return PdoElement.__super__.constructor.apply(this, arguments);
       }
+
+      MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
       PdoElement.prototype.tagName = 'div';
 
@@ -20,12 +23,16 @@
       PdoElement.prototype.initialize = function() {
         United.EventBus.on('gridpoint-dispatch', this.gridPointsReceived, this);
         United.EventBus.on('offset-timeline', this.offsetTimeline, this);
-        return United.EventBus.on('zoom-grid-updated', this.updateZoom, this);
+        United.EventBus.on('zoom-grid-updated', this.updateZoom, this);
+        return United.JST.Hb.registerHelper('printDate', this.printDate);
       };
 
       PdoElement.prototype.render = function() {
+        var ctx, html;
         United.EventBus.trigger('where-am-i', this.cid, this.model.get('start_date'), this.model.get('end_date'));
-        this.$el.html('<article>Out<br/>of<br/>office.</article>');
+        ctx = this.model.toJSON();
+        html = United.JST.PdoElement(ctx);
+        this.$el.html(html);
         return this;
       };
 
@@ -52,6 +59,11 @@
 
       PdoElement.prototype.updateZoom = function(zoom) {
         return United.EventBus.trigger('where-am-i', this.cid, this.model.get('start_date'), this.model.get('end_date'));
+      };
+
+      PdoElement.prototype.printDate = function(date) {
+        date = new Date(date);
+        return new Handlebars.SafeString(MONTHS[date.getMonth()] + ' ' + date.getDate() + ', ' + date.getFullYear());
       };
 
       return PdoElement;
