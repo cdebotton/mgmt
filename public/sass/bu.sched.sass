@@ -508,8 +508,9 @@ $modal-width: 480px
 						@include transition-timing-function('ease-in')
 					.date
 						color: #fff
-						font-weight: bold
-						font-size: 14px
+						//font-weight: bold
+						font-size: 12px
+						letter-spacing: 1px
 						position: absolute
 						z-index: 10
 						text-shadow: 0 0 15px rgba(0, 0, 0, 1), 1px 0 0 #000, 0 1px 0 #000, -1px 0 0 #000, 0 -1px 0 #000
@@ -517,21 +518,24 @@ $modal-width: 480px
 						@include transition-property('opacity')
 						@include transition-duration('.2s')
 						@include transition-timing-function('ease-in')
+						width: 100%
 						&.start
-							top: 10px
-							left: 20px
-							@include transform(rotateZ(90deg))
+							bottom: 0
+							left: 0
+							@include transform(rotateZ(-90deg))
 							-webkit-transform-origin: 0% 0%
 							transform-origin: 0% 0%
 						&.end
-							bottom: 10px
-							right: 0
-							@include transform(rotateZ(90deg))
-							-webkit-transform-origin: 100% 100%
-							transform-origin: 100% 100%
+							word-wrap: none
+							bottom: 0
+							left: 100%
+							margin-left: -20px
+							@include transform(rotate(-90deg))
+							-webkit-transform-origin: 0% 0%
+							transform-origin: 0% 0%
 					&:hover
 						.background-element
-							@include opacity(1)
+							@include opacity(0.95)
 						.date
 							@include opacity(1)
 				.overage
