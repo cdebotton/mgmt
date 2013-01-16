@@ -29,7 +29,7 @@ define [
 			@
 
 		setup: =>
-			@secondary = @$ '.msg, .actions'
+			@secondary = @$ '.msg, .actions, .stats'
 			@secondary.css 'display', 'block'
 			@height = @secondary.outerHeight()
 			@secondary.css 'display', 'none'

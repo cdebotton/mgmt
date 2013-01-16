@@ -18,7 +18,16 @@ class Requests_Controller extends Base_Controller
 			->where_status(false)
 			->get();
 
+		$request_array = array_map(function($request)
+		{
+			$object = $request->to_array();
+			$object['duration'] = $request->duration();
+			$object['user']['available_pdos'] = $request->user->available_pdos();
+			$object['className'] = $request->duration() > $request->user->available_pdos() ? ' overage' : '';
+			return $object;
+		}, $requests);
+
 		return View::make('requests.index')
-			->with('requests', eloquent_to_json($requests));
+			->with('requests', json_encode($request_array));
 	}
 }

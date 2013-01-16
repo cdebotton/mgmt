@@ -4,7 +4,17 @@
 	<div class="type"><span class="label label-{{{ printTypeClass type }}}">{{{ printType type }}}</span></div>
 	<div class="requested-on">{{{ printDate created_at }}}</div>
 	<div class="dates">{{{ printDate start_date }}} - {{{ printDate end_date }}}</div>
-	<div class="msg"><p>{{{ printMsg message }}}</p></div>
+	<div class="msg">
+		{{#if message}}
+			<p>{{{ printMsg message }}}</p>
+		{{else}}
+			&nbsp;
+		{{/if}}
+	</div>
+	<div class="stats">
+		<h4><small>Available:</small> {{ user.available_pdos }}</h4>
+		<h4><small>Duration:</small> {{ duration }}</h4>
+	</div>
 	<div class="actions btn-group">
 		<span class="accept-request btn btn-mini btn-primary">Accept</span>
 		<span class="reject-request btn btn-mini">Reject</span>

@@ -56,7 +56,7 @@
       };
 
       RequestOverviewItem.prototype.setup = function() {
-        this.secondary = this.$('.msg, .actions');
+        this.secondary = this.$('.msg, .actions, .stats');
         this.secondary.css('display', 'block');
         this.height = this.secondary.outerHeight();
         return this.secondary.css('display', 'none');
