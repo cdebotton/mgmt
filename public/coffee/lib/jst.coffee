@@ -1,25 +1,8 @@
-define [
-	'ns'
-	'handlebars'
-	'underscore'
-	'text!templates/user-badge.html'
-	'text!templates/user-timeline.html'
-	'text!templates/graph-timeline.html'
-	'text!templates/task-element.html'
-	'text!templates/edit-modal.html'
-	'text!templates/overage.html'
-	'text!templates/user-calendar.html'
-	'text!templates/edit-project-drawer.html'
-	'text!templates/edit-project-task-drawer.html'
-	'text!templates/option-modal.html'
-	'text!templates/project-item.html'
-	'text!templates/user-item.html'
-	'text!templates/user-edit.html'
-	'text!templates/pdo-request.html'
-	'text!templates/pdo-request-list-item.html'
-	'text!templates/request-overview-item.html'
-	'text!templates/pdo-element.html'
-], (ns, Handlebars, _, UserBadge, UserTimeline, GraphTimeline, TaskElement, EditModal, OverageTemplate, UserCalendar, ProjectDrawer, ProjectTaskDrawer, OptionModal, ProjectItem, UserItem, UserEdit, PdoRequest, PdoRequestListItem, RequestOverviewItem, PdoElement) ->
+define (require, exports, module) ->
+
+	ns			= require 'ns'
+	handlebars	= require 'handlebars'
+	_ 			= require 'underscore'
 
 	ns 'United.JST'
 	United.JST =
@@ -27,30 +10,30 @@ define [
 		Hb:						Handlebars
 
 		### Widgets ###
-		OptionModal:			Handlebars.compile OptionModal
+		OptionModal:			Handlebars.compile require 'text!templates/option-modal.html'
 
 		### Schedule Timeline ###
-		UserBadge:				Handlebars.compile UserBadge
-		UserTimeline:			Handlebars.compile UserTimeline
-		GraphTimeline:			Handlebars.compile GraphTimeline
-		TaskElement:			Handlebars.compile TaskElement
-		EditModal:				Handlebars.compile EditModal
-		Overage:				Handlebars.compile OverageTemplate
+		UserBadge:				Handlebars.compile require 'text!templates/user-badge.html'
+		UserTimeline:			Handlebars.compile require 'text!templates/user-timeline.html'
+		GraphTimeline:			Handlebars.compile require 'text!templates/graph-timeline.html'
+		TaskElement:			Handlebars.compile require 'text!templates/task-element.html'
+		EditModal:				Handlebars.compile require 'text!templates/edit-modal.html'
+		Overage:				Handlebars.compile require 'text!templates/overage.html'
 
 		### Project Management ###
-		ProjectDrawer:			Handlebars.compile ProjectDrawer
-		ProjectTaskDrawer:		Handlebars.compile ProjectTaskDrawer
-		ProjectItem:			Handlebars.compile ProjectItem
+		ProjectDrawer:			Handlebars.compile require 'text!templates/edit-project-drawer.html'
+		ProjectTaskDrawer:		Handlebars.compile require 'text!templates/edit-project-task-drawer.html'
+		ProjectItem:			Handlebars.compile require 'text!templates/project-item.html'
 
 		### Dashboard ###
-		UserCalendar:			Handlebars.compile UserCalendar
+		UserCalendar:			Handlebars.compile require 'text!templates/user-calendar.html'
 
 		### Paid Day Off Management ###
-		PdoRequest:				Handlebars.compile PdoRequest
-		PdoRequestListItem:		Handlebars.compile PdoRequestListItem
-		RequestOverviewItem:	Handlebars.compile RequestOverviewItem
-		PdoElement:				Handlebars.compile PdoElement
+		PdoRequest:				Handlebars.compile require 'text!templates/pdo-request.html'
+		PdoRequestListItem:		Handlebars.compile require 'text!templates/pdo-request-list-item.html'
+		RequestOverviewItem:	Handlebars.compile require 'text!templates/request-overview-item.html'
+		PdoElement:				Handlebars.compile require 'text!templates/pdo-element.html'
 
 		### User Management ###
-		UserItem:				Handlebars.compile UserItem
-		UserEdit:				Handlebars.compile UserEdit
+		UserItem:				Handlebars.compile require 'text!templates/user-item.html'
+		UserEdit:				Handlebars.compile require 'text!templates/user-edit.html'
