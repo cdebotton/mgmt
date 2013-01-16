@@ -1,12 +1,12 @@
-define (require, exports, module) ->
+define [
+	'backbone',
+	'ns',
+	'models/users/user'
+], (Backbone, ns) ->
 
-	ns			= require 'ns'
-	Backbone 	= require 'backbone'
-	UserModel	= require 'models/users/user'
-	console.log United
 	ns 'United.Collections.Users.Users'
 	class United.Collections.Users.Users extends Backbone.Collection
 
-		model: UserModel
+		model: United.Models.Users.User
 
 		initialize: ->
