@@ -103,4 +103,10 @@ class User extends Eloquent {
 		}
 		return $total;
 	}
+
+	public function available_pdos()
+	{
+		$accrued_days = $this->accrued_pdos() - $this->pdos_used();
+		return $accrued_days > $this->pdo_allotment ? $this->pdo_allotment : $accrued_days;
+	}
 }

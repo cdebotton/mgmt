@@ -19,8 +19,7 @@ class Dashboard_Controller extends Base_Controller {
 		}))->where_id(Auth::user()->id)
 			->first();
 
-		$accrued_days = $user->accrued_pdos() - $user->pdos_used();
-		if ($accrued_days > $user->pdo_allotment) $accrued_days = $user->pdo_allotment;
+		$accrued_days = $user->available_pdos();
 
 		return View::make('dashboard.index')
 			->with('user', $user)
