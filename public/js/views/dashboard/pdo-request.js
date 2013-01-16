@@ -69,6 +69,7 @@
         'keyup [name="end_day"]': 'setEndDay',
         'keyup [name="end_year"]': 'setEndYear',
         'keyup [name="message"]': 'setMessage',
+        'change [name="pdo-type"]': 'setType',
         'blur [name="start_month"]': 'resetStartMonth',
         'blur [name="start_day"]': 'resetStartDay',
         'blur [name="start_year"]': 'resetStartYear',
