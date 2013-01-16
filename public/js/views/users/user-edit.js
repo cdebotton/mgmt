@@ -48,8 +48,8 @@
         'keyup [name="email"]': 'updateEmail',
         'keyup [name="hired-on-month"]': 'updateHiredOnMonth',
         'keyup [name="hired-on-day"]': 'updateHiredOnDay',
+        'keyup [name="pdo-allotment"]': 'updatePdo',
         'keyup [name="hired-on-year"]': 'updateHiredOnYear',
-        'keyup [name="pdo"]': 'updatePdo',
         'keyup [name="password"]': 'updatePassword',
         'keyup [name="confrim-password"]': 'updateConfirmPassword',
         'click #save-user': 'saveUser',
@@ -107,7 +107,9 @@
       };
 
       UserEdit.prototype.updatePdo = function(e) {
-        return this.model.set('pdo_allotment', e.currentTarget.value);
+        var val;
+        val = parseInt(e.currentTarget.value, 10);
+        return this.model.set('pdo_allotment', val);
       };
 
       UserEdit.prototype.updatePassword = function(e) {};

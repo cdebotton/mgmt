@@ -1,5 +1,7 @@
 <?php
 
+use User\Pdo\Adjustment as Adjustment;
+
 class Api_V1_Users_Controller extends Api_V1_Base_Controller
 {
 	public $restful = true;
@@ -50,7 +52,17 @@ class Api_V1_Users_Controller extends Api_V1_Base_Controller
 		$user->last_name = $input->last_name;
 		$user->email = $input->email;
 		$user->hired_on = $input->hired_on;
-		$user->pdo_allotment = $input->pdo_allotment;
+		if($user->pdo_allotment === 0) {
+			$user->pdo_allotment = $input->pdo_allotment;
+		}
+		else {
+			$adjustment = new Adjustment;
+			$adjustment->user_id = $user->id;
+			$adjustment->authorized_by = Auth::user()->id;
+			$adjustment->effective_date = date(static::$DATE_FORMAT);
+			$adjustment->pdo_allotment = $input->pdo_allotment;
+			$adjustment->save();
+		}
 		$user->save();
 
 		$today = date('Y-m-d');

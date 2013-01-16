@@ -17,8 +17,8 @@ define [
 			'keyup [name="email"]':				'updateEmail'
 			'keyup [name="hired-on-month"]':	'updateHiredOnMonth'
 			'keyup [name="hired-on-day"]':		'updateHiredOnDay'
+			'keyup [name="pdo-allotment"]':		'updatePdo'
 			'keyup [name="hired-on-year"]':		'updateHiredOnYear'
-			'keyup [name="pdo"]':				'updatePdo'
 			'keyup [name="password"]':			'updatePassword'
 			'keyup [name="confrim-password"]':	'updateConfirmPassword'
 			'click #save-user':					'saveUser'
@@ -62,7 +62,8 @@ define [
 				@model.set 'hired_on', d
 
 		updatePdo: (e) =>
-			@model.set 'pdo_allotment', e.currentTarget.value
+			val = parseInt e.currentTarget.value, 10
+			@model.set 'pdo_allotment', val
 
 		updatePassword: (e) =>
 
