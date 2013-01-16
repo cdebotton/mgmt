@@ -4,7 +4,6 @@
 	out: 'min.js',
 	preserveLicenseComments: false,
 	include: 'almond',
-	optimize: 'none',
 	paths: {
 		"jquery": "vendors/jquery/jquery",
 		"backbone": "vendors/backbone/backbone",
