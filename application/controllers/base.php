@@ -11,6 +11,7 @@ class Base_Controller extends Controller {
 	 * @param  array     $parameters
 	 * @return Response
 	 */
+	static $DATE_FORMAT = 'Y-m-d';
 
 	public $restful = true;
 
