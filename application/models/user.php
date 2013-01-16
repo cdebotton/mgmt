@@ -107,6 +107,14 @@ class User extends Eloquent {
 	public function available_pdos()
 	{
 		$accrued_days = floor($this->accrued_pdos() - $this->pdos_used());
-		return $accrued_days > $this->pdo_allotment ? $this->pdo_allotment : $accrued_days;
+		return $accrued_days > $this->current_pdo_allotment ? $this->current_pdo_allotment : $accrued_days;
+	}
+
+	public function get_current_pdo_allotment()
+	{
+		$adjustment = $this->has_many('User\\Pdo\\Adjustment')
+			->order_by('effective_date', 'DESC')
+			->first();
+		return (!$adjustment) ? $this->pdo_allotment : $adjustment->pdo_allotment;
 	}
 }

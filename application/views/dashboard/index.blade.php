@@ -20,8 +20,8 @@
 						@foreach($user->roles as $role)
 							<span class="label label-warning">{{ $role->name }}</span>
 						@endforeach
-						<h4><small>PDO Limit:</small> {{ $user->pdo_allotment }} <small>days</small></h4>
-						<h4><small>PDO accrual rate:</small> {{ number_format(($user->pdo_allotment / 12), 3) }} <small>days per month</small></h4>
+						<h4><small>PDO Limit:</small> {{ $user->current_pdo_allotment }} <small>days</small></h4>
+						<h4><small>PDO accrual rate:</small> {{ number_format(($user->current_pdo_allotment / 12), 3) }} <small>days per month</small></h4>
 						<h4><small>Available days off:</small> {{ $accrued_days }}</h4>
 						<div id="pdo-actions">
 							<a id="request-time-off" class="btn btn-inverse btn-mini" href="#">Request time off</a>
