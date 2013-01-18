@@ -52,8 +52,6 @@ requirejs.config
 			exports: '$.fn.animate'
 		mousetrap:
 			exports: 'Mousetrap'
-		raphael:
-			exports: 'Raphael'
 		morris:
 			deps: ['raphael', 'jquery']
 			exports: 'Morris'

@@ -3,6 +3,7 @@ define [
 	'ns'
 	'views/dashboard/pdo-request'
 	'views/dashboard/pdo-list'
+	'views/dashboard/pdo-graph'
 ], (Backbone, ns) ->
 
 	ns 'United.Views.Dashboard.Dashboard'

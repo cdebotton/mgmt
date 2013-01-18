@@ -4,7 +4,7 @@
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['backbone', 'ns', 'views/dashboard/pdo-request', 'views/dashboard/pdo-list'], function(Backbone, ns) {
+  define(['backbone', 'ns', 'views/dashboard/pdo-request', 'views/dashboard/pdo-list', 'views/dashboard/pdo-graph'], function(Backbone, ns) {
     ns('United.Views.Dashboard.Dashboard');
     return United.Views.Dashboard.Dashboard = (function(_super) {
       var LIST_OPEN, REQUEST_OPEN;

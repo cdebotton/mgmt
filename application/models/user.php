@@ -160,36 +160,9 @@ class User extends Eloquent {
 	}
 
 	/**
-	 * Calculate how many paid days off the user has accrued through the
-	 * duration of their employment
-	 * @return int
+	 * Build an array that contains the history of the users accrual of PDOs.
+	 * @return array
 	 */
-	public function accrued_pdos()
-	{
-		$history = $this->pdo_adjustment_history();
-		$start_string = date(static::$DATE_FORMAT, strtotime($this->hired_on));
-		$start_date = date_create_from_format(static::$DATE_FORMAT, $start_string);
-		$today_string = date(static::$DATE_FORMAT, strtotime(date(static::$DATE_FORMAT)));
-		$today_date = date_create_from_format(static::$DATE_FORMAT, $today_string);
-		$len = count($history);
-		$pdoCount = 0;
-		$buffer = $len - 1;
-		for ($i = 0; $i < $len; $i++) {
-			$start = $history[$i]['date'];
-			$end = $i < $buffer ? $history[$i+1]['date'] : $today_date;
-			$diff = date_diff($start, $end);
-			$months = (12 * $diff->y) + $diff->m;
-			$rate = $history[$i]['rate'] / 12;
-			for ($j = 0; $j < $months; $j++) {
-				$start_date->add(date_interval_create_from_date_string('1 month'));
-				$target = $pdoCount + $rate;
-				$target -= $this->getPdosFromDate($start_date->format('Y-m'));
-				$pdoCount = $target > $history[$i]['rate'] ? $history[$i]['rate'] : $target;
-			}
-		}
-		return $pdoCount;
-	}
-
 	public function buildPdoGrid()
 	{
 		$history = $this->pdo_adjustment_history();
@@ -235,18 +208,6 @@ class User extends Eloquent {
 			$total += $pdo->duration();
 		}
 		return $total;
-	}
-
-	/**
-	 * Calculate how many paid days off the user currently
-	 * has available to them.
-	 * @return int
-	 */
-	public function available_pdos()
-	{
-		$accrued_days = floor($this->accrued_pdos());
-		#return $accrued_days > $this->current_pdo_allotment ? $this->current_pdo_allotment : $accrued_days;
-		return $accrued_days;
 	}
 
 	/**

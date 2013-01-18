@@ -17,9 +17,10 @@ class Dashboard_Controller extends Base_Controller {
 			$query->where_status(false);
 		}))->where_id(Auth::user()->id)
 			->first();
-		$accrued_days = $user->available_pdos();
 		$pdoGrid = $user->buildPdoGrid();
-
+		$gridKeys = array_keys($pdoGrid);
+		$lastKey = $gridKeys[count($pdoGrid) - 1];
+		$accrued_days = $pdoGrid[$lastKey]['pdo_count'];
 		return View::make('dashboard.index')
 			->with('user', $user)
 			->with('accrued_days', $accrued_days)

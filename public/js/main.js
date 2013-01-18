@@ -71,9 +71,6 @@
       mousetrap: {
         exports: 'Mousetrap'
       },
-      raphael: {
-        exports: 'Raphael'
-      },
       morris: {
         deps: ['raphael', 'jquery'],
         exports: 'Morris'

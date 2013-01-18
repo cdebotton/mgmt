@@ -66,5 +66,8 @@
 		<div id="pdo-request">
 
 		</div>
+		<div id="pdo-graph">
+
+		</div>
 	</div>
 @endsection
