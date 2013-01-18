@@ -7,26 +7,46 @@ class User extends Eloquent {
 
 	public static $hidden = array('password');
 
+	/**
+	 * Return all the Paid Days Off that a user has.
+	 * @return User\Pdo
+	 */
 	public function pdos()
 	{
 		return $this->has_many('User\\Pdo');
 	}
 
+	/**
+	 * Return the adjustment history of a users PDO Accrual rate.
+	 * @return User\Pdo\Adjustment
+	 */
 	public function adjustments()
 	{
 		return $this->has_many('User\\Pdo\\Adjustment');
 	}
 
+	/**
+	 * Return unapproved requests a user has for paid days off.
+	 * @return User\Pdo\Request
+	 */
 	public function requests()
 	{
 		return $this->has_many('User\\Pdo\\Request');
 	}
 
+	/**
+	 * Return all disciplines that a user is tagged with.
+	 * @return User\Discipline
+	 */
 	public function disciplines()
 	{
 		return $this->has_many_and_belongs_to('User\\Discipline');
 	}
 
+	/**
+	 * Return the tasks that are assigned to a user.
+	 * @return Client\Project\Task
+	 */
 	public function tasks()
 	{
 		return $this->has_many('Client\\Project\\Task');
@@ -80,6 +100,10 @@ class User extends Eloquent {
 		return false;
 	}
 
+	/**
+	 * Get the duration of a users employment.
+	 * @return DateDiff
+	 */
 	public function employment_duration()
 	{
 		$today_str = date(static::$DATE_FORMAT);
@@ -89,12 +113,47 @@ class User extends Eloquent {
 		return date_diff($today, $hired_on);
 	}
 
+	/**
+	 * Return an array of the users PDO Accrual adjustment history.
+	 * @return array
+	 */
+	public function pdo_adjustment_history()
+	{
+		$hired_on_string = date(static::$DATE_FORMAT, strtotime($this->hired_on));
+		$hired_on_date = date_create_from_format(static::$DATE_FORMAT, $hired_on_string);
+		$history = array(array(
+			'date' => $hired_on_date,
+			'rate' => $this->pdo_allotment
+		));
+		$adjustments = $this->adjustments;
+		foreach ($adjustments as $adjustment) {
+			$date_string = date(static::$DATE_FORMAT, strtotime($adjustment->effective_date));
+			$date = date_create_from_format(static::$DATE_FORMAT, $date_string);
+			array_push($history, array(
+				'date' => $date,
+				'rate' => $adjustment->pdo_allotment
+			));
+		}
+		return $history;
+	}
+
+	/**
+	 * Calculate how many paid days off the user has accrued through the
+	 * duration of their employment
+	 * @return int
+	 */
 	public function accrued_pdos()
 	{
+		$history = $this->pdo_adjustment_history();
 		$months = $this->employment_duration()->m + ($this->employment_duration()->y * 12);
 		return $months * ($this->pdo_allotment/12);
 	}
 
+	/**
+	 * Calculate how many paid days off the user has taken
+	 * throughout the duration of their employment.
+	 * @return int
+	 */
 	public function pdos_used()
 	{
 		$total = 0;
@@ -104,12 +163,22 @@ class User extends Eloquent {
 		return $total;
 	}
 
+	/**
+	 * Calculate how many paid days off the user currently
+	 * has available to them.
+	 * @return int
+	 */
 	public function available_pdos()
 	{
 		$accrued_days = floor($this->accrued_pdos() - $this->pdos_used());
 		return $accrued_days > $this->current_pdo_allotment ? $this->current_pdo_allotment : $accrued_days;
 	}
 
+	/**
+	 * Get the current value of the users PDO Accrual rate.
+	 * If the user has a PDO Adjustment history, the latest adjustment is used as this value.
+	 * @return float
+	 */
 	public function get_current_pdo_allotment()
 	{
 		$adjustment = $this->has_many('User\\Pdo\\Adjustment')

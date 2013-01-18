@@ -9,7 +9,7 @@ class Dashboard_Controller extends Base_Controller {
 	{
 		$today = date('Y-m-d');
 
-		$user = User::with(array('pdos', 'disciplines', 'roles', 'tasks' => function($query) use($today)
+		$user = User::with(array('pdos', 'disciplines', 'adjustments', 'roles', 'tasks' => function($query) use($today)
 		{
 			$query->where('start_date', '<=', $today)
 				->where('end_date', '>=', $today);
