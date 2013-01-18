@@ -1,5 +1,11 @@
 @layout('layouts.default')
 
+@section('js-bootstrap')
+	<script>
+		var jsonPdoGrid = {{ $pdo_grid }};
+	</script>
+@endsection
+
 @section('content')
 	<div id="dashboard-container">
 		<div id="dashboard-head">

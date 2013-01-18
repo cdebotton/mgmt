@@ -8,7 +8,6 @@ class Dashboard_Controller extends Base_Controller {
 	public function get_index ()
 	{
 		$today = date('Y-m-d');
-
 		$user = User::with(array('pdos', 'disciplines', 'adjustments', 'roles', 'tasks' => function($query) use($today)
 		{
 			$query->where('start_date', '<=', $today)
@@ -18,12 +17,13 @@ class Dashboard_Controller extends Base_Controller {
 			$query->where_status(false);
 		}))->where_id(Auth::user()->id)
 			->first();
-
 		$accrued_days = $user->available_pdos();
+		$pdoGrid = $user->buildPdoGrid();
 
 		return View::make('dashboard.index')
 			->with('user', $user)
-			->with('accrued_days', $accrued_days);
+			->with('accrued_days', $accrued_days)
+			->with('pdo_grid', json_encode($pdoGrid));
 	}
 
 }

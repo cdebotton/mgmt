@@ -156,6 +156,7 @@ class User extends Eloquent {
 		if (isset($pdoHistory[$reference_date])) {
 			return $pdoHistory[$reference_date];
 		}
+		return 0;
 	}
 
 	/**
@@ -187,6 +188,39 @@ class User extends Eloquent {
 			}
 		}
 		return $pdoCount;
+	}
+
+	public function buildPdoGrid()
+	{
+		$history = $this->pdo_adjustment_history();
+		$cursor_string = date(static::$DATE_FORMAT, strtotime($this->hired_on));
+		$cursor = date_create_from_format(static::$DATE_FORMAT, $cursor_string);
+		$pdoGrid = array();
+		$end_date = date_create_from_format(static::$DATE_FORMAT, date(static::$DATE_FORMAT));
+		$end_date->add(date_interval_create_from_date_string('4 months'));
+		$diff = date_diff($cursor, $end_date);
+		$len = count($history);
+		$buffer = $len - 1;
+		$pdoCount = 0;
+		for ($i = 0; $i < $len; $i++) {
+			$start = $history[$i]['date'];
+			$end = $i < $buffer ? $history[$i+1]['date'] : $end_date;
+			$diff = date_diff($start, $end);
+			$months = (12 * $diff->y) + $diff->m;
+			$rate = $history[$i]['rate'] / 12;
+			for ($j = 0; $j < $months; $j++) {
+				$target = $pdoCount + $rate;
+				$target -= $this->getPdosFromDate($cursor->format('Y-m'));
+				$pdoCount = $target > $history[$i]['rate'] ? $history[$i]['rate'] : $target;
+				$cursor->add(date_interval_create_from_date_string('1 month'));
+				$pdoGrid[$cursor->format('Y-m')] = array(
+					'pdo_debit' => $this->getPdosFromDate($cursor->format('Y-m')),
+					'pdo_credit' => $rate,
+					'pdo_count' => (int) floor($pdoCount)
+				);
+			}
+		}
+		return $pdoGrid;
 	}
 
 	/**
