@@ -26,6 +26,7 @@ define [
 			United.JST.Hb.registerHelper 'getDate', @getDate
 			United.EventBus.on 'request-closed', @requestClosed, @
 			United.EventBus.on 'pdo-list-closed', @pdoListClosed, @
+			@graph = new United.Views.Dashboard.PdoGraph
 
 		createNewPdo: (e) =>
 			@model.get('session').get('requests').add {}

@@ -37,7 +37,8 @@
         United.JST.Hb.registerHelper('getMonth', this.getMonth);
         United.JST.Hb.registerHelper('getDate', this.getDate);
         United.EventBus.on('request-closed', this.requestClosed, this);
-        return United.EventBus.on('pdo-list-closed', this.pdoListClosed, this);
+        United.EventBus.on('pdo-list-closed', this.pdoListClosed, this);
+        return this.graph = new United.Views.Dashboard.PdoGraph;
       };
 
       Dashboard.prototype.createNewPdo = function(e) {
