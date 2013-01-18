@@ -145,8 +145,20 @@ class User extends Eloquent {
 	public function accrued_pdos()
 	{
 		$history = $this->pdo_adjustment_history();
-		$months = $this->employment_duration()->m + ($this->employment_duration()->y * 12);
-		return $months * ($this->pdo_allotment/12);
+		$today_string = date(static::$DATE_FORMAT, strtotime(date(static::$DATE_FORMAT)));
+		$today_date = date_create_from_format(static::$DATE_FORMAT, $today_string);
+		$len = count($history);
+		$pdoCount = 0;
+		$buffer = $len - 1;
+		for ($i = 0; $i < $len; $i++) {
+			$start = $history[$i]['date'];
+			$end = $i < $buffer ? $history[$i+1]['date'] : $today_date;
+			$diff = date_diff($start, $end);
+			$months = (12 * $diff->y) + $diff->m;
+			$rate = $history[$i]['rate'] / 12;
+			$pdoCount += floor($months * 12);
+		}
+		return $pdoCount;
 	}
 
 	/**
