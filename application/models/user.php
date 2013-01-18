@@ -123,7 +123,7 @@ class User extends Eloquent {
 		$hired_on_date = date_create_from_format(static::$DATE_FORMAT, $hired_on_string);
 		$history = array(array(
 			'date' => $hired_on_date,
-			'rate' => $this->pdo_allotment
+			'rate' => (int)$this->attributes['pdo_allotment']
 		));
 		$adjustments = $this->adjustments;
 		foreach ($adjustments as $adjustment) {
@@ -131,10 +131,31 @@ class User extends Eloquent {
 			$date = date_create_from_format(static::$DATE_FORMAT, $date_string);
 			array_push($history, array(
 				'date' => $date,
-				'rate' => $adjustment->pdo_allotment
+				'rate' => (int)$adjustment->pdo_allotment
 			));
 		}
 		return $history;
+	}
+
+	/**
+	 * Find the total PDOs used in a month.
+	 * @param  string 	$date The time we're looking for a PDO count of in 'Y-m' format.
+	 * @return int 		Number of PDOs used that month.
+	 */
+	public function getPdosFromDate($reference_date)
+	{
+		$pdoHistory = array();
+		foreach ($this->pdos as $pdo) {
+			$date_string = date(static::$DATE_FORMAT, strtotime($pdo->created_at));
+			$date = date_create_from_format(static::$DATE_FORMAT, $date_string);
+			if (!isset($pdoHistory[$date->format('Y-m')])) {
+				$pdoHistory[$date->format('Y-m')] = 0;
+			}
+			$pdoHistory[$date->format('Y-m')] += $pdo->duration();
+		}
+		if (isset($pdoHistory[$reference_date])) {
+			return $pdoHistory[$reference_date];
+		}
 	}
 
 	/**
@@ -145,6 +166,8 @@ class User extends Eloquent {
 	public function accrued_pdos()
 	{
 		$history = $this->pdo_adjustment_history();
+		$start_string = date(static::$DATE_FORMAT, strtotime($this->hired_on));
+		$start_date = date_create_from_format(static::$DATE_FORMAT, $start_string);
 		$today_string = date(static::$DATE_FORMAT, strtotime(date(static::$DATE_FORMAT)));
 		$today_date = date_create_from_format(static::$DATE_FORMAT, $today_string);
 		$len = count($history);
@@ -156,7 +179,12 @@ class User extends Eloquent {
 			$diff = date_diff($start, $end);
 			$months = (12 * $diff->y) + $diff->m;
 			$rate = $history[$i]['rate'] / 12;
-			$pdoCount += floor($months * 12);
+			for ($j = 0; $j < $months; $j++) {
+				$start_date->add(date_interval_create_from_date_string('1 month'));
+				$target = $pdoCount + $rate;
+				$target -= $this->getPdosFromDate($start_date->format('Y-m'));
+				$pdoCount = $target > $history[$i]['rate'] ? $history[$i]['rate'] : $target;
+			}
 		}
 		return $pdoCount;
 	}
@@ -182,8 +210,9 @@ class User extends Eloquent {
 	 */
 	public function available_pdos()
 	{
-		$accrued_days = floor($this->accrued_pdos() - $this->pdos_used());
-		return $accrued_days > $this->current_pdo_allotment ? $this->current_pdo_allotment : $accrued_days;
+		$accrued_days = floor($this->accrued_pdos());
+		#return $accrued_days > $this->current_pdo_allotment ? $this->current_pdo_allotment : $accrued_days;
+		return $accrued_days;
 	}
 
 	/**
