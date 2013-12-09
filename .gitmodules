@@ -1,0 +1,3 @@
+[submodule "application/libraries/schemaenhanced"]
+	path = application/libraries/schemaenhanced
+	url = git@github.com:brooklynunited/mgmt.git
